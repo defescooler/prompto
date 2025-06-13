@@ -1,7 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+/* New Violent Purple/White Palette */
+:root {
+  --color-purple-50: #F9F5FF;    /* Very light purple, almost white */
+  --color-purple-100: #F2ECFF;   /* Pale lavender */
+  --color-purple-200: #E6D9FF;   /* Soft lavender */
+  --color-purple-300: #D3BFFF;   /* Medium lavender */
+  --color-purple-400: #BF99FF;   /* Bright violet */
+  --color-purple-500: #A87DFF;   /* Strong purple */
+  --color-purple-600: #8C5EFF;   /* Deep violet */
+  --color-purple-700: #6A3BBF;   /* Dark purple */
+  --color-purple-800: #4B2780;   /* Very dark purple */
+  --color-purple-900: #2C184D;   /* Near black purple for deep contrast */
+  
+  /* RGB values for shadows/filters */
+  --color-purple-400-rgb: 191, 153, 255;
+  --color-purple-500-rgb: 168, 125, 255;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow-y: auto;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -43,7 +74,7 @@
 }
 
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop_shadow(0 0 2em #61dafbaa);
 }
 
 @keyframes logo-spin {
@@ -61,100 +92,122 @@
   }
 }
 
-/* Gradient backgrounds */
+/* Gradient backgrounds - simplified for minimalism */
 .gradient-bg {
-  background: linear-gradient(135deg, #fffbe6 0%, #f7e9b0 100%);
+  background: var(--color-purple-50); /* A very light purple, almost white */
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, #FFD600 0%, #FFEA70 100%);
+  background: var(--color-purple-700); /* Use a solid dark purple for text */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Floating animation */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
+/* Floating animation - removed for minimalism */
+/* @keyframes float { */
+/*   0%, 100% { transform: translateY(0px); } */
+/*   50% { transform: translateY(-10px); } */
+/* } */
 
 .float-animation {
-  animation: float 2.5s ease-in-out infinite;
+  /* animation: float 2.5s ease-in-out infinite; */
+  animation: none; /* Disable animation */
 }
 
-/* Glass morphism effect */
+/* Glass morphism effect - simplified for minimalism */
 .glass {
-  background: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-  border-radius: 1.5rem;
-  border: none;
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.9); /* More opaque white */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Lighter, subtle shadow */
+  border-radius: 0.75rem; /* Slightly smaller border radius */
+  border: 1px solid var(--color-purple-100); /* Add a subtle border */
+  backdrop-filter: none; /* Remove blur for flatter look */
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - simplified for minimalism */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px; /* Slightly thinner */
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
+  background: var(--color-purple-50); /* Use light purple for track */
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 4px;
+  background: var(--color-purple-300); /* Use a lighter purple for thumb */
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background: var(--color-purple-400); /* Slightly darker on hover */
 }
 
-/* Add modern font */
+/* Apply Inter font globally */
 body, .font-sans {
-  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Card improvements */
+/* Card improvements - simplified for minimalism */
 .card {
-  border-radius: 1.5rem;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-  border: none;
+  border-radius: 0.75rem; /* Match glass border radius */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Lighter, subtle shadow */
+  border: 1px solid var(--color-purple-100); /* Subtle border */
 }
 
 input, .rounded-lg {
-  border-radius: 0.75rem !important;
-  border: 1px solid #e5e7eb;
-  background: #f9fafb;
-  transition: border 0.2s;
+  border-radius: 0.5rem !important; /* Make input corners slightly less rounded */
+  border: 1px solid var(--color-purple-200); /* Softer border */
+  background: var(--color-purple-50); /* Light background */
+  transition: border 0.2s, background 0.2s; /* Add background transition */
 }
 input:focus, .rounded-lg:focus {
-  border: 1.5px solid #FFD600;
+  border: 1.5px solid var(--color-purple-500); /* Keep purple focus */
   outline: none;
-  background: #fffbe6;
+  background: #ffffff; /* White background on focus */
 }
 
-button, .btn, .shadcn-button, .bg-yellow-400 {
-  border-radius: 0.75rem !important;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  box-shadow: 0 2px 8px 0 rgba(255, 214, 0, 0.08);
+button, .btn, .shadcn-button {
+  border-radius: 0.5rem !important; /* Match input corners */
+  font-weight: 600; /* Slightly less bold */
+  letter-spacing: normal; /* Remove letter spacing */
+  box-shadow: none; /* Remove button shadow for flatter look */
+  transition: background-color 0.2s, box-shadow 0.2s; /* Smooth transitions */
 }
 
-/* Pixel star shadow */
+/* Ensure the base button colors are purple and white, in line with the new palette */
+button.bg-purple-500:hover {
+  background-color: var(--color-purple-600); /* Darker purple on hover */
+}
+
+button.text-white {
+  color: white; /* Ensure text remains white for purple buttons */
+}
+
+/* Pixel star shadow - removed for minimalism */
 svg.float-animation {
-  filter: drop-shadow(0 2px 8px #FFD60088);
+  filter: none; /* Remove drop shadow */
 }
 
-/* Error message */
+/* Error message - simplified */
 .text-red-500.animate-pulse {
-  animation: pulse 1.2s infinite;
+  animation: none; /* Remove pulse animation */
+  font-weight: 500; /* Normal weight */
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+/* General adjustments for whitespace and simpler typography */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em; /* Tighter letter spacing for headings */
+  line-height: 1.2; /* Slightly tighter line height */
+}
+
+.text-lg {
+  font-size: 1.125rem; /* Keep text-lg size */
+}
+
+/* Remove or simplify any remaining animations in CSS */
+.animate__animated {
+  animation: none !important; /* Disable all animate.css animations */
 }
 
 /* Add/adjust styles for a yellow/gold, animated, pixel-art, visually engaging dashboard. Emphasize fire/cool/modern look, pixel star, and animated stats. Remove any styles for prompt enhancement UI. */

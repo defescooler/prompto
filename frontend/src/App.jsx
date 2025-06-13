@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge.jsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog.jsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.jsx'
-import { Sparkles, Heart, BarChart3, Settings, User, LogOut, CheckCircle, Zap, Clock, TrendingUp, Star } from 'lucide-react'
+import { Sparkles, Heart, BarChart3, Settings, User, LogOut, CheckCircle, Zap, Clock, TrendingUp, Star, BookOpen } from 'lucide-react'
 import './App.css'
 
 // API Configuration
@@ -122,41 +122,39 @@ function AuthProvider({ children }) {
 // Header Component
 function Header({ user, logout }) {
   return (
-    <header className="border-b bg-gradient-to-r from-yellow-100 via-yellow-50 to-yellow-200 shadow-lg sticky top-0 z-50 animate__animated animate__fadeInDown">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+    <header className="border-b border-purple-100 bg-white shadow-sm sticky top-0 z-50">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-3">
-            {/* Pixel Star */}
-            <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="float-animation">
-              <rect x="20" y="4" width="8" height="8" fill="#FFD600"/>
-              <rect x="16" y="8" width="16" height="8" fill="#FFD600"/>
-              <rect x="12" y="16" width="24" height="8" fill="#FFD600"/>
-              <rect x="8" y="24" width="32" height="8" fill="#FFD600"/>
-              <rect x="12" y="32" width="24" height="8" fill="#FFD600"/>
-              <rect x="16" y="40" width="16" height="4" fill="#FFD600"/>
+            {/* Pixel Star - simplified */}
+            <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-purple-500">
+              <rect x="20" y="4" width="8" height="8" fill="currentColor"/>
+              <rect x="16" y="8" width="16" height="8" fill="currentColor"/>
+              <rect x="12" y="16" width="24" height="8" fill="currentColor"/>
+              <rect x="8" y="24" width="32" height="8" fill="currentColor"/>
+              <rect x="12" y="32" width="24" height="8" fill="currentColor"/>
+              <rect x="16" y="40" width="16" height="4" fill="currentColor"/>
             </svg>
-            <div>
-              <h1 className="text-2xl font-extrabold gradient-text bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-300 bg-clip-text text-transparent animate__animated animate__pulse animate__infinite">
-                Prompt Copilot
-              </h1>
-              <p className="text-sm font-semibold gradient-text bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-400 bg-clip-text text-transparent animate__animated animate__fadeIn animate__delay-1s">
+          <div>
+              <h1 className="text-xl font-bold text-purple-700">
+              Prompt Copilot
+            </h1>
+              <p className="text-xs font-medium text-purple-500">
                 AI-Powered Prompt Enhancement
               </p>
             </div>
           </div>
         </div>
-        <div className="flex items-center space-x-4">
-          {/* Fancy yellow badge for flair */}
-          <span className="px-4 py-2 rounded-full bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-200 text-yellow-900 font-bold shadow-lg animate__animated animate__pulse animate__infinite flex items-center gap-2">
-            <svg width='20' height='20' viewBox='0 0 48 48' fill='none' className='inline-block mr-1'><rect x='20' y='4' width='8' height='8' fill='#FFD600'/><rect x='16' y='8' width='16' height='8' fill='#FFD600'/><rect x='12' y='16' width='24' height='8' fill='#FFD600'/><rect x='8' y='24' width='32' height='8' fill='#FFD600'/><rect x='12' y='32' width='24' height='8' fill='#FFD600'/><rect x='16' y='40' width='16' height='4' fill='#FFD600'/></svg>
-          </span>
+        <div className="flex items-center space-x-3">
+          {/* Removed fancy purple badge and replaced with a simple text link for flair */}
+          <a href="#" className="text-purple-600 hover:text-purple-800 text-sm font-semibold transition-colors duration-200">Dashboard</a>
           {user && (
             <div className="flex items-center space-x-2">
-              <Badge variant="secondary" className="flex items-center space-x-1">
+              <Badge variant="secondary" className="flex items-center space-x-1 bg-purple-100 text-purple-700">
                 <User className="w-3 h-3" />
                 <span>{user.username}</span>
               </Badge>
-              <Button variant="ghost" size="sm" onClick={logout}>
+              <Button variant="ghost" size="sm" onClick={logout} className="text-purple-600 hover:bg-purple-50 hover:text-purple-800">
                 <LogOut className="w-4 h-4" />
               </Button>
             </div>
@@ -200,14 +198,14 @@ function AuthForm({ onLogin, onRegister }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center gradient-bg p-4 font-sans">
-      <Card className="w-full max-w-md glass shadow-2xl rounded-3xl border-0">
-        <CardHeader className="flex flex-col items-center pb-2">
-          <PixelStar />
-          <CardTitle className="text-2xl font-extrabold gradient-text mb-1 tracking-tight">
+    <div className="gradient-bg p-8 font-sans flex items-center justify-center min-h-screen">
+      <Card className="w-full max-w-md glass shadow-lg rounded-xl border border-purple-100">
+        <CardHeader className="flex flex-col items-center pb-4">
+          <PixelStar className="text-purple-500 mb-2" width="36" height="36" />
+          <CardTitle className="text-2xl font-bold text-purple-700 mb-1">
             {isLogin ? 'Sign In to Prompt Copilot' : 'Join Prompt Copilot'}
           </CardTitle>
-          <CardDescription className="text-gray-600">
+          <CardDescription className="text-purple-500 text-sm">
             {isLogin ? 'Sign in to your account' : 'Create your account to get started'}
           </CardDescription>
         </CardHeader>
@@ -215,32 +213,32 @@ function AuthForm({ onLogin, onRegister }) {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div>
-                <Label htmlFor="name">Full Name</Label>
-                <Input id="name" type="text" autoComplete="name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required className="rounded-lg" />
+                <Label htmlFor="name" className="text-purple-700 text-sm font-medium mb-1">Full Name</Label>
+                <Input id="name" type="text" autoComplete="name" value={formData.name} onChange={e => setFormData({ ...formData.name, name: e.target.value })} required className="rounded-md" />
               </div>
             )}
             <div>
-              <Label htmlFor="username">Username or Email</Label>
-              <Input id="username" type="text" autoComplete="username" value={formData.username} onChange={e => setFormData({ ...formData, username: e.target.value })} required className="rounded-lg" />
+              <Label htmlFor="username" className="text-purple-700 text-sm font-medium mb-1">Username or Email</Label>
+              <Input id="username" type="text" autoComplete="username" value={formData.username} onChange={e => setFormData({ ...formData, username: e.target.value })} required className="rounded-md" />
             </div>
             {!isLogin && (
               <div>
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" autoComplete="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} required className="rounded-lg" />
+                <Label htmlFor="email" className="text-purple-700 text-sm font-medium mb-1">Email</Label>
+                <Input id="email" type="email" autoComplete="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} required className="rounded-md" />
               </div>
             )}
             <div>
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" autoComplete={isLogin ? 'current-password' : 'new-password'} value={formData.password} onChange={e => setFormData({ ...formData, password: e.target.value })} required className="rounded-lg" />
+              <Label htmlFor="password" className="text-purple-700 text-sm font-medium mb-1">Password</Label>
+              <Input id="password" type="password" autoComplete={isLogin ? 'current-password' : 'new-password'} value={formData.password} onChange={e => setFormData({ ...formData, password: e.target.value })} required className="rounded-md" />
             </div>
-            {error && <div className="text-red-500 text-center text-sm font-medium animate-pulse">{error || 'An error occurred. Please try again.'}</div>}
-            <Button type="submit" className="w-full rounded-lg bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold shadow-md transition">{loading ? 'Loading...' : isLogin ? 'Sign In' : 'Create Account'}</Button>
+            {error && <div className="text-red-600 text-center text-sm font-medium">{error || 'An error occurred. Please try again.'}</div>}
+            <Button type="submit" className="w-full rounded-md bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-sm transition-colors">{loading ? 'Loading...' : isLogin ? 'Sign In' : 'Create Account'}</Button>
           </form>
-          <div className="text-center text-sm text-gray-500 mt-2">
+          <div className="text-center text-sm text-purple-600 mt-3">
             {isLogin ? (
-              <>Don&apos;t have an account? <span className="text-yellow-600 hover:underline cursor-pointer font-semibold" onClick={() => setIsLogin(false)}>Sign up</span></>
+              <>Don&apos;t have an account? <span className="text-purple-700 hover:underline cursor-pointer font-semibold" onClick={() => setIsLogin(false)}>Sign up</span></>
             ) : (
-              <>Already have an account? <span className="text-yellow-600 hover:underline cursor-pointer font-semibold" onClick={() => setIsLogin(true)}>Sign in</span></>
+              <>Already have an account? <span className="text-purple-700 hover:underline cursor-pointer font-semibold" onClick={() => setIsLogin(true)}>Sign in</span></>
             )}
           </div>
         </CardContent>
@@ -289,19 +287,19 @@ function Dashboard({ user, token }) {
     <div className="glass flex flex-col items-center justify-center p-3 rounded-lg shadow-md animate__animated animate__fadeInUp" style={{ minHeight: 72, maxWidth: 140 }}>
       <div className="mb-1">{icon}</div>
       <div className="text-2xl font-extrabold mb-0.5" style={{ color, letterSpacing: '0.01em' }}>{value}</div>
-      <div className="text-xs font-bold text-yellow-800 tracking-wide uppercase drop-shadow-sm" style={{ letterSpacing: '0.04em' }}>{label}</div>
+      <div className="text-xs font-bold text-purple-800 tracking-wide uppercase drop-shadow-sm" style={{ letterSpacing: '0.04em' }}>{label}</div>
     </div>
   )
 
   // Pixel star animation
   const PixelStar = () => (
     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto mb-2 float-animation">
-      <rect x="20" y="4" width="8" height="8" fill="#FFD600"/>
-      <rect x="16" y="8" width="16" height="8" fill="#FFD600"/>
-      <rect x="12" y="16" width="24" height="8" fill="#FFD600"/>
-      <rect x="8" y="24" width="32" height="8" fill="#FFD600"/>
-      <rect x="12" y="32" width="24" height="8" fill="#FFD600"/>
-      <rect x="16" y="40" width="16" height="4" fill="#FFD600"/>
+      <rect x="20" y="4" width="8" height="8" fill="var(--color-purple-400)"/>
+      <rect x="16" y="8" width="16" height="8" fill="var(--color-purple-400)"/>
+      <rect x="12" y="16" width="24" height="8" fill="var(--color-purple-400)"/>
+      <rect x="8" y="24" width="32" height="8" fill="var(--color-purple-400)"/>
+      <rect x="12" y="32" width="24" height="8" fill="var(--color-purple-400)"/>
+      <rect x="16" y="40" width="16" height="4" fill="var(--color-purple-400)"/>
     </svg>
   )
 
@@ -328,52 +326,51 @@ function Dashboard({ user, token }) {
     return <span>{display}</span>
   }
 
-  // ROI, cost, effectiveness, streaks (mocked for now)
+  // Cost, effectiveness, streaks
   const effectiveness = analytics?.analytics?.success_rate ? Math.round(analytics.analytics.success_rate * 100) / 100 : 0
   const cost = (analytics?.analytics?.prompts_enhanced || 0) * 0.002 // e.g., $0.002 per prompt
-  const roi = effectiveness > 0 ? ((effectiveness * 100) / (cost || 1)).toFixed(1) : 0
   const streak = Math.min(analytics?.analytics?.prompts_enhanced || 0, 7)
 
   return (
-    <div className="min-h-screen gradient-bg py-10 px-2 md:px-0">
+    <div className="gradient-bg py-10 px-4 md:px-0">
       <div className="max-w-3xl mx-auto">
         <div className="flex flex-col items-center mb-8">
-          <PixelStar />
-          <h1 className="text-4xl font-extrabold gradient-text text-center mb-2 animate__animated animate__fadeInDown">Prompt Copilot Dashboard</h1>
-          <p className="text-lg text-yellow-800 font-semibold text-center animate__animated animate__fadeIn">Your AI prompt analytics, history, and stats</p>
-        </div>
+          <PixelStar className="text-purple-500 mb-4" width="40" height="40" />
+          <h1 className="text-3xl font-extrabold text-purple-700 text-center mb-2">Dashboard</h1>
+          <p className="text-md text-purple-600 font-medium text-center">Your AI prompt analytics, history, and stats</p>
+          </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <StatCard label="Enhanced" value={<AnimatedNumber value={analytics?.analytics?.prompts_enhanced || 0} />} icon={<span role="img" aria-label="spark">✨</span>} color="#FFD600" />
-          <StatCard label="Time Saved" value={analytics?.time_saved_formatted || '0m 0s'} icon={<span role="img" aria-label="clock">⏰</span>} color="#FFD600" />
-          <StatCard label="Favorites" value={<AnimatedNumber value={analytics?.favorite_prompts || 0} />} icon={<span role="img" aria-label="star">⭐</span>} color="#FFD600" />
-          <StatCard label="Streak" value={<AnimatedNumber value={streak} />} icon={<span role="img" aria-label="fire">🔥</span>} color="#FFD600" />
-        </div>
+          <StatCard label="Enhanced" value={<AnimatedNumber value={analytics?.analytics?.prompts_enhanced || 0} />} icon={<Sparkles className="w-5 h-5 text-purple-500" />} color="var(--color-purple-600)" />
+          <StatCard label="Time Saved" value={analytics?.time_saved_formatted || '0m 0s'} icon={<Clock className="w-5 h-5 text-purple-500" />} color="var(--color-purple-600)" />
+          <StatCard label="Favorites" value={<AnimatedNumber value={analytics?.favorite_prompts || 0} />} icon={<Heart className="w-5 h-5 text-purple-500" />} color="var(--color-purple-600)" />
+          <StatCard label="Streak" value={<AnimatedNumber value={streak} />} icon={<Zap className="w-5 h-5 text-purple-500" />} color="var(--color-purple-600)" />
+              </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <StatCard label="Effectiveness" value={effectiveness + '%'} icon={<span role="img" aria-label="target">🎯</span>} color="#FFD600" />
-          <StatCard label="Cost" value={`$${cost.toFixed(2)}`} icon={<span role="img" aria-label="money">💸</span>} color="#FFD600" />
-          <StatCard label="ROI" value={`${roi}x`} icon={<span role="img" aria-label="rocket">🚀</span>} color="#FFD600" />
-          <StatCard label="Total Usage" value={<AnimatedNumber value={analytics?.analytics?.total_usage || 0} />} icon={<span role="img" aria-label="chart">📈</span>} color="#FFD600" />
-        </div>
-        <div className="glass p-6 rounded-2xl shadow-xl animate__animated animate__fadeInUp">
-          <h2 className="text-2xl font-bold text-yellow-700 mb-4 flex items-center"><span className="mr-2">📝</span>Prompt History</h2>
+          <StatCard label="Effectiveness" value={effectiveness + '%'} icon={<TrendingUp className="w-5 h-5 text-purple-500" />} color="var(--color-purple-600)" />
+          <StatCard label="Cost" value={`$${cost.toFixed(2)}`} icon={<BarChart3 className="w-5 h-5 text-purple-500" />} color="var(--color-purple-600)" />
+          <StatCard label="Total Usage" value={<AnimatedNumber value={analytics?.analytics?.total_usage || 0} />} icon={<BarChart3 className="w-5 h-5 text-purple-500" />} color="var(--color-purple-600)" />
+          <StatCard label="Total Prompts" value={<AnimatedNumber value={analytics?.stats?.total_prompts || 0} />} icon={<BookOpen className="w-5 h-5 text-purple-500" />} color="var(--color-purple-600)" />
+                  </div>
+        <div className="glass p-6 rounded-lg shadow-sm">
+          <h2 className="text-xl font-bold text-purple-700 mb-4 flex items-center"><BookOpen className="w-5 h-5 text-purple-600 mr-2" />Prompt History</h2>
           <div className="max-h-80 overflow-y-auto space-y-4">
-            {prompts.length === 0 && <div className="text-yellow-600 text-center">No prompts yet. Use the Chrome extension to enhance prompts!</div>}
+            {prompts.length === 0 && <div className="text-purple-600 text-center py-8">No prompts yet. Use the Chrome extension to enhance prompts!</div>}
             {prompts.map((prompt) => (
-              <div key={prompt.id} className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 shadow flex flex-col md:flex-row md:items-center md:justify-between animate__animated animate__fadeIn">
+              <div key={prompt.id} className="bg-white border border-purple-100 rounded-lg p-4 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
-                  <div className="font-bold text-yellow-900 mb-1 flex items-center"><Star className="w-4 h-4 text-yellow-500 mr-1" />{prompt.title}</div>
-                  <div className="text-yellow-800 text-sm mb-1">{prompt.body}</div>
+                  <div className="font-semibold text-purple-800 mb-1 flex items-center"><Star className="w-4 h-4 text-purple-400 mr-1" />{prompt.title}</div>
+                  <div className="text-purple-700 text-sm mb-1">{prompt.body}</div>
                   {prompt.enhanced_text && <div className="text-green-700 text-xs mt-1">Enhanced: {prompt.enhanced_text}</div>}
                 </div>
-                <div className="flex flex-col items-end mt-2 md:mt-0 md:ml-4">
-                  <span className="text-xs text-yellow-600">{prompt.category}</span>
-                  <span className="text-xs text-yellow-400">{new Date(prompt.created_at).toLocaleString()}</span>
-                </div>
-              </div>
+                <div className="flex flex-col items-end mt-2 md:mt-0 md:ml-4 text-sm">
+                  <span className="text-purple-500">Category: {prompt.category}</span>
+                  <span className="text-purple-400 text-xs mt-0.5">{new Date(prompt.created_at).toLocaleString()}</span>
+                    </div>
+                  </div>
             ))}
           </div>
-        </div>
-      </div>
+                </div>
+          </div>
     </div>
   )
 }
@@ -384,13 +381,13 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 overflow-y-auto">
         <AuthContext.Consumer>
           {({ user, token, login, register, logout, loading }) => {
             if (loading) {
               return (
                 <div className="min-h-screen flex items-center justify-center">
-                  <div className="text-center">
+                  <div className="text-center text-purple-600">
                     <p>Loading...</p>
                   </div>
                 </div>
@@ -405,7 +402,7 @@ function App() {
               <>
                 <Header 
                   user={user} 
-                  logout={logout}
+                  logout={logout} 
                 />
                 <Dashboard 
                   user={user} 
@@ -419,21 +416,22 @@ function App() {
     </AuthProvider>
   )
 }
+
 // Add these new components after your existing components
 
 // Enhanced Status Indicator Component
 function StatusIndicator({ status, message }) {
   const statusConfig = {
-    success: { color: 'text-green-400', icon: '✅', bg: 'bg-green-500/10' },
-    warning: { color: 'text-yellow-400', icon: '⚠️', bg: 'bg-yellow-500/10' },
-    error: { color: 'text-red-400', icon: '❌', bg: 'bg-red-500/10' },
-    info: { color: 'text-blue-400', icon: 'ℹ️', bg: 'bg-blue-500/10' }
+    success: { color: 'text-green-600', icon: '✅', bg: 'bg-green-50' },
+    warning: { color: 'text-orange-600', icon: '⚠️', bg: 'bg-orange-50' }, 
+    error: { color: 'text-red-600', icon: '❌', bg: 'bg-red-50' },
+    info: { color: 'text-blue-600', icon: 'ℹ️', bg: 'bg-blue-50' }
   }
   
   const config = statusConfig[status] || statusConfig.info
   
   return (
-    <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${config.bg} ${config.color} text-sm font-medium`}>
+    <div className={`flex items-center gap-2 px-3 py-2 rounded-md ${config.bg} ${config.color} text-sm font-medium border border-gray-200`}>
       <span>{config.icon}</span>
       <span>{message}</span>
     </div>
@@ -445,12 +443,12 @@ function ProgressBar({ progress, label }) {
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-medium text-white/80">{label}</span>
-        <span className="text-sm font-mono text-white/60">{progress}%</span>
+        <span className="text-sm font-medium text-purple-700">{label}</span>
+        <span className="text-sm font-medium text-purple-500">{progress}%</span>
       </div>
-      <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+      <div className="w-full bg-purple-100 rounded-full h-2 overflow-hidden">
         <div 
-          className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-500 ease-out"
+          className="h-full bg-purple-500 rounded-full transition-all duration-500 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -458,12 +456,12 @@ function ProgressBar({ progress, label }) {
   )
 }
 
-// Enhanced Floating Action Button
+// Enhanced Floating Action Button (simplified if not used or needed)
 function FloatingActionButton({ onClick, icon, label, variant = 'primary' }) {
   const variants = {
-    primary: 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600',
-    secondary: 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600',
-    success: 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600'
+    primary: 'bg-purple-600 hover:bg-purple-700',
+    secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-800',
+    success: 'bg-green-600 hover:bg-green-700'
   }
   
   return (
@@ -473,12 +471,10 @@ function FloatingActionButton({ onClick, icon, label, variant = 'primary' }) {
         fixed bottom-8 right-8 z-50
         ${variants[variant]}
         text-white font-semibold
-        px-6 py-4 rounded-full
-        shadow-lg hover:shadow-xl
-        transform hover:scale-105 active:scale-95
+        px-4 py-2 rounded-md
+        shadow-md hover:shadow-lg
         transition-all duration-200
-        flex items-center gap-3
-        backdrop-blur-sm
+        flex items-center gap-2
       `}
     >
       {icon}
@@ -487,7 +483,7 @@ function FloatingActionButton({ onClick, icon, label, variant = 'primary' }) {
   )
 }
 
-// Enhanced Tooltip Component
+// Enhanced Tooltip Component (simplified if not used or needed)
 function Tooltip({ children, content, position = 'top' }) {
   const [isVisible, setIsVisible] = useState(false)
   
@@ -507,14 +503,13 @@ function Tooltip({ children, content, position = 'top' }) {
       {children}
       {isVisible && (
         <div className={`
-          absolute z-50 px-3 py-2 text-sm font-medium text-white
-          bg-black/90 backdrop-blur-sm rounded-lg shadow-lg
+          absolute z-50 px-2 py-1 text-xs font-medium text-white
+          bg-gray-800 rounded-md shadow-sm
           whitespace-nowrap ${positions[position]}
-          animate-in fade-in-0 zoom-in-95 duration-200
         `}>
           {content}
           <div className={`
-            absolute w-2 h-2 bg-black/90 transform rotate-45
+            absolute w-2 h-2 bg-gray-800 transform rotate-45
             ${position === 'top' ? 'top-full left-1/2 -translate-x-1/2 -mt-1' : ''}
             ${position === 'bottom' ? 'bottom-full left-1/2 -translate-x-1/2 -mb-1' : ''}
             ${position === 'left' ? 'left-full top-1/2 -translate-y-1/2 -ml-1' : ''}
@@ -526,17 +521,18 @@ function Tooltip({ children, content, position = 'top' }) {
   )
 }
 
-// Add yellow pixel star SVG
-const PixelStar = () => (
-  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto mb-2 float-animation">
-    <rect x="20" y="4" width="8" height="8" fill="#FFD600"/>
-    <rect x="16" y="8" width="16" height="8" fill="#FFD600"/>
-    <rect x="12" y="16" width="24" height="8" fill="#FFD600"/>
-    <rect x="8" y="24" width="32" height="8" fill="#FFD600"/>
-    <rect x="12" y="32" width="24" height="8" fill="#FFD600"/>
-    <rect x="16" y="40" width="16" height="4" fill="#FFD600"/>
+// Add purple pixel star SVG (simplified version)
+const PixelStar = ({ className, width, height }) => (
+  <svg width={width || "48"} height={height || "48"} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <rect x="20" y="4" width="8" height="8" fill="currentColor"/>
+    <rect x="16" y="8" width="16" height="8" fill="currentColor"/>
+    <rect x="12" y="16" width="24" height="8" fill="currentColor"/>
+    <rect x="8" y="24" width="32" height="8" fill="currentColor"/>
+    <rect x="12" y="32" width="24" height="8" fill="currentColor"/>
+    <rect x="16" y="40" width="16" height="4" fill="currentColor"/>
   </svg>
 )
 
 export default App
+
 
