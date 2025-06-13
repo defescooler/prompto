@@ -6,48 +6,58 @@ import bcrypt
 import google.generativeai as genai
 from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from src.models.user import db
+from src.config import config
+from src.database import db, migrate, init_app
+from src.models.user import User
+from src.models.prompt import Prompt
+from src.models.analytics import Analytics
+from src.models.prompt_draft import PromptDraft
 from src.routes.user import user_bp
 from src.routes.prompt import prompt_bp
 from src.routes.auth import auth_bp
+from src.routes.prompt_draft import prompt_draft_bp
 
-app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
-app.config['SECRET_KEY'] = 'prompt-copilot-super-secret-key-2024'
+def create_app(config_name=None):
+    """Application factory pattern"""
+    app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
+    
+    # Load configuration
+    if config_name is None:
+        config_name = os.getenv('FLASK_ENV', 'default')
+    app.config.from_object(config[config_name])
+    
+    # Enable CORS for all routes
+    CORS(app, origins="*")
+    
+    # Initialize database and migrations
+    init_app(app)
+    
+    # Initialize Gemini AI
+    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+    if GEMINI_API_KEY:
+        genai.configure(api_key=GEMINI_API_KEY)
+    
+    # Register blueprints
+    app.register_blueprint(user_bp, url_prefix='/api')
+    app.register_blueprint(prompt_bp, url_prefix='/api')
+    app.register_blueprint(auth_bp, url_prefix='/api')
+    app.register_blueprint(prompt_draft_bp, url_prefix='/api')
+    
+    # Create database tables
+    with app.app_context():
+        db.create_all()
+    
+    return app
 
-# Enable CORS for all routes
-CORS(app, origins="*")
-
-# Database configuration - PostgreSQL for production, SQLite for development
-DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///app.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# Initialize Gemini AI
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-
-# Register blueprints
-app.register_blueprint(user_bp, url_prefix='/api')
-app.register_blueprint(prompt_bp, url_prefix='/api')
-app.register_blueprint(auth_bp, url_prefix='/api')
-
-# Initialize database
-db.init_app(app)
-
-# Import all models to ensure they're registered
-from src.models.prompt import Prompt
-from src.models.analytics import Analytics
-
-with app.app_context():
-    db.create_all()
+# Create the app instance
+app = create_app()
 
 # API Routes for Prompt Enhancement
 @app.route('/api/enhance-prompt', methods=['POST'])

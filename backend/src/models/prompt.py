@@ -1,7 +1,5 @@
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from src.database import db
 
 class Prompt(db.Model):
     __tablename__ = 'prompts'

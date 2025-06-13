@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, request, jsonify
-from src.models.user import db, User
+from src.database import db
+from src.models.user import User
 from src.models.prompt import Prompt
 from src.models.analytics import Analytics
 from src.routes.auth import verify_jwt_token
@@ -252,9 +253,10 @@ def get_analytics():
         
         return jsonify({
             'analytics': analytics.to_dict(),
-            'total_prompts': total_prompts,
-            'favorite_prompts': favorite_prompts,
-            'time_saved_formatted': f"{analytics.time_saved // 60}m {analytics.time_saved % 60}s"
+            'stats': {
+                'total_prompts': total_prompts,
+                'favorite_prompts': favorite_prompts
+            }
         })
         
     except Exception as e:

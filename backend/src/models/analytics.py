@@ -1,7 +1,5 @@
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from src.database import db
 
 class Analytics(db.Model):
     __tablename__ = 'analytics'

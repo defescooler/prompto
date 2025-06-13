@@ -1,0 +1,37 @@
+# Development override for Docker Compose
+# This file is automatically loaded by docker-compose for development
+
+version: '3.8'
+
+services:
+  backend:
+    # Development-specific settings
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    volumes:
+      - ./backend:/app
+      - backend_cache:/app/__pycache__
+    command: >
+      sh -c "
+        echo 'Development mode: Waiting for database...' &&
+        sleep 5 &&
+        python init_db.py &&
+        echo 'Creating sample data...' &&
+        python create_sample_data.py &&
+        echo 'Starting Flask in development mode...' &&
+        python src/main.py
+      "
+
+  postgres:
+    # Development-specific PostgreSQL settings
+    environment:
+      POSTGRES_PASSWORD: prompt_password_2024_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_dev_data:
+    driver: local 

@@ -1,8 +1,6 @@
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
+from src.database import db
 import bcrypt
-
-db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = 'users'
