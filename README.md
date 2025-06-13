@@ -378,7 +378,7 @@ npm test
 
 ### Getting Help
 
-- 📧 **Email**: [your-email@example.com]
+- 📧 **Email**: [arsen.kozhabekof@gmail.com]
 - 🐛 **Issues**: [GitHub Issues](https://github.com/defescooler/prompt-copilot/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/defescooler/prompt-copilot/discussions)
 
