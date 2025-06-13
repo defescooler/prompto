@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: prompt_copilot_db
+    environment:
+      POSTGRES_DB: prompt_copilot_db
+      POSTGRES_USER: prompt_user
+      POSTGRES_PASSWORD: prompt_password_2024
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - prompt_copilot_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prompt_user -d prompt_copilot_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Flask Backend Application (Demo Version)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: prompt_copilot_backend
+    environment:
+      - DATABASE_URL=postgresql://prompt_user:prompt_password_2024@postgres:5432/prompt_copilot_db
+      - FLASK_ENV=development
+      - SECRET_KEY=prompt-copilot-demo-secret-key-2024
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./backend:/app
+      - backend_cache:/app/__pycache__
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - prompt_copilot_network
+    restart: unless-stopped
+    command: >
+      sh -c "
+        echo 'Waiting for database to be ready...' &&
+        sleep 5 &&
+        echo 'Starting Flask application...' &&
+        python src/main.py
+      "
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: prompt_copilot_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - prompt_copilot_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  backend_cache:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  prompt_copilot_network:
+    driver: bridge 

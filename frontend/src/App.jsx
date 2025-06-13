@@ -10,7 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.j
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog.jsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.jsx'
 import { Sparkles, Heart, BarChart3, Settings, User, LogOut, CheckCircle, Zap, Clock, TrendingUp, Star } from 'lucide-react'
-import logo from './assets/logo.png'
 import './App.css'
 
 // API Configuration
@@ -121,31 +120,36 @@ function AuthProvider({ children }) {
 }
 
 // Header Component
-function Header({ user, logout, showAskFirst, setShowAskFirst }) {
+function Header({ user, logout }) {
   return (
-    <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+    <header className="border-b bg-gradient-to-r from-yellow-100 via-yellow-50 to-yellow-200 shadow-lg sticky top-0 z-50 animate__animated animate__fadeInDown">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <img src={logo} alt="Prompt Copilot" className="w-10 h-10" />
-          <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Prompt Copilot
-            </h1>
-            <p className="text-sm text-gray-600">AI-Powered Prompt Enhancement</p>
+          <div className="flex items-center space-x-3">
+            {/* Pixel Star */}
+            <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="float-animation">
+              <rect x="20" y="4" width="8" height="8" fill="#FFD600"/>
+              <rect x="16" y="8" width="16" height="8" fill="#FFD600"/>
+              <rect x="12" y="16" width="24" height="8" fill="#FFD600"/>
+              <rect x="8" y="24" width="32" height="8" fill="#FFD600"/>
+              <rect x="12" y="32" width="24" height="8" fill="#FFD600"/>
+              <rect x="16" y="40" width="16" height="4" fill="#FFD600"/>
+            </svg>
+            <div>
+              <h1 className="text-2xl font-extrabold gradient-text bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-300 bg-clip-text text-transparent animate__animated animate__pulse animate__infinite">
+                Prompt Copilot
+              </h1>
+              <p className="text-sm font-semibold gradient-text bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-400 bg-clip-text text-transparent animate__animated animate__fadeIn animate__delay-1s">
+                AI-Powered Prompt Enhancement
+              </p>
+            </div>
           </div>
         </div>
-        
         <div className="flex items-center space-x-4">
-          <Button
-            variant={showAskFirst ? "default" : "outline"}
-            size="sm"
-            onClick={() => setShowAskFirst(!showAskFirst)}
-            className="flex items-center space-x-2"
-          >
-            <CheckCircle className="w-4 h-4" />
-            <span>Ask me first</span>
-          </Button>
-          
+          {/* Fancy yellow badge for flair */}
+          <span className="px-4 py-2 rounded-full bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-200 text-yellow-900 font-bold shadow-lg animate__animated animate__pulse animate__infinite flex items-center gap-2">
+            <svg width='20' height='20' viewBox='0 0 48 48' fill='none' className='inline-block mr-1'><rect x='20' y='4' width='8' height='8' fill='#FFD600'/><rect x='16' y='8' width='16' height='8' fill='#FFD600'/><rect x='12' y='16' width='24' height='8' fill='#FFD600'/><rect x='8' y='24' width='32' height='8' fill='#FFD600'/><rect x='12' y='32' width='24' height='8' fill='#FFD600'/><rect x='16' y='40' width='16' height='4' fill='#FFD600'/></svg>
+          </span>
           {user && (
             <div className="flex items-center space-x-2">
               <Badge variant="secondary" className="flex items-center space-x-1">
@@ -196,84 +200,48 @@ function AuthForm({ onLogin, onRegister }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <img src={logo} alt="Prompt Copilot" className="w-16 h-16 mx-auto mb-4" />
-          <CardTitle className="text-2xl bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-            {isLogin ? 'Welcome Back' : 'Join Prompt Copilot'}
+    <div className="min-h-screen flex items-center justify-center gradient-bg p-4 font-sans">
+      <Card className="w-full max-w-md glass shadow-2xl rounded-3xl border-0">
+        <CardHeader className="flex flex-col items-center pb-2">
+          <PixelStar />
+          <CardTitle className="text-2xl font-extrabold gradient-text mb-1 tracking-tight">
+            {isLogin ? 'Sign In to Prompt Copilot' : 'Join Prompt Copilot'}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-gray-600">
             {isLogin ? 'Sign in to your account' : 'Create your account to get started'}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
-              <div className="space-y-2">
+              <div>
                 <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  required={!isLogin}
-                />
+                <Input id="name" type="text" autoComplete="name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required className="rounded-lg" />
               </div>
             )}
-            
-            <div className="space-y-2">
-              <Label htmlFor="username">{isLogin ? 'Username or Email' : 'Username'}</Label>
-              <Input
-                id="username"
-                type="text"
-                value={formData.username}
-                onChange={(e) => setFormData({...formData, username: e.target.value})}
-                required
-              />
+            <div>
+              <Label htmlFor="username">Username or Email</Label>
+              <Input id="username" type="text" autoComplete="username" value={formData.username} onChange={e => setFormData({ ...formData, username: e.target.value })} required className="rounded-lg" />
             </div>
-            
             {!isLogin && (
-              <div className="space-y-2">
+              <div>
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  required={!isLogin}
-                />
+                <Input id="email" type="email" autoComplete="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} required className="rounded-lg" />
               </div>
             )}
-            
-            <div className="space-y-2">
+            <div>
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
-                required
-              />
+              <Input id="password" type="password" autoComplete={isLogin ? 'current-password' : 'new-password'} value={formData.password} onChange={e => setFormData({ ...formData, password: e.target.value })} required className="rounded-lg" />
             </div>
-            
-            {error && (
-              <div className="text-red-600 text-sm text-center">{error}</div>
-            )}
-            
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
-            </Button>
+            {error && <div className="text-red-500 text-center text-sm font-medium animate-pulse">{error || 'An error occurred. Please try again.'}</div>}
+            <Button type="submit" className="w-full rounded-lg bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold shadow-md transition">{loading ? 'Loading...' : isLogin ? 'Sign In' : 'Create Account'}</Button>
           </form>
-          
-          <div className="mt-4 text-center">
-            <Button
-              variant="link"
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-sm"
-            >
-              {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
-            </Button>
+          <div className="text-center text-sm text-gray-500 mt-2">
+            {isLogin ? (
+              <>Don&apos;t have an account? <span className="text-yellow-600 hover:underline cursor-pointer font-semibold" onClick={() => setIsLogin(false)}>Sign up</span></>
+            ) : (
+              <>Already have an account? <span className="text-yellow-600 hover:underline cursor-pointer font-semibold" onClick={() => setIsLogin(true)}>Sign in</span></>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -282,12 +250,9 @@ function AuthForm({ onLogin, onRegister }) {
 }
 
 // Dashboard Component
-function Dashboard({ user, token, showAskFirst, setShowAskFirst }) {
+function Dashboard({ user, token }) {
   const [prompts, setPrompts] = useState([])
   const [analytics, setAnalytics] = useState(null)
-  const [newPrompt, setNewPrompt] = useState({ title: '', body: '', category: 'general' })
-  const [enhancedPrompt, setEnhancedPrompt] = useState('')
-  const [enhancing, setEnhancing] = useState(false)
   const [activeTab, setActiveTab] = useState('dashboard')
 
   useEffect(() => {
@@ -319,285 +284,96 @@ function Dashboard({ user, token, showAskFirst, setShowAskFirst }) {
     }
   }
 
-  const enhancePrompt = async (promptText) => {
-    if (showAskFirst) {
-      const confirmed = window.confirm('Do you want to enhance this prompt using AI?')
-      if (!confirmed) return
-    }
+  // Animated stat card
+  const StatCard = ({ label, value, icon, color }) => (
+    <div className="glass flex flex-col items-center justify-center p-3 rounded-lg shadow-md animate__animated animate__fadeInUp" style={{ minHeight: 72, maxWidth: 140 }}>
+      <div className="mb-1">{icon}</div>
+      <div className="text-2xl font-extrabold mb-0.5" style={{ color, letterSpacing: '0.01em' }}>{value}</div>
+      <div className="text-xs font-bold text-yellow-800 tracking-wide uppercase drop-shadow-sm" style={{ letterSpacing: '0.04em' }}>{label}</div>
+    </div>
+  )
 
-    setEnhancing(true)
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/enhance-prompt`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ prompt: promptText, user_id: user.id })
-      })
-      const data = await response.json()
-      setEnhancedPrompt(data.enhanced)
-      fetchAnalytics() // Refresh analytics
-    } catch (error) {
-      console.error('Error enhancing prompt:', error)
-    } finally {
-      setEnhancing(false)
-    }
+  // Pixel star animation
+  const PixelStar = () => (
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto mb-2 float-animation">
+      <rect x="20" y="4" width="8" height="8" fill="#FFD600"/>
+      <rect x="16" y="8" width="16" height="8" fill="#FFD600"/>
+      <rect x="12" y="16" width="24" height="8" fill="#FFD600"/>
+      <rect x="8" y="24" width="32" height="8" fill="#FFD600"/>
+      <rect x="12" y="32" width="24" height="8" fill="#FFD600"/>
+      <rect x="16" y="40" width="16" height="4" fill="#FFD600"/>
+    </svg>
+  )
+
+  // Animated number (simple)
+  const AnimatedNumber = ({ value }) => {
+    const [display, setDisplay] = useState(0)
+    useEffect(() => {
+      let start = 0
+      const end = Number(value)
+      if (start === end) return
+      let increment = end / 30
+      let current = start
+      const timer = setInterval(() => {
+        current += increment
+        if (current >= end) {
+          setDisplay(end)
+          clearInterval(timer)
+        } else {
+          setDisplay(Math.round(current))
+        }
+      }, 16)
+      return () => clearInterval(timer)
+    }, [value])
+    return <span>{display}</span>
   }
 
-  const savePrompt = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/prompts`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          ...newPrompt,
-          enhanced_text: enhancedPrompt
-        })
-      })
-      
-      if (response.ok) {
-        setNewPrompt({ title: '', body: '', category: 'general' })
-        setEnhancedPrompt('')
-        fetchPrompts()
-      }
-    } catch (error) {
-      console.error('Error saving prompt:', error)
-    }
-  }
-
-  const toggleFavorite = async (promptId) => {
-    try {
-      await fetch(`${API_BASE_URL}/api/prompts/${promptId}/favorite`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      fetchPrompts()
-    } catch (error) {
-      console.error('Error toggling favorite:', error)
-    }
-  }
+  // ROI, cost, effectiveness, streaks (mocked for now)
+  const effectiveness = analytics?.analytics?.success_rate ? Math.round(analytics.analytics.success_rate * 100) / 100 : 0
+  const cost = (analytics?.analytics?.prompts_enhanced || 0) * 0.002 // e.g., $0.002 per prompt
+  const roi = effectiveness > 0 ? ((effectiveness * 100) / (cost || 1)).toFixed(1) : 0
+  const streak = Math.min(analytics?.analytics?.prompts_enhanced || 0, 7)
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          <TabsTrigger value="prompts">Prompts</TabsTrigger>
-          <TabsTrigger value="favorites">Favorites</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="dashboard" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Prompts Enhanced</CardTitle>
-                <Sparkles className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{analytics?.analytics?.prompts_enhanced || 0}</div>
-                <p className="text-xs text-muted-foreground">Total enhancements</p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Time Saved</CardTitle>
-                <Clock className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{analytics?.time_saved_formatted || '0m 0s'}</div>
-                <p className="text-xs text-muted-foreground">Estimated time saved</p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Favorites</CardTitle>
-                <Heart className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{analytics?.favorite_prompts || 0}/10</div>
-                <p className="text-xs text-muted-foreground">Favorite prompts</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Zap className="w-5 h-5" />
-                <span>AI Prompt Enhancer</span>
-              </CardTitle>
-              <CardDescription>
-                Transform your prompts with AI-powered enhancements
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="prompt-input">Your Prompt</Label>
-                <Textarea
-                  id="prompt-input"
-                  placeholder="Enter your prompt here..."
-                  value={newPrompt.body}
-                  onChange={(e) => setNewPrompt({...newPrompt, body: e.target.value})}
-                  rows={4}
-                />
-              </div>
-              
-              <Button 
-                onClick={() => enhancePrompt(newPrompt.body)}
-                disabled={!newPrompt.body || enhancing}
-                className="w-full"
-              >
-                {enhancing ? 'Enhancing...' : '✨ Enhance Prompt'}
-              </Button>
-              
-              {enhancedPrompt && (
-                <div className="space-y-2">
-                  <Label>Enhanced Prompt</Label>
-                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <p className="text-sm">{enhancedPrompt}</p>
-                  </div>
-                  <div className="flex space-x-2">
-                    <Input
-                      placeholder="Prompt title..."
-                      value={newPrompt.title}
-                      onChange={(e) => setNewPrompt({...newPrompt, title: e.target.value})}
-                    />
-                    <Select value={newPrompt.category} onValueChange={(value) => setNewPrompt({...newPrompt, category: value})}>
-                      <SelectTrigger className="w-40">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="general">General</SelectItem>
-                        <SelectItem value="writing">Writing</SelectItem>
-                        <SelectItem value="coding">Coding</SelectItem>
-                        <SelectItem value="business">Business</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Button onClick={savePrompt}>Save</Button>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="prompts" className="space-y-6">
-          <div className="grid gap-4">
+    <div className="min-h-screen gradient-bg py-10 px-2 md:px-0">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex flex-col items-center mb-8">
+          <PixelStar />
+          <h1 className="text-4xl font-extrabold gradient-text text-center mb-2 animate__animated animate__fadeInDown">Prompt Copilot Dashboard</h1>
+          <p className="text-lg text-yellow-800 font-semibold text-center animate__animated animate__fadeIn">Your AI prompt analytics, history, and stats</p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <StatCard label="Enhanced" value={<AnimatedNumber value={analytics?.analytics?.prompts_enhanced || 0} />} icon={<span role="img" aria-label="spark">✨</span>} color="#FFD600" />
+          <StatCard label="Time Saved" value={analytics?.time_saved_formatted || '0m 0s'} icon={<span role="img" aria-label="clock">⏰</span>} color="#FFD600" />
+          <StatCard label="Favorites" value={<AnimatedNumber value={analytics?.favorite_prompts || 0} />} icon={<span role="img" aria-label="star">⭐</span>} color="#FFD600" />
+          <StatCard label="Streak" value={<AnimatedNumber value={streak} />} icon={<span role="img" aria-label="fire">🔥</span>} color="#FFD600" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <StatCard label="Effectiveness" value={effectiveness + '%'} icon={<span role="img" aria-label="target">🎯</span>} color="#FFD600" />
+          <StatCard label="Cost" value={`$${cost.toFixed(2)}`} icon={<span role="img" aria-label="money">💸</span>} color="#FFD600" />
+          <StatCard label="ROI" value={`${roi}x`} icon={<span role="img" aria-label="rocket">🚀</span>} color="#FFD600" />
+          <StatCard label="Total Usage" value={<AnimatedNumber value={analytics?.analytics?.total_usage || 0} />} icon={<span role="img" aria-label="chart">📈</span>} color="#FFD600" />
+        </div>
+        <div className="glass p-6 rounded-2xl shadow-xl animate__animated animate__fadeInUp">
+          <h2 className="text-2xl font-bold text-yellow-700 mb-4 flex items-center"><span className="mr-2">📝</span>Prompt History</h2>
+          <div className="max-h-80 overflow-y-auto space-y-4">
+            {prompts.length === 0 && <div className="text-yellow-600 text-center">No prompts yet. Use the Chrome extension to enhance prompts!</div>}
             {prompts.map((prompt) => (
-              <Card key={prompt.id}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{prompt.title}</CardTitle>
-                    <div className="flex items-center space-x-2">
-                      <Badge variant="secondary">{prompt.category}</Badge>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleFavorite(prompt.id)}
-                      >
-                        <Heart className={`w-4 h-4 ${prompt.is_favorite ? 'fill-red-500 text-red-500' : ''}`} />
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600 mb-2">{prompt.body}</p>
-                  {prompt.enhanced_text && (
-                    <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
-                      <p className="text-sm font-medium text-blue-800">Enhanced:</p>
-                      <p className="text-sm text-blue-700">{prompt.enhanced_text}</p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              <div key={prompt.id} className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 shadow flex flex-col md:flex-row md:items-center md:justify-between animate__animated animate__fadeIn">
+                <div className="flex-1">
+                  <div className="font-bold text-yellow-900 mb-1 flex items-center"><Star className="w-4 h-4 text-yellow-500 mr-1" />{prompt.title}</div>
+                  <div className="text-yellow-800 text-sm mb-1">{prompt.body}</div>
+                  {prompt.enhanced_text && <div className="text-green-700 text-xs mt-1">Enhanced: {prompt.enhanced_text}</div>}
+                </div>
+                <div className="flex flex-col items-end mt-2 md:mt-0 md:ml-4">
+                  <span className="text-xs text-yellow-600">{prompt.category}</span>
+                  <span className="text-xs text-yellow-400">{new Date(prompt.created_at).toLocaleString()}</span>
+                </div>
+              </div>
             ))}
           </div>
-        </TabsContent>
-
-        <TabsContent value="favorites" className="space-y-6">
-          <div className="grid gap-4">
-            {prompts.filter(p => p.is_favorite).map((prompt) => (
-              <Card key={prompt.id}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg flex items-center space-x-2">
-                      <Star className="w-5 h-5 text-yellow-500" />
-                      <span>{prompt.title}</span>
-                    </CardTitle>
-                    <Badge variant="secondary">{prompt.category}</Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600">{prompt.enhanced_text || prompt.body}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="analytics" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Usage Statistics</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between">
-                  <span>Total Prompts:</span>
-                  <span className="font-bold">{analytics?.total_prompts || 0}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Enhanced Prompts:</span>
-                  <span className="font-bold">{analytics?.analytics?.prompts_enhanced || 0}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Success Rate:</span>
-                  <span className="font-bold">{analytics?.analytics?.success_rate || 0}%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Time Saved:</span>
-                  <span className="font-bold">{analytics?.time_saved_formatted || '0m 0s'}</span>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Account Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between">
-                  <span>Username:</span>
-                  <span className="font-bold">{user?.username}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Email:</span>
-                  <span className="font-bold">{user?.email}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Account Type:</span>
-                  <Badge variant={user?.is_premium ? "default" : "secondary"}>
-                    {user?.is_premium ? "Premium" : "Free"}
-                  </Badge>
-                </div>
-                <div className="flex justify-between">
-                  <span>Member Since:</span>
-                  <span className="font-bold">
-                    {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
+        </div>
+      </div>
     </div>
   )
 }
@@ -615,7 +391,6 @@ function App() {
               return (
                 <div className="min-h-screen flex items-center justify-center">
                   <div className="text-center">
-                    <img src={logo} alt="Prompt Copilot" className="w-16 h-16 mx-auto mb-4 animate-pulse" />
                     <p>Loading...</p>
                   </div>
                 </div>
@@ -630,15 +405,11 @@ function App() {
               <>
                 <Header 
                   user={user} 
-                  logout={logout} 
-                  showAskFirst={showAskFirst}
-                  setShowAskFirst={setShowAskFirst}
+                  logout={logout}
                 />
                 <Dashboard 
                   user={user} 
                   token={token}
-                  showAskFirst={showAskFirst}
-                  setShowAskFirst={setShowAskFirst}
                 />
               </>
             )
@@ -755,196 +526,17 @@ function Tooltip({ children, content, position = 'top' }) {
   )
 }
 
-// Update your PromptEnhancement component to include these new features:
-function PromptEnhancement({ token }) {
-  const [originalPrompt, setOriginalPrompt] = useState('')
-  const [enhancedPrompt, setEnhancedPrompt] = useState('')
-  const [isEnhancing, setIsEnhancing] = useState(false)
-  const [showComparison, setShowComparison] = useState(false)
-  const [enhancementProgress, setEnhancementProgress] = useState(0)
-  const [status, setStatus] = useState(null)
-  const textareaRef = useRef(null)
-
-  // Add keyboard shortcuts
-  useKeyboardShortcuts(textareaRef, setOriginalPrompt, originalPrompt)
-
-  const enhancePrompt = async () => {
-    if (!originalPrompt.trim()) {
-      setStatus({ type: 'warning', message: 'Please enter a prompt to enhance' })
-      return
-    }
-
-    setIsEnhancing(true)
-    setEnhancementProgress(0)
-    setStatus({ type: 'info', message: 'Starting enhancement...' })
-    
-    // Simulate progress
-    const progressInterval = setInterval(() => {
-      setEnhancementProgress(prev => {
-        if (prev >= 90) {
-          clearInterval(progressInterval)
-          return 90
-        }
-        return prev + 10
-      })
-    }, 200)
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/enhance-prompt`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ prompt: originalPrompt })
-      })
-
-      const data = await response.json()
-      
-      clearInterval(progressInterval)
-      setEnhancementProgress(100)
-      
-      if (data.enhanced) {
-        setEnhancedPrompt(data.enhanced)
-        setShowComparison(true)
-        setStatus({ type: 'success', message: 'Prompt enhanced successfully!' })
-      } else {
-        setStatus({ type: 'error', message: 'Enhancement failed. Please try again.' })
-      }
-    } catch (error) {
-      clearInterval(progressInterval)
-      setStatus({ type: 'error', message: 'Network error. Please check your connection.' })
-      console.error('Enhancement failed:', error)
-    } finally {
-      setIsEnhancing(false)
-      setTimeout(() => {
-        setEnhancementProgress(0)
-        setStatus(null)
-      }, 3000)
-    }
-  }
-
-  // ... rest of your existing component code
-
-  return (
-    <div className="fire-enhancement-container">
-      <Card className="fire-enhancement-card">
-        <CardHeader className="fire-enhancement-header">
-          <div className="fire-enhancement-header-content">
-            <div className="fire-enhancement-title-section">
-              <CardTitle className="fire-enhancement-title">
-                <Wand2 className="w-6 h-6 mr-2" />
-                Enhance Your Prompt
-                <Flame className="w-5 h-5 ml-2 text-orange-500" />
-              </CardTitle>
-              <CardDescription>
-                Transform your prompts with AI magic ✨
-              </CardDescription>
-            </div>
-            <div className="flex items-center gap-4">
-              <KeyboardShortcutsHelp />
-              <Tooltip content="Save your enhanced prompts">
-                <Button variant="ghost" size="sm">
-                  <Heart className="w-4 h-4" />
-                </Button>
-              </Tooltip>
-            </div>
-          </div>
-        </CardHeader>
-        
-        <CardContent className="fire-enhancement-content">
-          {/* Status Indicator */}
-          {status && (
-            <div className="mb-6">
-              <StatusIndicator status={status.type} message={status.message} />
-            </div>
-          )}
-          
-          {/* Progress Bar */}
-          {isEnhancing && (
-            <div className="mb-6">
-              <ProgressBar progress={enhancementProgress} label="Enhancing prompt..." />
-            </div>
-          )}
-          
-          <div className="fire-prompt-input-section">
-            <Label htmlFor="prompt-input" className="fire-input-label">
-              Your Prompt
-            </Label>
-            <Textarea
-              ref={textareaRef}
-              id="prompt-input"
-              placeholder="Enter your prompt here... Use Ctrl+A to select all, Ctrl+D to duplicate lines, Ctrl+/ to comment"
-              value={originalPrompt}
-              onChange={(e) => setOriginalPrompt(e.target.value)}
-              className="fire-prompt-textarea"
-              rows={8}
-            />
-            
-            <div className="fire-prompt-actions">
-              <Button
-                onClick={enhancePrompt}
-                disabled={isEnhancing || !originalPrompt.trim()}
-                className="fire-enhance-btn"
-              >
-                {isEnhancing ? (
-                  <>
-                    <RotateCcw className="w-4 h-4 mr-2 animate-spin" />
-                    Enhancing...
-                  </>
-                ) : (
-                  <>
-                    <Rocket className="w-4 h-4 mr-2" />
-                    Enhance Prompt
-                  </>
-                )}
-              </Button>
-              
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setOriginalPrompt('')
-                  setEnhancedPrompt('')
-                  setShowComparison(false)
-                  textareaRef.current?.focus()
-                }}
-                className="fire-reset-btn"
-              >
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-              
-              {showComparison && (
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    setOriginalPrompt(enhancedPrompt)
-                    setShowComparison(false)
-                    textareaRef.current?.focus()
-                  }}
-                  className="fire-apply-btn"
-                >
-                  <CheckCircle className="w-4 h-4 mr-2" />
-                  Apply Enhanced
-                </Button>
-              )}
-            </div>
-          </div>
-
-          {/* Rest of your comparison section... */}
-        </CardContent>
-      </Card>
-      
-      {/* Floating Action Button for quick actions */}
-      <FloatingActionButton
-        onClick={() => textareaRef.current?.focus()}
-        icon={<Sparkles className="w-5 h-5" />}
-        label="Quick Enhance"
-        variant="primary"
-      />
-    </div>
-  )
-}
+// Add yellow pixel star SVG
+const PixelStar = () => (
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto mb-2 float-animation">
+    <rect x="20" y="4" width="8" height="8" fill="#FFD600"/>
+    <rect x="16" y="8" width="16" height="8" fill="#FFD600"/>
+    <rect x="12" y="16" width="24" height="8" fill="#FFD600"/>
+    <rect x="8" y="24" width="32" height="8" fill="#FFD600"/>
+    <rect x="12" y="32" width="24" height="8" fill="#FFD600"/>
+    <rect x="16" y="40" width="16" height="4" fill="#FFD600"/>
+  </svg>
+)
 
 export default App
 

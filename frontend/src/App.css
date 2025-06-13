@@ -63,11 +63,11 @@
 
 /* Gradient backgrounds */
 .gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #fffbe6 0%, #f7e9b0 100%);
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(90deg, #FFD600 0%, #FFEA70 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -80,14 +80,16 @@
 }
 
 .float-animation {
-  animation: float 3s ease-in-out infinite;
+  animation: float 2.5s ease-in-out infinite;
 }
 
 /* Glass morphism effect */
 .glass {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  border-radius: 1.5rem;
+  border: none;
+  backdrop-filter: blur(12px);
 }
 
 /* Custom scrollbar */
@@ -108,4 +110,52 @@
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
 }
+
+/* Add modern font */
+body, .font-sans {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Card improvements */
+.card {
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  border: none;
+}
+
+input, .rounded-lg {
+  border-radius: 0.75rem !important;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  transition: border 0.2s;
+}
+input:focus, .rounded-lg:focus {
+  border: 1.5px solid #FFD600;
+  outline: none;
+  background: #fffbe6;
+}
+
+button, .btn, .shadcn-button, .bg-yellow-400 {
+  border-radius: 0.75rem !important;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px 0 rgba(255, 214, 0, 0.08);
+}
+
+/* Pixel star shadow */
+svg.float-animation {
+  filter: drop-shadow(0 2px 8px #FFD60088);
+}
+
+/* Error message */
+.text-red-500.animate-pulse {
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Add/adjust styles for a yellow/gold, animated, pixel-art, visually engaging dashboard. Emphasize fire/cool/modern look, pixel star, and animated stats. Remove any styles for prompt enhancement UI. */
 
