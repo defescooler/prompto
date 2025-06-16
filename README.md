@@ -4,249 +4,199 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![React 18](https://img.shields.io/badge/react-18.2-blue.svg)](https://reactjs.org/)
+[![FastAPI](https://img.shields.io/badge/fastapi-0.104.1-green.svg)](https://fastapi.tiangolo.com/)
+[![React 19](https://img.shields.io/badge/react-19.1-blue.svg)](https://reactjs.org/)
 [![Chrome Extension](https://img.shields.io/badge/chrome-extension-green.svg)](https://developer.chrome.com/docs/extensions/)
 
-> Transform your AI prompts with intelligent enhancement, cross-platform synchronization, and powerful analytics.
+> Transform your AI prompts with intelligent enhancement, cross-platform synchronization, and powerful analytics. Complete system with FastAPI backend, PostgreSQL database, and comprehensive API.
+
+## 📋 Table of Contents
+
+- [Project Description](#project-description)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Tech Stack](#tech-stack)
+- [Contributing](#contributing)
+- [License](#license)
+
+## 📖 Project Description
+
+Prompt Copilot is a comprehensive AI-powered prompt enhancement system that helps users improve their prompts across various AI platforms. The system consists of three main components:
+
+- **Chrome Extension**: Automatically detects typing in AI platforms and provides one-click enhancement
+- **Web Dashboard**: Modern React interface for managing prompts, viewing analytics, and accessing the prompt library
+- **FastAPI Backend**: High-performance API server with PostgreSQL database and JWT authentication
+
+### What Problem Does It Solve?
+
+- **Inconsistent Prompt Quality**: Users often write unclear or ineffective prompts
+- **Manual Enhancement**: No automated way to improve prompts across different AI platforms
+- **Lack of Analytics**: No insights into prompt effectiveness and usage patterns
+- **Cross-Platform Sync**: Difficulty managing prompts across different AI services
+
+### What Makes It Stand Out?
+
+- **Real-time Enhancement**: Instant AI-powered prompt improvement
+- **Cross-Platform Integration**: Works with ChatGPT, Claude, Gemini, and other AI platforms
+- **Effectiveness Scoring**: Calculates prompt quality metrics using advanced algorithms
+- **Modern Tech Stack**: FastAPI for high performance, React 19 for modern UI, PostgreSQL for reliability
 
 ## ✨ Features
 
-### 🔌 **Chrome Extension**
-- **Smart Detection** - Automatically detects typing in ChatGPT, Claude, Gemini, and other AI platforms
-- **One-Click Enhancement** - Improve prompts with AI-powered suggestions
-- **Real-time Sync** - Seamlessly syncs with web dashboard
-- **Cross-Platform** - Works across all major AI platforms
+### 🔌 Chrome Extension
+- Smart detection of AI platform typing
+- One-click prompt enhancement
+- Real-time synchronization with dashboard
+- Cross-platform compatibility (ChatGPT, Claude, Gemini)
 
-### 🌐 **Web Dashboard**
-- **Modern UI** - Beautiful, responsive interface with dark theme
-- **Analytics Dashboard** - Track usage, improvements, and success rates
-- **Prompt Library** - Save, organize, and manage your enhanced prompts
-- **Keyboard Shortcuts** - Professional shortcuts (Ctrl+A, Ctrl+D, Ctrl+/)
-- **User Authentication** - Secure JWT-based authentication system
+### 🌐 Web Dashboard
+- Modern, responsive interface with dark theme
+- Analytics dashboard with usage insights
+- Prompt library with favorites system
+- User authentication and profile management
 
-### 🤖 **AI Enhancement**
-- **Google Gemini Integration** - Powered by advanced AI models
-- **Intelligent Analysis** - Detects prompt weaknesses and suggests improvements
-- **Context Preservation** - Maintains original intent while enhancing clarity
-- **Multi-language Support** - Works with prompts in various languages
+### 🤖 AI Enhancement
+- Google Gemini integration for intelligent analysis
+- Effectiveness scoring and quality metrics
+- Context preservation during enhancement
+- Multi-language support
 
-### 📊 **Analytics & Insights**
-- **Usage Tracking** - Monitor prompt enhancement frequency
-- **Success Metrics** - Track improvement effectiveness
-- **Favorites System** - Save up to 10 favorite prompts per user
-- **Historical Data** - View past enhancements and patterns
+### 📊 Analytics & Insights
+- Usage tracking and success metrics
+- Effectiveness scoring breakdown
+- Historical data and patterns
+- Performance analytics
 
-## 🏗️ Architecture
-
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  Chrome         │    │  React          │    │  Flask          │
-│  Extension      │◄──►│  Frontend       │◄──►│  Backend        │
-│                 │    │                 │    │                 │
-│ • Content Script│    │ • Dashboard     │    │ • JWT Auth      │
-│ • Background    │    │ • Analytics     │    │ • AI Enhancement│
-│ • Popup UI      │    │ • Prompt Library│    │ • Database      │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                                       │
-                                               ┌─────────────────┐
-                                               │  Database       │
-                                               │                 │
-                                               │ • Users         │
-                                               │ • Prompts       │
-                                               │ • Analytics     │
-                                               └─────────────────┘
-```
-
-## 🚀 Quick Start
+## 🚀 Installation
 
 ### Prerequisites
 
-- **Python 3.11+**
-- **Node.js 18+**
-- **Chrome Browser**
-- **Google Gemini API Key**
+- Python 3.11+
+- Node.js 18+
+- PostgreSQL 15+
+- Chrome Browser
+- Google Gemini API Key
 
-### 1. Clone Repository
+### Quick Start with Docker
 
 ```bash
+# Clone the repository
 git clone https://github.com/defescooler/prompt-copilot.git
 cd prompt-copilot
+
+# Copy environment template
+cp backend/env.example backend/.env
+
+# Edit .env and add your GEMINI_API_KEY
+nano backend/.env
+
+# Start all services
+docker compose up -d
 ```
 
-### 2. Backend Setup
+Services will be available at:
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
+
+### Manual Installation
+
+#### Backend Setup
 
 ```bash
 cd backend
 
 # Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Configure environment
-cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY
+cp env.example .env
+# Add your GEMINI_API_KEY to .env
 
-# Start backend server
-python src/main.py
+# Initialize database
+alembic upgrade head
+
+# Start server
+uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Backend will run on `http://localhost:8002`
-
-### 3. Frontend Setup
+#### Frontend Setup
 
 ```bash
 cd frontend
 
 # Install dependencies
 npm install
-# or
-pnpm install
 
 # Start development server
-npm run dev --host
-# or
-pnpm run dev --host
+npm run dev
 ```
 
-Frontend will run on `http://localhost:5173`
-
-### 4. Chrome Extension Setup
+#### Chrome Extension Setup
 
 1. Open Chrome and go to `chrome://extensions/`
-2. Enable **Developer mode** (top right toggle)
+2. Enable **Developer mode**
 3. Click **Load unpacked**
 4. Select the `chrome-extension/` folder
-5. Extension will appear in your Chrome toolbar
 
-## 📖 Usage Guide
+## 📖 Usage
 
 ### Getting Started
 
 1. **Register Account**
-   - Open the web dashboard at `http://localhost:5173`
-   - Create a new account with username, email, and password
-   - Login to access the full dashboard
+   - Open http://localhost:5173
+   - Create account with username, email, and password
+   - Login to access dashboard
 
 2. **Install Chrome Extension**
-   - Load the extension in Chrome (see setup above)
-   - Click the extension icon to login with your account
+   - Load extension in Chrome
+   - Login with your account credentials
 
 3. **Enhance Prompts**
    - Go to any AI platform (ChatGPT, Claude, etc.)
    - Start typing a prompt (10+ words)
-   - Click the "✨ Enhance" button that appears
-   - Review and apply the enhanced version
+   - Click the "✨ Enhance" button
+   - Review and apply enhanced version
 
-### Web Dashboard Features
+### Dashboard Features
 
-#### 📊 **Analytics Dashboard**
-- View total prompts enhanced
-- Track time saved and success rates
-- Monitor usage patterns and trends
-
-#### 📚 **Prompt Library**
-- Browse all your enhanced prompts
-- Save favorites (up to 10 per user)
-- Search and filter by date or content
-
-#### ⚙️ **Settings**
-- Update profile information
-- Manage API preferences
-- Configure enhancement settings
+- **Analytics**: View prompt enhancement statistics and effectiveness scores
+- **Prompt Library**: Browse, search, and manage your enhanced prompts
+- **Favorites**: Save up to 10 favorite prompts per user
+- **Settings**: Update profile and preferences
 
 ### Keyboard Shortcuts
 
 | Shortcut | Action |
 |----------|--------|
-| `Ctrl+A` | Select all text in textarea |
-| `Ctrl+D` | Duplicate current line |
-| `Ctrl+/` | Toggle comment (add/remove #) |
-| `Ctrl+L` | Clear all text |
-| `Ctrl+Shift+D` | Delete current line |
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Create a `.env` file in the `backend/` directory:
-
-```env
-# Required
-SECRET_KEY=your-secret-key-here
-GEMINI_API_KEY=your-gemini-api-key
-
-# Database (SQLite for development)
-DATABASE_URL=sqlite:///app.db
-
-# Optional - Flask settings
-FLASK_ENV=development
-FLASK_DEBUG=True
-
-# Optional - OAuth (future feature)
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-```
-
-### Getting Gemini API Key
-
-1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Create a new API key
-3. Add it to your `.env` file as `GEMINI_API_KEY`
-
-## 🚀 Deployment
-
-### Production Deployment
-
-1. **Backend (Flask)**
-   ```bash
-   # Install production dependencies
-   pip install gunicorn
-   
-   # Run with Gunicorn
-   gunicorn -w 4 -b 0.0.0.0:8002 src.main:app
-   ```
-
-2. **Frontend (React)**
-   ```bash
-   # Build for production
-   npm run build
-   
-   # Serve with nginx or any static file server
-   ```
-
-3. **Database**
-   - For production, use PostgreSQL instead of SQLite
-   - Update `DATABASE_URL` in `.env`
-
-### Docker Deployment
-
-```bash
-# Build and run with Docker Compose
-docker-compose up -d
-```
+| `Ctrl+A` | Select all text |
+| `Ctrl+D` | Duplicate line |
+| `Ctrl+/` | Toggle comment |
+| `Ctrl+L` | Clear text |
 
 ## 📚 API Documentation
 
-### Authentication Endpoints
+FastAPI automatically generates interactive API documentation at `/docs` and `/redoc`.
 
-#### POST `/api/register`
-Register a new user account.
+### Authentication
 
-```json
+```bash
+# Register
+POST /api/auth/register
 {
   "username": "string",
-  "email": "string", 
+  "email": "string",
   "password": "string"
 }
-```
 
-#### POST `/api/login`
-Login and receive JWT token.
-
-```json
+# Login
+POST /api/auth/login
 {
   "username": "string",
   "password": "string"
@@ -255,82 +205,62 @@ Login and receive JWT token.
 
 ### Prompt Enhancement
 
-#### POST `/api/enhance-prompt`
-Enhance a prompt using AI.
-
-```json
+```bash
+# Enhance prompt
+POST /api/prompts/enhance
 {
   "prompt": "string",
   "context": "optional string"
 }
+
+# Get user prompts
+GET /api/prompts
+
+# Add to favorites
+POST /api/prompts/{id}/favorite
 ```
 
-#### GET `/api/prompts`
-Get user's prompt history.
+### Prompt Drafts
 
-#### POST `/api/prompts/favorite`
-Add prompt to favorites.
-
-### Analytics
-
-#### GET `/api/analytics`
-Get user analytics and usage statistics.
-
-## 🛠️ Development
-
-### Project Structure
-
-```
-prompt-copilot/
-├── backend/                 # Flask API server
-│   ├── src/
-│   │   ├── main.py         # Main Flask application
-│   │   ├── models/         # Database models
-│   │   └── routes/         # API route handlers
-│   ├── requirements.txt    # Python dependencies
-│   └── .env               # Environment variables
-├── frontend/               # React web application
-│   ├── src/
-│   │   ├── App.jsx        # Main React component
-│   │   ├── App.css        # Styling and UI
-│   │   └── main.jsx       # React entry point
-│   ├── package.json       # Node.js dependencies
-│   └── vite.config.js     # Vite configuration
-├── chrome-extension/       # Browser extension
-│   ├── manifest.json      # Extension configuration
-│   ├── background.js      # Service worker
-│   ├── content.js         # Page interaction script
-│   ├── popup.html         # Extension popup UI
-│   └── popup.js           # Popup functionality
-└── README.md              # This file
+```bash
+# CRUD operations for drafts
+GET /api/drafts
+POST /api/drafts
+PUT /api/drafts/{id}
+DELETE /api/drafts/{id}
 ```
 
-### Tech Stack
+## 🛠️ Tech Stack
 
-#### Backend
-- **Flask** - Web framework
-- **SQLAlchemy** - Database ORM
-- **JWT** - Authentication
-- **bcrypt** - Password hashing
-- **Google Generative AI** - Prompt enhancement
-- **Flask-CORS** - Cross-origin requests
+### Backend
+- **FastAPI 0.104** - Modern, fast web framework
+- **SQLAlchemy 2.0** - Database ORM
+- **Alembic** - Database migrations
+- **PostgreSQL** - Production database
+- **Pydantic** - Data validation
+- **Python-Jose** - JWT authentication
+- **Passlib** - Password hashing
 
-#### Frontend
-- **React 18** - UI framework
+### Frontend
+- **React 19** - UI framework
 - **Vite** - Build tool
 - **Tailwind CSS** - Styling
-- **Lucide React** - Icons
+- **Radix UI** - Component primitives
+- **Recharts** - Data visualization
 
-#### Chrome Extension
-- **Manifest V3** - Latest extension format
+### Chrome Extension
+- **Manifest V3** - Extension format
 - **Vanilla JavaScript** - No frameworks
 - **Chrome APIs** - Browser integration
 
-#### Database
-- **SQLite** - Development database
-- **PostgreSQL** - Production database (recommended)
+### DevOps
+- **Docker** - Containerization
+- **Docker Compose** - Orchestration
+- **Uvicorn** - ASGI server
 
-### Contributing
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -338,49 +268,21 @@ prompt-copilot/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-### Running Tests
+### Development Setup
 
 ```bash
 # Backend tests
 cd backend
-python -m pytest
+pytest
 
-# Frontend tests  
+# Frontend tests
 cd frontend
 npm test
+
+# API testing
+cd backend
+python test_api.py
 ```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### Backend won't start
-- Check if port 8002 is available
-- Verify Python virtual environment is activated
-- Ensure all dependencies are installed
-- Check `.env` file configuration
-
-#### Frontend can't connect to backend
-- Verify backend is running on port 8002
-- Check CORS configuration in Flask app
-- Ensure API_BASE_URL is correct in frontend
-
-#### Chrome extension not working
-- Check if extension is loaded and enabled
-- Verify manifest.json permissions
-- Check browser console for errors
-- Ensure backend is running for API calls
-
-#### Database errors
-- Create database directory: `mkdir -p backend/database`
-- Check database permissions
-- Verify DATABASE_URL in `.env`
-
-### Getting Help
-
-- 📧 **Email**: [arsen.kozhabekof@gmail.com]
-- 🐛 **Issues**: [GitHub Issues](https://github.com/defescooler/prompt-copilot/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/defescooler/prompt-copilot/discussions)
 
 ## 📄 License
 
@@ -388,21 +290,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Google Gemini AI** for powerful prompt enhancement
-- **React** and **Flask** communities for excellent frameworks
-- **Chrome Extensions** documentation and examples
-- **Tailwind CSS** for beautiful, responsive styling
-
-## 🔮 Roadmap
-
-- [ ] **Multi-language Support** - Support for non-English prompts
-- [ ] **Team Collaboration** - Share prompts and analytics with team members
-- [ ] **Advanced Analytics** - More detailed usage insights and trends
-- [ ] **Custom AI Models** - Support for other AI providers (OpenAI, Anthropic)
-- [ ] **Mobile App** - Native mobile application
-- [ ] **API Rate Limiting** - Enterprise-grade API management
-- [ ] **Prompt Templates** - Pre-built templates for common use cases
-- [ ] **Export/Import** - Backup and restore prompt libraries
+- **Google Gemini AI** for prompt enhancement
+- **FastAPI** community for excellent framework
+- **React** team for modern UI development
+- **Chrome Extensions** documentation
 
 ---
 
