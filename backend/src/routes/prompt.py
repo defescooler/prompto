@@ -254,7 +254,7 @@ def get_analytics():
         return jsonify({
             'analytics': analytics.to_dict(),
             'stats': {
-                'total_prompts': total_prompts,
+            'total_prompts': total_prompts,
                 'favorite_prompts': favorite_prompts
             }
         })

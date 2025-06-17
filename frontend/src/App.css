@@ -212,3 +212,85 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Add/adjust styles for a yellow/gold, animated, pixel-art, visually engaging dashboard. Emphasize fire/cool/modern look, pixel star, and animated stats. Remove any styles for prompt enhancement UI. */
 
+/* Loader Animation */
+.loader {
+  display: inline-grid;
+}
+.loader:before,
+.loader:after {
+  content: "";
+  grid-area: 1/1;
+  height: 30px;
+  aspect-ratio: 6;
+  --c: #0000 64%,#000 66% 98%,#0000 101%;
+  background:
+    radial-gradient(35% 146% at 50% 159%,var(--c)) 0 0,
+    radial-gradient(35% 146% at 50% -59%,var(--c)) 25% 100%;
+  background-size: calc(100%/3) 50%;
+  background-repeat: repeat-x;
+  -webkit-mask: repeating-linear-gradient(90deg,#000 0 15%,#0000 0 50%) 0 0/200%;
+  animation: l9 .8s infinite linear;
+}
+.loader:after {
+  scale: 1 -1;
+  animation-delay: -.2s;
+}
+@keyframes l9{
+  to {-webkit-mask-position:-100% 0}
+}
+
+/* Smooth page transitions and performance optimizations */
+.page-transition {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Optimize animations for better performance */
+* {
+  will-change: auto;
+}
+
+.animate-optimized {
+  will-change: transform, opacity;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optimize button and input transitions */
+button, input, .btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

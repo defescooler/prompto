@@ -26,7 +26,17 @@ class User(db.Model):
     
     def get_favorites_count(self):
         """Get count of favorite prompts (max 10)"""
-        return len([p for p in self.prompts if p.is_favorite])
+        try:
+            if hasattr(self, 'prompts'):
+                return len([p for p in self.prompts if p.is_favorite])
+            else:
+                print(f"Debug: User {self.id} has no 'prompts' attribute")
+                return 0
+        except Exception as e:
+            print(f"Debug: Error in get_favorites_count for user {self.id}: {e}")
+            import traceback
+            traceback.print_exc()
+            return 0
     
     def can_add_favorite(self):
         """Check if user can add more favorites (max 10)"""
@@ -36,14 +46,26 @@ class User(db.Model):
         return f'<User {self.username}>'
 
     def to_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'username': self.username,
-            'email': self.email,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'is_premium': self.is_premium,
-            'favorites_count': self.get_favorites_count()
-        }
+        try:
+            return {
+                'id': self.id,
+                'name': self.name,
+                'username': self.username,
+                'email': self.email,
+                'created_at': self.created_at.isoformat() if self.created_at else None,
+                'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+                'is_premium': self.is_premium,
+                'favorites_count': self.get_favorites_count()
+            }
+        except Exception as e:
+            print(f"Debug: Error in User.to_dict(): {e}")
+            import traceback
+            traceback.print_exc()
+            return {
+                'id': self.id,
+                'name': self.name,
+                'username': self.username,
+                'email': self.email,
+                'error': str(e)
+            }
 

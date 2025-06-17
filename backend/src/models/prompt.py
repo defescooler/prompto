@@ -21,18 +21,27 @@ class Prompt(db.Model):
     user = db.relationship('User', backref='prompts')
     
     def to_dict(self):
-        return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'title': self.title,
-            'body': self.body,
-            'original_text': self.original_text,
-            'enhanced_text': self.enhanced_text,
-            'category': self.category,
-            'is_favorite': self.is_favorite,
-            'effectiveness_score': self.effectiveness_score,
-            'usage_count': self.usage_count,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None
-        }
+        try:
+            return {
+                'id': self.id,
+                'user_id': self.user_id,
+                'title': self.title,
+                'body': self.body,
+                'original_text': self.original_text,
+                'enhanced_text': self.enhanced_text,
+                'category': self.category,
+                'is_favorite': self.is_favorite,
+                'effectiveness_score': self.effectiveness_score,
+                'usage_count': self.usage_count,
+                'created_at': self.created_at.isoformat() if self.created_at else None,
+                'updated_at': self.updated_at.isoformat() if self.updated_at else None
+            }
+        except Exception as e:
+            print(f"Debug: Error in Prompt.to_dict(): {e}")
+            import traceback
+            traceback.print_exc()
+            return {
+                'id': self.id,
+                'error': str(e)
+            }
 
