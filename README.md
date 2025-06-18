@@ -1,78 +1,50 @@
-# 🚀 Prompt Copilot
+# Prompto
 
-**AI-Powered Prompt Enhancement System with Chrome Extension & Web Dashboard**
+AI-powered prompt enhancement system that helps you write better prompts for ChatGPT, Claude, and other AI platforms.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/fastapi-0.104.1-green.svg)](https://fastapi.tiangolo.com/)
-[![React 19](https://img.shields.io/badge/react-19.1-blue.svg)](https://reactjs.org/)
-[![Chrome Extension](https://img.shields.io/badge/chrome-extension-green.svg)](https://developer.chrome.com/docs/extensions/)
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![React](https://img.shields.io/badge/react-19.1-blue.svg)](https://reactjs.org/)
 
-> Transform your AI prompts with intelligent enhancement, cross-platform synchronization, and powerful analytics. Complete system with FastAPI backend, PostgreSQL database, and comprehensive API.
+## What is Prompto?
 
-## 📋 Table of Contents
+Prompto is a complete system that helps you write better AI prompts. It consists of:
 
-- [Project Description](#project-description)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Documentation](#api-documentation)
-- [Tech Stack](#tech-stack)
-- [Contributing](#contributing)
-- [License](#license)
+- **Chrome Extension**: Automatically enhances your prompts while you type on AI platforms
+- **Web Dashboard**: Manage your prompts, view analytics, and access your prompt library
+- **Backend API**: Handles prompt enhancement using Google's Gemini AI
 
-## 📖 Project Description
+## Why I Built This
 
-Prompt Copilot is a comprehensive AI-powered prompt enhancement system that helps users improve their prompts across various AI platforms. The system consists of three main components:
+Writing effective prompts for AI platforms can be challenging. Many users struggle with:
+- Unclear or ineffective prompts
+- No way to improve prompts across different AI platforms
+- Lack of insights into what makes a good prompt
 
-- **Chrome Extension**: Automatically detects typing in AI platforms and provides one-click enhancement
-- **Web Dashboard**: Modern React interface for managing prompts, viewing analytics, and accessing the prompt library
-- **FastAPI Backend**: High-performance API server with PostgreSQL database and JWT authentication
+Prompto solves these problems by providing real-time enhancement and analytics.
 
-### What Problem Does It Solve?
+## Features
 
-- **Inconsistent Prompt Quality**: Users often write unclear or ineffective prompts
-- **Manual Enhancement**: No automated way to improve prompts across different AI platforms
-- **Lack of Analytics**: No insights into prompt effectiveness and usage patterns
-- **Cross-Platform Sync**: Difficulty managing prompts across different AI services
-
-### What Makes It Stand Out?
-
-- **Real-time Enhancement**: Instant AI-powered prompt improvement
-- **Cross-Platform Integration**: Works with ChatGPT, Claude, Gemini, and other AI platforms
-- **Effectiveness Scoring**: Calculates prompt quality metrics using advanced algorithms
-- **Modern Tech Stack**: FastAPI for high performance, React 19 for modern UI, PostgreSQL for reliability
-
-## ✨ Features
-
-### 🔌 Chrome Extension
-- Smart detection of AI platform typing
+### Chrome Extension
+- Works on ChatGPT, Claude, Gemini, and other AI platforms
 - One-click prompt enhancement
-- Real-time synchronization with dashboard
-- Cross-platform compatibility (ChatGPT, Claude, Gemini)
+- Syncs with your web dashboard
 
-### 🌐 Web Dashboard
-- Modern, responsive interface with dark theme
-- Analytics dashboard with usage insights
-- Prompt library with favorites system
-- User authentication and profile management
+### Web Dashboard
+- Modern, responsive interface
+- Analytics and usage insights
+- Prompt library with favorites
+- User authentication
 
-### 🤖 AI Enhancement
-- Google Gemini integration for intelligent analysis
-- Effectiveness scoring and quality metrics
-- Context preservation during enhancement
+### AI Enhancement
+- Powered by Google Gemini
+- Effectiveness scoring
+- Context preservation
 - Multi-language support
 
-### 📊 Analytics & Insights
-- Usage tracking and success metrics
-- Effectiveness scoring breakdown
-- Historical data and patterns
-- Performance analytics
-
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
-
 - Python 3.11+
 - Node.js 18+
 - PostgreSQL 15+
@@ -89,7 +61,7 @@ cd prompt-copilot
 # Copy environment template
 cp backend/env.example backend/.env
 
-# Edit .env and add your GEMINI_API_KEY
+# Add your GEMINI_API_KEY to backend/.env
 nano backend/.env
 
 # Start all services
@@ -97,94 +69,57 @@ docker compose up -d
 ```
 
 Services will be available at:
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:8000
-- **API Docs**: http://localhost:8000/docs
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
 
 ### Manual Installation
 
-#### Backend Setup
-
+#### Backend
 ```bash
 cd backend
-
-# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Configure environment
 cp env.example .env
-# Add your GEMINI_API_KEY to .env
-
-# Initialize database
+# Add GEMINI_API_KEY to .env
 alembic upgrade head
-
-# Start server
 uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-#### Frontend Setup
-
+#### Frontend
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
 ```
 
-#### Chrome Extension Setup
-
+#### Chrome Extension
 1. Open Chrome and go to `chrome://extensions/`
 2. Enable **Developer mode**
 3. Click **Load unpacked**
 4. Select the `chrome-extension/` folder
 
-## 📖 Usage
+## How to Use
 
 ### Getting Started
+1. Register an account at http://localhost:5173
+2. Install the Chrome extension
+3. Go to any AI platform (ChatGPT, Claude, etc.)
+4. Start typing a prompt (10+ words)
+5. Click the "Enhance" button to improve your prompt
 
-1. **Register Account**
-   - Open http://localhost:5173
-   - Create account with username, email, and password
-   - Login to access dashboard
+### Dashboard
+- View your prompt enhancement statistics
+- Browse and manage your enhanced prompts
+- Save favorite prompts
+- Update your profile and preferences
 
-2. **Install Chrome Extension**
-   - Load extension in Chrome
-   - Login with your account credentials
+## API Documentation
 
-3. **Enhance Prompts**
-   - Go to any AI platform (ChatGPT, Claude, etc.)
-   - Start typing a prompt (10+ words)
-   - Click the "✨ Enhance" button
-   - Review and apply enhanced version
+FastAPI automatically generates interactive documentation at `/docs` and `/redoc`.
 
-### Dashboard Features
-
-- **Analytics**: View prompt enhancement statistics and effectiveness scores
-- **Prompt Library**: Browse, search, and manage your enhanced prompts
-- **Favorites**: Save up to 10 favorite prompts per user
-- **Settings**: Update profile and preferences
-
-### Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+A` | Select all text |
-| `Ctrl+D` | Duplicate line |
-| `Ctrl+/` | Toggle comment |
-| `Ctrl+L` | Clear text |
-
-## 📚 API Documentation
-
-FastAPI automatically generates interactive API documentation at `/docs` and `/redoc`.
-
-### Authentication
+### Example API Calls
 
 ```bash
 # Register
@@ -195,72 +130,22 @@ POST /api/auth/register
   "password": "string"
 }
 
-# Login
-POST /api/auth/login
-{
-  "username": "string",
-  "password": "string"
-}
-```
-
-### Prompt Enhancement
-
-```bash
 # Enhance prompt
 POST /api/prompts/enhance
 {
   "prompt": "string",
   "context": "optional string"
 }
-
-# Get user prompts
-GET /api/prompts
-
-# Add to favorites
-POST /api/prompts/{id}/favorite
 ```
 
-### Prompt Drafts
+## Tech Stack
 
-```bash
-# CRUD operations for drafts
-GET /api/drafts
-POST /api/drafts
-PUT /api/drafts/{id}
-DELETE /api/drafts/{id}
-```
+- **Backend**: FastAPI, SQLAlchemy, PostgreSQL
+- **Frontend**: React 19, Vite, Tailwind CSS
+- **Chrome Extension**: Manifest V3, Vanilla JavaScript
+- **AI**: Google Gemini API
 
-## 🛠️ Tech Stack
-
-### Backend
-- **FastAPI 0.104** - Modern, fast web framework
-- **SQLAlchemy 2.0** - Database ORM
-- **Alembic** - Database migrations
-- **PostgreSQL** - Production database
-- **Pydantic** - Data validation
-- **Python-Jose** - JWT authentication
-- **Passlib** - Password hashing
-
-### Frontend
-- **React 19** - UI framework
-- **Vite** - Build tool
-- **Tailwind CSS** - Styling
-- **Radix UI** - Component primitives
-- **Recharts** - Data visualization
-
-### Chrome Extension
-- **Manifest V3** - Extension format
-- **Vanilla JavaScript** - No frameworks
-- **Chrome APIs** - Browser integration
-
-### DevOps
-- **Docker** - Containerization
-- **Docker Compose** - Orchestration
-- **Uvicorn** - ASGI server
-
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -268,36 +153,17 @@ We welcome contributions! Please follow these steps:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-### Development Setup
-
-```bash
-# Backend tests
-cd backend
-pytest
-
-# Frontend tests
-cd frontend
-npm test
-
-# API testing
-cd backend
-python test_api.py
-```
-
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- **Google Gemini AI** for prompt enhancement
-- **FastAPI** community for excellent framework
-- **React** team for modern UI development
-- **Chrome Extensions** documentation
+- Google Gemini AI for prompt enhancement
+- FastAPI and React communities
+- Chrome Extensions documentation
 
 ---
 
-**Made with ❤️ by [defescooler](https://github.com/defescooler)**
-
-⭐ **Star this repo if you find it useful!**
+Made with ❤️ by [defescooler](https://github.com/defescooler)
 
