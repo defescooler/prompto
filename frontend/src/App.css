@@ -5,22 +5,36 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* New Violent Purple/White Palette */
+/* Prompto Green Color Palette */
 :root {
-  --color-purple-50: #F9F5FF;    /* Very light purple, almost white */
-  --color-purple-100: #F2ECFF;   /* Pale lavender */
-  --color-purple-200: #E6D9FF;   /* Soft lavender */
-  --color-purple-300: #D3BFFF;   /* Medium lavender */
-  --color-purple-400: #BF99FF;   /* Bright violet */
-  --color-purple-500: #A87DFF;   /* Strong purple */
-  --color-purple-600: #8C5EFF;   /* Deep violet */
-  --color-purple-700: #6A3BBF;   /* Dark purple */
-  --color-purple-800: #4B2780;   /* Very dark purple */
-  --color-purple-900: #2C184D;   /* Near black purple for deep contrast */
+  --color-green-50: #F0FDF4;    /* Very light green, almost white */
+  --color-green-100: #DCFCE7;   /* Pale green */
+  --color-green-200: #BBF7D0;   /* Soft green */
+  --color-green-300: #86EFAC;   /* Medium green */
+  --color-green-400: #4ADE80;   /* Bright green */
+  --color-green-500: #22C55E;   /* Strong green */
+  --color-green-600: #16A34A;   /* Deep green */
+  --color-green-700: #15803D;   /* Dark green */
+  --color-green-800: #166534;   /* Very dark green */
+  --color-green-900: #14532D;   /* Near black green for deep contrast */
+  
+  /* Prompto specific colors */
+  --color-prompto-dark: #005F16;
+  --color-prompto-primary: #0DA30D;
+  --color-prompto-light: #51D071;
+  --color-primary: var(--color-prompto-primary);
+  --color-primary-dark: var(--color-prompto-dark);
+  --color-primary-light: var(--color-prompto-light);
+  --color-accent: var(--color-prompto-light);
+  --color-accent-dark: var(--color-prompto-dark);
+  --color-accent-light: var(--color-prompto-light);
+  --color-success: var(--color-prompto-primary);
+  --color-success-bg: var(--color-prompto-light);
+  --color-success-dark: var(--color-prompto-dark);
   
   /* RGB values for shadows/filters */
-  --color-purple-400-rgb: 191, 153, 255;
-  --color-purple-500-rgb: 168, 125, 255;
+  --color-green-400-rgb: 74, 222, 128;
+  --color-green-500-rgb: 34, 197, 94;
 }
 
 html, body, #root {
@@ -94,11 +108,11 @@ html, body, #root {
 
 /* Gradient backgrounds - simplified for minimalism */
 .gradient-bg {
-  background: var(--color-purple-50); /* A very light purple, almost white */
+  background: var(--color-primary-light);
 }
 
 .gradient-text {
-  background: var(--color-purple-700); /* Use a solid dark purple for text */
+  background: var(--color-primary-dark);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -120,7 +134,7 @@ html, body, #root {
   background: rgba(255, 255, 255, 0.9); /* More opaque white */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Lighter, subtle shadow */
   border-radius: 0.75rem; /* Slightly smaller border radius */
-  border: 1px solid var(--color-purple-100); /* Add a subtle border */
+  border: 1px solid var(--color-primary-light);
   backdrop-filter: none; /* Remove blur for flatter look */
 }
 
@@ -130,17 +144,17 @@ html, body, #root {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-purple-50); /* Use light purple for track */
+  background: var(--color-green-50); /* Use light green for track */
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-purple-300); /* Use a lighter purple for thumb */
+  background: var(--color-primary-light);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-purple-400); /* Slightly darker on hover */
+  background: var(--color-primary);
 }
 
 /* Apply Inter font globally */
@@ -152,19 +166,19 @@ body, .font-sans {
 .card {
   border-radius: 0.75rem; /* Match glass border radius */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Lighter, subtle shadow */
-  border: 1px solid var(--color-purple-100); /* Subtle border */
+  border: 1px solid var(--color-primary-light);
 }
 
 input, .rounded-lg {
   border-radius: 0.5rem !important; /* Make input corners slightly less rounded */
-  border: 1px solid var(--color-purple-200); /* Softer border */
-  background: var(--color-purple-50); /* Light background */
+  border: 1px solid var(--color-primary-light);
+  background: #fff;
   transition: border 0.2s, background 0.2s; /* Add background transition */
 }
 input:focus, .rounded-lg:focus {
-  border: 1.5px solid var(--color-purple-500); /* Keep purple focus */
+  border: 1.5px solid var(--color-primary);
   outline: none;
-  background: #ffffff; /* White background on focus */
+  background: #fff;
 }
 
 button, .btn, .shadcn-button {
@@ -173,15 +187,12 @@ button, .btn, .shadcn-button {
   letter-spacing: normal; /* Remove letter spacing */
   box-shadow: none; /* Remove button shadow for flatter look */
   transition: background-color 0.2s, box-shadow 0.2s; /* Smooth transitions */
+  background: var(--color-primary);
+  color: white;
 }
-
-/* Ensure the base button colors are purple and white, in line with the new palette */
-button.bg-purple-500:hover {
-  background-color: var(--color-purple-600); /* Darker purple on hover */
-}
-
-button.text-white {
-  color: white; /* Ensure text remains white for purple buttons */
+button:hover, .btn:hover, .shadcn-button:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-light);
 }
 
 /* Pixel star shadow - removed for minimalism */
@@ -292,5 +303,9 @@ button, input, .btn {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.header, .sidebar {
+  border-bottom: 1px solid var(--color-primary-light);
 }
 

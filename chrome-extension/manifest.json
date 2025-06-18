@@ -1,52 +1,62 @@
 {
-  "manifest_version": 3,
-  "name": "Prompt Copilot",
-  "version": "1.0.0",
-  "description": "Enhance your AI prompts with intelligent suggestions and connect to your personal prompt library",
-  "permissions": [
-    "activeTab",
-    "storage",
-    "scripting"
-  ],
-  "host_permissions": [
-    "https://chat.openai.com/*",
-    "https://chatgpt.com/*",
-    "https://claude.ai/*",
-    "https://bard.google.com/*",
-    "https://gemini.google.com/*",
-    "http://localhost:8002/*"
-  ],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "https://chat.openai.com/*",
-        "https://chatgpt.com/*",
-        "https://claude.ai/*",
-        "https://bard.google.com/*",
-        "https://gemini.google.com/*"
-      ],
-      "js": ["content.js"],
-      "css": ["styles.css"],
-      "run_at": "document_end"
-    }
-  ],
-  "action": {
-    "default_popup": "popup.html",
-    "default_title": "Prompt Copilot"
-  },
-  "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["icon128.png"],
-      "matches": ["<all_urls>"]
-    }
-  ]
-}
-
+    "manifest_version": 3,
+    "name": "Prompto - AI Prompt Enhancer and Token Optimizer",
+    "version": "1.0.0",
+    "description": "Enhance and optimize your AI prompts with intelligent suggestions",
+    "permissions": [
+      "storage",
+      "activeTab",
+      "scripting"
+    ],
+    "host_permissions": [
+      "https://chat.openai.com/*",
+      "https://chatgpt.com/*",
+      "https://claude.ai/*",
+      "https://bard.google.com/*",
+      "https://gemini.google.com/*",
+      "https://poe.com/*",
+      "https://you.com/*",
+      "https://perplexity.ai/*",
+      "http://localhost:8002/*"
+    ],
+    "content_scripts": [
+      {
+        "matches": [
+          "https://chat.openai.com/*",
+          "https://chatgpt.com/*",
+          "https://claude.ai/*",
+          "https://bard.google.com/*",
+          "https://gemini.google.com/*",
+          "https://poe.com/*",
+          "https://you.com/*",
+          "https://perplexity.ai/*",
+          "file://*/*"
+        ],
+        "js": ["content.js"],
+        "css": ["styles.css"],
+        "run_at": "document_end"
+      }
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html",
+      "default_title": "Prompto"
+    },
+    "icons": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    },
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "prompto-logo-black.svg",
+          "prompto-logo-white.svg"
+        ],
+        "matches": ["<all_urls>"]
+      }
+    ]
+  }
+  

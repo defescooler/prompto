@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prompt Copilot</title>
+    <title>Prompto</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +15,7 @@
             width: 380px;
             min-height: 500px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0DA30D 0%, #51D071 100%);
             color: white;
         }
         
@@ -79,9 +79,9 @@
         
         .form-group input {
             width: 100%;
-            padding: 10px 12px;
+            padding: 8px 12px;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
+            border-radius: 6px;
             background: rgba(255, 255, 255, 0.1);
             color: white;
             font-size: 14px;
@@ -91,151 +91,100 @@
             color: rgba(255, 255, 255, 0.6);
         }
         
+        .form-group input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
         .btn {
-            width: 100%;
-            padding: 12px;
+            display: inline-block;
+            padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
-        }
-        
-        .btn-primary {
-            background: white;
-            color: #667eea;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-        }
-        
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            margin-top: 8px;
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 16px;
-            border-radius: 8px;
+            text-decoration: none;
             text-align: center;
         }
         
-        .stat-number {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 4px;
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
-        .stat-label {
-            font-size: 12px;
-            opacity: 0.8;
+        .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
         }
         
-        .user-info {
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.1);
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
         }
         
-        .user-name {
-            font-weight: 600;
-            margin-bottom: 4px;
+        .link-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 8px;
         }
         
-        .user-email {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        
-        .actions {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+        .link-btn:hover {
+            color: white;
         }
         
         .error {
-            background: rgba(239, 68, 68, 0.2);
-            color: #fecaca;
+            background: rgba(255, 0, 0, 0.2);
+            color: #ffcccc;
             padding: 8px 12px;
-            border-radius: 6px;
+            border-radius: 4px;
+            margin-bottom: 16px;
             font-size: 12px;
-            margin-bottom: 12px;
-        }
-        
-        .success {
-            background: rgba(16, 185, 129, 0.2);
-            color: #a7f3d0;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            margin-bottom: 12px;
-        }
-        
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
         }
         
         .hidden {
             display: none;
         }
         
-        .link-btn {
-            background: none;
-            border: none;
-            color: white;
-            text-decoration: underline;
-            cursor: pointer;
-            font-size: 12px;
-            margin-top: 8px;
-        }
-        
-        .settings-section {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .setting-item {
+        .toggle-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
         }
         
-        .setting-label {
+        .toggle-label {
             font-size: 14px;
+            font-weight: 500;
         }
         
         .toggle {
+            position: relative;
             width: 44px;
             height: 24px;
             background: rgba(255, 255, 255, 0.3);
             border-radius: 12px;
-            position: relative;
             cursor: pointer;
             transition: background 0.2s ease;
         }
         
         .toggle.active {
-            background: white;
+            background: rgba(255, 255, 255, 0.8);
         }
         
         .toggle-slider {
@@ -251,14 +200,16 @@
         
         .toggle.active .toggle-slider {
             transform: translateX(20px);
-            background: #667eea;
+            background: #0DA30D;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="logo">🦜</div>
-        <div class="title">Prompt Copilot</div>
+        <div class="logo">
+            <img src="prompto-logo-white.svg" alt="Prompto Logo" style="width: 40px; height: 40px; display: block; margin: 0 auto;" />
+        </div>
+        <div class="title">Prompto</div>
         <div class="subtitle">AI-Powered Enhancement</div>
     </div>
     
@@ -289,22 +240,22 @@
             
             <!-- Register Form -->
             <div id="register-form" class="auth-form">
-                <div id="register-error" class="error hidden"></div>
+                <div id="auth-error" class="error hidden"></div>
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" id="register-name" placeholder="Enter your name">
+                    <input type="text" id="register-name" placeholder="Enter your full name">
                 </div>
                 <div class="form-group">
                     <label>Username</label>
-                    <input type="text" id="register-username" placeholder="Choose username">
+                    <input type="text" id="register-username" placeholder="Choose a username">
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" id="register-email" placeholder="Enter email">
+                    <input type="email" id="register-email" placeholder="Enter your email">
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="register-password" placeholder="Create password">
+                    <input type="password" id="register-password" placeholder="Create a password">
                 </div>
                 <button class="btn btn-primary" onclick="handleRegister()">Create Account</button>
                 <button class="link-btn" onclick="showAuthForm('login')">Already have an account? Sign in</button>
@@ -312,55 +263,30 @@
             </div>
         </div>
         
-        <!-- Dashboard Section -->
-        <div id="dashboard-section" class="hidden">
-            <div id="user-info" class="user-info">
-                <div class="user-name" id="user-name"></div>
-                <div class="user-email" id="user-email"></div>
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" id="prompts-enhanced">0</div>
-                    <div class="stat-label">Enhanced</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="time-saved">0m</div>
-                    <div class="stat-label">Time Saved</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="favorites-count">0</div>
-                    <div class="stat-label">Favorites</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="success-rate">0%</div>
-                    <div class="stat-label">Success Rate</div>
+        <!-- Settings Section -->
+        <div id="settings-section" class="settings-section" style="display: none;">
+            <div class="toggle-container">
+                <span class="toggle-label">Auto-enhance prompts</span>
+                <div class="toggle" id="auto-enhance-toggle" onclick="toggleSetting('auto-enhance')">
+                    <div class="toggle-slider"></div>
                 </div>
             </div>
             
-            <div class="actions">
-                <button class="btn btn-primary" onclick="openDashboard()">📊 Open Dashboard</button>
-                <button class="btn btn-secondary" onclick="openPromptLibrary()">📚 Prompt Library</button>
-            </div>
-            
-            <div class="settings-section">
-                <div class="setting-item">
-                    <span class="setting-label">Smart Suggestions</span>
-                    <div class="toggle active" id="smart-suggestions-toggle" onclick="toggleSetting('smartSuggestions')">
-                        <div class="toggle-slider"></div>
-                    </div>
-                </div>
-                <div class="setting-item">
-                    <span class="setting-label">Auto-save Enhanced</span>
-                    <div class="toggle" id="auto-save-toggle" onclick="toggleSetting('autoSave')">
-                        <div class="toggle-slider"></div>
-                    </div>
+            <div class="toggle-container">
+                <span class="toggle-label">Show suggestions</span>
+                <div class="toggle active" id="suggestions-toggle" onclick="toggleSetting('suggestions')">
+                    <div class="toggle-slider"></div>
                 </div>
             </div>
             
-            <div class="actions" style="margin-top: 20px;">
-                <button class="btn btn-secondary" onclick="handleLogout()">Sign Out</button>
+            <div class="toggle-container">
+                <span class="toggle-label">Track analytics</span>
+                <div class="toggle active" id="analytics-toggle" onclick="toggleSetting('analytics')">
+                    <div class="toggle-slider"></div>
+                </div>
             </div>
+            
+            <button class="btn btn-secondary" onclick="logout()" style="width: 100%; margin-top: 20px;">Sign Out</button>
         </div>
     </div>
     

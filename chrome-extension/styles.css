@@ -1,72 +1,108 @@
-/* Styles for Prompt Copilot Chrome Extension */
-
-/* Reset and base styles */
-* {
-  box-sizing: border-box;
+/* Prompto Extension Styles */
+.prompto-toolbar {
+  position: fixed !important;
+  z-index: 10000 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
 
-/* Enhance button styles */
-.prompt-copilot-enhance-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.prompto-main-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0DA30D, #51D071);
   color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(13, 163, 13, 0.3);
+  transition: all 0.3s ease;
+}
+
+.prompto-main-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(13, 163, 13, 0.4);
+}
+
+.prompto-actions {
+  position: absolute;
+  bottom: 50px;
+  right: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prompto-enhance-btn,
+.prompto-optimize-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: white;
+  color: #333;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
-  z-index: 10000;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  white-space: nowrap;
 }
 
-.prompt-copilot-enhance-btn:hover {
+.prompto-enhance-btn:hover,
+.prompto-optimize-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.prompt-copilot-enhance-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
+.prompto-enhance-btn {
+  border-left: 3px solid #0DA30D;
 }
 
-/* Enhancement panel styles */
-.prompt-copilot-panel {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.prompto-optimize-btn {
+  border-left: 3px solid #f59e0b;
+}
+
+/* Overlay Styles */
+.prompto-overlay {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10001 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.prompto-modal {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-  z-index: 10001;
   max-width: 600px;
-  width: 90vw;
+  width: 90%;
   max-height: 80vh;
-  overflow-y: auto;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-.prompt-copilot-panel-header {
+.prompto-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid #e5e7eb;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0DA30D, #51D071);
   color: white;
-  border-radius: 12px 12px 0 0;
 }
 
-.prompt-copilot-panel-header h3 {
+.prompto-header h3 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
 }
 
-.prompt-copilot-close-btn {
+.prompto-close {
   background: none;
   border: none;
   color: white;
@@ -75,227 +111,154 @@
   padding: 0;
   width: 30px;
   height: 30px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  transition: background 0.2s ease;
 }
 
-.prompt-copilot-close-btn:hover {
+.prompto-close:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.prompt-copilot-panel-content {
+.prompto-content {
   padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
-.prompt-copilot-section {
+.prompto-section {
   margin-bottom: 20px;
 }
 
-.prompt-copilot-section h4 {
+.prompto-section h4 {
   margin: 0 0 8px 0;
   font-size: 14px;
-  font-weight: 600;
-  color: #374151;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.prompt-copilot-text {
+.prompto-text {
   padding: 12px;
-  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #f8f9fa;
   font-size: 14px;
   line-height: 1.5;
-  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-.prompt-copilot-text.original {
-  background: #fef3c7;
-  border: 1px solid #f59e0b;
-  color: #92400e;
-}
-
-.prompt-copilot-text.enhanced {
-  background: #d1fae5;
-  border: 1px solid #10b981;
-  color: #065f46;
-}
-
-.prompt-copilot-actions {
+.prompto-actions {
   display: flex;
+  justify-content: flex-end;
   gap: 12px;
-  margin-top: 20px;
-  flex-wrap: wrap;
+  padding: 20px;
+  border-top: 1px solid #e0e0e0;
 }
 
-.prompt-copilot-btn {
+.prompto-decline,
+.prompto-accept {
   padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
   border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
   transition: all 0.2s ease;
-  font-family: inherit;
 }
 
-.prompt-copilot-btn.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.prompto-decline {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.prompto-decline:hover {
+  background: #e0e0e0;
+}
+
+.prompto-accept {
+  background: #0DA30D;
   color: white;
 }
 
-.prompt-copilot-btn.primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+.prompto-accept:hover {
+  background: #0A8A0A;
 }
 
-.prompt-copilot-btn.secondary {
-  background: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
-}
-
-.prompt-copilot-btn.secondary:hover {
-  background: #e5e7eb;
-}
-
-/* Notification styles */
-.prompt-copilot-notification {
-  position: fixed;
+/* Toast Styles */
+.prompto-toast {
+  position: fixed !important;
   top: 20px;
   right: 20px;
-  padding: 12px 20px;
-  border-radius: 8px;
+  z-index: 10002 !important;
+  padding: 12px 16px;
+  border-radius: 6px;
+  color: white;
   font-size: 14px;
-  font-weight: 600;
-  z-index: 10002;
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  max-width: 300px;
-  word-wrap: break-word;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.prompt-copilot-notification.show {
-  transform: translateX(0);
+.prompto-toast-success {
+  background: #0DA30D;
 }
 
-.prompt-copilot-notification.success {
-  background: #10b981;
+.prompto-toast-error {
+  background: #dc3545;
+}
+
+:root {
+  --prompto-green-dark: #005F16;
+  --prompto-green: #0DA30D;
+  --prompto-green-light: #51D071;
+  --prompto-bg-gradient: linear-gradient(135deg, #0DA30D 0%, #51D071 100%);
+}
+
+body {
+  background: var(--prompto-bg-gradient);
   color: white;
 }
 
-.prompt-copilot-notification.error {
-  background: #ef4444;
+.btn-primary {
+  background: var(--prompto-green);
+  color: white;
+  border: 1px solid var(--prompto-green-light);
+}
+
+.btn-primary:hover {
+  background: var(--prompto-green-dark);
+  border-color: var(--prompto-green-light);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--prompto-green-light);
+  border: 1px solid var(--prompto-green-light);
+}
+
+.btn-secondary:hover {
+  background: var(--prompto-green-dark);
   color: white;
 }
 
-.prompt-copilot-notification.warning {
-  background: #f59e0b;
-  color: white;
+.toggle.active .toggle-slider {
+  background: var(--prompto-green);
 }
 
-.prompt-copilot-notification.info {
-  background: #3b82f6;
-  color: white;
+.toggle {
+  background: var(--prompto-green-light);
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .prompt-copilot-panel {
-    width: 95vw;
-    max-height: 90vh;
-  }
-  
-  .prompt-copilot-actions {
-    flex-direction: column;
-  }
-  
-  .prompt-copilot-btn {
-    width: 100%;
-  }
+.header {
+  border-bottom: 1px solid var(--prompto-green-light);
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .prompt-copilot-panel {
-    background: #1f2937;
-    color: #f9fafb;
-  }
-  
-  .prompt-copilot-section h4 {
-    color: #f9fafb;
-  }
-  
-  .prompt-copilot-text.original {
-    background: #451a03;
-    border-color: #92400e;
-    color: #fbbf24;
-  }
-  
-  .prompt-copilot-text.enhanced {
-    background: #064e3b;
-    border-color: #059669;
-    color: #6ee7b7;
-  }
-  
-  .prompt-copilot-btn.secondary {
-    background: #374151;
-    color: #f9fafb;
-    border-color: #4b5563;
-  }
-  
-  .prompt-copilot-btn.secondary:hover {
-    background: #4b5563;
-  }
+.logo {
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-/* Animation keyframes */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -60%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
-
-.prompt-copilot-panel {
-  animation: slideIn 0.3s ease-out;
-}
-
-/* Focus styles for accessibility */
-.prompt-copilot-btn:focus,
-.prompt-copilot-close-btn:focus {
-  outline: 2px solid #667eea;
-  outline-offset: 2px;
-}
-
-/* Loading state */
-.prompt-copilot-loading {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-.prompt-copilot-loading::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  margin: -10px 0 0 -10px;
-  border: 2px solid #667eea;
-  border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-

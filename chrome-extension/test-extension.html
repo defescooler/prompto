@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompto Extension Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .input-area {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 100px;
+            margin: 20px 0;
+            background: white;
+        }
+        .input-area:focus {
+            outline: none;
+            border-color: #0DA30D;
+        }
+        h1 {
+            color: #0DA30D;
+            text-align: center;
+        }
+        .instructions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #0DA30D;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🚀 Prompto Extension Test</h1>
+        
+        <div class="instructions">
+            <h3>Testing Instructions:</h3>
+            <ol>
+                <li>Make sure the Prompto extension is loaded in Chrome</li>
+                <li>Type some text in the input area below (at least 5 characters)</li>
+                <li>You should see a green ✨ button appear below the input</li>
+                <li>Click the button to expand the enhance/optimize options</li>
+                <li>Test the enhance and optimize functionality</li>
+            </ol>
+        </div>
+
+        <div>
+            <label for="test-input"><strong>Test Input Area:</strong></label>
+            <div 
+                id="test-input" 
+                class="input-area" 
+                contenteditable="true" 
+                placeholder="Type your test prompt here... (at least 5 characters to see the toolbar)"
+            ></div>
+        </div>
+
+        <div class="instructions">
+            <h3>Expected Behavior:</h3>
+            <ul>
+                <li>✅ Green ✨ button should appear below the input</li>
+                <li>✅ Clicking the button should show enhance/optimize options</li>
+                <li>✅ Enhance button should have green border</li>
+                <li>✅ Optimize button should have orange border</li>
+                <li>✅ Clicking outside should close the options</li>
+                <li>✅ API calls should work if backend is running</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <p><strong>If the toolbar doesn't appear:</strong></p>
+            <ul style="text-align: left; display: inline-block;">
+                <li>Check Chrome DevTools Console for errors</li>
+                <li>Verify the extension is enabled</li>
+                <li>Try refreshing the page</li>
+                <li>Check if content script is loaded</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Add some test content
+        document.getElementById('test-input').addEventListener('focus', function() {
+            if (!this.textContent.trim()) {
+                this.textContent = 'Write a professional email to schedule a meeting with a client about our new product launch.';
+            }
+        });
+    </script>
+</body>
+</html> 

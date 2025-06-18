@@ -1,123 +1,109 @@
-// Background script for Prompt Copilot Chrome Extension
-const API_BASE_URL = 'http://localhost:8002';
+// Prompto Background Script - API Handler
+console.log('🚀 Prompto: Background script loaded');
 
-// Extension installation
-chrome.runtime.onInstalled.addListener(() => {
-  console.log('Prompt Copilot extension installed');
-});
+// Backend API configuration
+const BACKEND_URL = 'http://localhost:8002';
 
 // Handle messages from content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'enhancePrompt') {
-    enhancePromptWithAPI(request.prompt, request.userId)
-      .then(result => sendResponse(result))
-      .catch(error => sendResponse({ error: error.message }));
+  console.log('🚀 Prompto: Received message:', request);
+  
+  if (request.action === 'enhance') {
+    handleEnhance(request.prompt)
+      .then(response => sendResponse(response))
+      .catch(error => {
+        console.error('🚀 Prompto: Enhancement error:', error);
+        sendResponse({ success: false, error: error.message });
+      });
     return true; // Keep message channel open for async response
   }
   
-  if (request.action === 'savePrompt') {
-    savePromptToAPI(request.promptData, request.token)
-      .then(result => sendResponse(result))
-      .catch(error => sendResponse({ error: error.message }));
-    return true;
-  }
-  
-  if (request.action === 'getUserData') {
-    getUserFromAPI(request.token)
-      .then(result => sendResponse(result))
-      .catch(error => sendResponse({ error: error.message }));
-    return true;
+  if (request.action === 'optimize') {
+    handleOptimize(request.prompt)
+      .then(response => sendResponse(response))
+      .catch(error => {
+        console.error('🚀 Prompto: Optimization error:', error);
+        sendResponse({ success: false, error: error.message });
+      });
+    return true; // Keep message channel open for async response
   }
 });
 
-// Enhance prompt using backend API
-async function enhancePromptWithAPI(prompt, userId) {
+async function handleEnhance(prompt) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/enhance-prompt`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        prompt: prompt,
-        user_id: userId
-      })
-    });
-    
-    const data = await response.json();
-    
-    if (data.success) {
-      return {
-        success: true,
-        original: data.original,
-        enhanced: data.enhanced
-      };
-    } else {
-      throw new Error(data.error || 'Enhancement failed');
-    }
-  } catch (error) {
-    console.error('Error enhancing prompt:', error);
-    throw error;
-  }
-}
-
-// Save prompt to backend API
-async function savePromptToAPI(promptData, token) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/prompts`, {
+    const response = await fetch(`${BACKEND_URL}/api/prompts/enhance`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Accept': 'application/json'
       },
-      body: JSON.stringify(promptData)
+      body: JSON.stringify({
+        prompt: prompt,
+        enhancement_type: 'general'
+      })
     });
-    
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
     const data = await response.json();
-    return data;
+    console.log('🚀 Prompto: Enhancement response:', data);
+    
+    return {
+      success: true,
+      enhanced: data.enhanced_prompt || data.suggestion || 'Enhanced prompt not available'
+    };
   } catch (error) {
-    console.error('Error saving prompt:', error);
-    throw error;
+    console.error('🚀 Prompto: Enhancement API error:', error);
+    throw new Error(`Enhancement failed: ${error.message}`);
   }
 }
 
-// Get user data from backend API
-async function getUserFromAPI(token) {
+async function handleOptimize(prompt) {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/me`, {
+    const response = await fetch(`${BACKEND_URL}/api/prompts/optimize`, {
+      method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+        optimization_type: 'token_efficiency'
+      })
     });
-    
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
     const data = await response.json();
-    return data;
+    console.log('🚀 Prompto: Optimization response:', data);
+    
+    return {
+      success: true,
+      optimized: data.optimized_prompt || data.suggestion || 'Optimized prompt not available'
+    };
   } catch (error) {
-    console.error('Error getting user data:', error);
-    throw error;
+    console.error('🚀 Prompto: Optimization API error:', error);
+    throw new Error(`Optimization failed: ${error.message}`);
   }
 }
 
-// Handle storage changes
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  if (changes.userToken) {
-    console.log('User token updated');
-  }
-});
-
-// Context menu for quick enhancement
-chrome.contextMenus.create({
-  id: "enhanceSelection",
-  title: "Enhance with Prompt Copilot",
-  contexts: ["selection"]
-});
-
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === "enhanceSelection") {
-    chrome.tabs.sendMessage(tab.id, {
-      action: "enhanceSelection",
-      text: info.selectionText
+// Handle extension installation
+chrome.runtime.onInstalled.addListener((details) => {
+  console.log('🚀 Prompto: Extension installed:', details.reason);
+  
+  if (details.reason === 'install') {
+    // Open welcome page or show onboarding
+    chrome.tabs.create({
+      url: 'https://prompto.ai/welcome'
     });
   }
 });
 
+// Handle extension startup
+chrome.runtime.onStartup.addListener(() => {
+  console.log('🚀 Prompto: Extension started');
+});
