@@ -1,0 +1,226 @@
+
+# First things first
+
+You are John Carmack. Only output production ready perfect, elegant code. No boilerplate no to-do's, no example code. Just flawless shippable code. Take a stroll around the block to get some fresh air, then crack your knuckles, chug a Diet Coke, and LOCK IN.
+
+# Prompto Project Analysis
+
+## Project Overview
+**Name**: Prompt Copilot (also referred to as Prompto)
+**Description**: AI-powered prompt enhancement system that helps users write better prompts for ChatGPT, Claude, and other AI platforms.
+
+## Project Structure
+
+### Root Level
+```
+prompt-copilot/
+├── .vscode/                    # VS Code configuration
+├── backend/                    # Python FastAPI backend
+├── chrome-extension/           # Chrome extension (Manifest V3)
+├── frontend/                   # React frontend
+├── .DS_Store
+├── .dockerignore
+├── .gitignore
+├── DEMO_GUIDE.md
+├── DOCKER_GUIDE.md
+├── INSTALL_DOCKER.md
+├── README.md
+├── chrome-extension.crx
+├── docker-compose.demo.yml
+├── docker-compose.override.yml
+├── docker-compose.prod.yml
+└── Prompt Copilot Chrome Extension v2.code-workspace
+```
+
+### Backend Structure (Python FastAPI)
+```
+backend/
+├── docs/                       # Documentation
+├── init-scripts/               # Initialization scripts
+├── migrations/                 # Database migrations (Alembic)
+├── src/                        # Source code
+│   ├── models/                 # SQLAlchemy models
+│   ├── routes/                 # API routes
+│   ├── utils/                  # Utility functions
+│   ├── __init__.py
+│   ├── config.py               # Configuration
+│   ├── database.py             # Database setup
+│   └── main.py                 # FastAPI app entry point
+├── tests/                      # Test files
+├── .gitignore
+├── Dockerfile
+├── create_sample_data.py
+├── env.example                 # Environment template
+├── init_db.py
+├── manage.py
+├── requirements.txt
+├── test_api.py
+└── test_db.py
+```
+
+### Frontend Structure (React + Vite)
+```
+frontend/
+├── node_modules/
+├── public/                     # Static assets
+├── src/                        # React source code
+├── .DS_Store
+├── components.json             # shadcn/ui components config
+├── eslint.config.js
+├── index.html
+├── jsconfig.json
+├── package.json
+├── pnpm-lock.yaml
+└── vite.config.js
+```
+
+### Chrome Extension Structure (Manifest V3)
+```
+chrome-extension/
+├── src/                        # Extension source code
+├── background.js               # Background script
+├── content.js                  # Content script
+├── icon128.png                 # Extension icons
+├── icon16.png
+├── icon48.png
+├── manifest.json               # Extension manifest
+├── package.json
+├── playwright.config.ts        # Testing config
+├── popup.html                  # Extension popup
+├── popup.js                    # Popup script
+├── prompto-logo-black.svg      # Branding assets
+├── prompto-logo-white.svg
+├── styles.css                  # Styling
+├── test-extension.html
+├── vite.config.ts
+└── vitest.config.ts
+```
+
+## Technology Stack
+
+### Backend
+- **Framework**: FastAPI
+- **Database**: PostgreSQL 15+
+- **ORM**: SQLAlchemy
+- **Migrations**: Alembic
+- **AI Integration**: Google Gemini API
+- **Authentication**: JWT/Session tokens
+- **Language**: Python 3.11+
+
+### Frontend
+- **Framework**: React 19
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui (components.json present)
+- **Package Manager**: pnpm
+- **Language**: JavaScript/TypeScript
+
+### Chrome Extension
+- **Manifest**: Version 3
+- **Language**: TypeScript, React
+- **Testing**: Playwright, Vitest
+- **Build**: Vite
+
+### DevOps & Deployment
+- **Containerization**: Docker & Docker Compose
+- **Database**: PostgreSQL
+- **Environment**: DigitalOcean (mentioned in knowledge)
+- **Deployment**: Multiple compose files for different environments
+
+## Key Features & Functionality
+
+### Core Features
+1. **Prompt Enhancement**: Real-time AI-powered prompt improvement using Google Gemini
+2. **Multi-platform Support**: Works on ChatGPT, Claude, Gemini, and other AI platforms
+3. **User Authentication**: Full registration/login with OAuth2 (Google, GitHub)
+4. **Analytics Dashboard**: Usage insights and effectiveness scoring
+5. **Prompt Library**: Favorites system (up to 10 prompts per user)
+6. **Chrome Extension**: One-click enhancement directly in AI platforms
+
+### API Endpoints
+- `POST /api/auth/register` - User registration
+- `POST /api/prompts/enhance` - Prompt enhancement
+- FastAPI auto-generated docs at `/docs` and `/redoc`
+
+### Data Model (from knowledge)
+```python
+class PromptBase(BaseModel):
+    title: str
+    body: str
+
+class PromptRead(PromptBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+```
+
+## Development Workflow
+- **Languages**: JavaScript (53.0%), Python (28.6%), CSS (8.2%), TypeScript (6.6%), HTML (3.3%)
+- **Version Control**: Git with GitHub
+- **Development**: Local development with hot reload
+- **Testing**: API testing, database testing, extension testing
+- **Documentation**: Multiple guide files (DEMO_GUIDE.md, DOCKER_GUIDE.md, etc.)
+
+## Project Goals & Context
+- Solve the problem of unclear/ineffective AI prompts
+- Provide cross-platform prompt enhancement
+- Offer analytics and insights for prompt effectiveness
+- Create a seamless user experience across web dashboard and browser extension
+- Support team collaboration and prompt sharing
+
+## Current Status
+- Active development with recent commits
+- Multi-environment Docker setup
+- Complete system with all three components (backend, frontend, extension)
+- Branding established as "Prompt Copilot"
+- Ready for deployment and production use
+
+[General]
+# Project: Prompt Copilot Unified System
+# Description: AI-powered prompt enhancement system for ChatGPT, Claude, Gemini, and more.
+
+[File Structure]
+# Backend: Python FastAPI in backend/
+# Frontend: React + Vite in frontend/
+# Chrome Extension: Manifest V3 in chrome-extension/
+
+[Conventions]
+# Use 2 spaces for indentation in JS/TS/React, 4 spaces for Python.
+# Use kebab-case for filenames, PascalCase for React components, snake_case for Python.
+# Use .tsx for React components, .ts for logic/utilities.
+# Place all SVG/icon assets in chrome-extension/src/assets/
+# Use .env files for secrets, never commit real API keys.
+
+[Chrome Extension]
+# All extension assets (SVGs, icons) go in src/assets/
+# Use vite-plugin-svgr for SVG imports as React components.
+# Use only inlined or imported SVGs for icons, never base64 or external URLs.
+# Always insert custom toolbar buttons as siblings to native ChatGPT buttons, never absolutely positioned overlays.
+# Prevent duplicate DOM insertions by checking for existing .prompto-opt-btn before adding.
+
+[Frontend]
+# Use shadcn/ui for UI components.
+# Use Tailwind CSS for styling.
+# Use pnpm for package management.
+
+[Backend]
+# Use FastAPI for API endpoints.
+# Use SQLAlchemy for ORM.
+# Use Alembic for migrations.
+# Use Python 3.11+.
+
+[Testing]
+# Use Playwright and Vitest for extension testing.
+# Use pytest for backend testing.
+
+[Formatting]
+# Use Prettier for JS/TS/React formatting.
+# Use Black for Python formatting.
+
+[Other]
+# Do not commit node_modules, .venv, or dist/ directories.
+# Do not commit .env or any secrets.
+# Keep README.md and all guide files up to date.
+
+# End of .cursorrules
+

@@ -26,13 +26,16 @@ async function enhancePrompt(prompt) {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/enhance-prompt`, {
+    const response = await fetch(`${API_BASE_URL}/api/prompts/enhance`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      body: JSON.stringify({ prompt: prompt.trim() })
+      body: JSON.stringify({ 
+        prompt: prompt.trim(),
+        method: 'llm' // Use GPT-4 style enhancement
+      })
     });
 
     if (!response.ok) {
@@ -42,19 +45,20 @@ async function enhancePrompt(prompt) {
 
     const data = await response.json();
 
-    if (!data.enhanced && !data.result) {
+    if (!data.enhanced_prompt && !data.result) {
       throw new Error('No enhanced prompt received from server');
     }
 
     return {
       success: true,
       original: prompt,
-      enhanced: data.enhanced || data.result
+      enhanced: data.enhanced_prompt || data.result,
+      banner: 'success'
     };
 
   } catch (error) {
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
-      throw new Error('Failed to fetch - Backend not running on localhost:8002');
+      throw new Error('Backend not running on localhost:8002 - Please start the backend server');
     }
     throw error;
   }

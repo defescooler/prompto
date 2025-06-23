@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Prompto Extension - Connection & Banners</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #0DA30D 0%, #51D071 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            background: #f8f9fa;
+        }
+        
+        .test-section h3 {
+            color: #495057;
+            margin-top: 0;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        
+        .mock-chatgpt {
+            position: relative;
+            background: #f7f7f8;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .instructions {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .instructions h4 {
+            margin-top: 0;
+            color: #fff;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Prompto Extension Test</h1>
+        
+        <div class="instructions">
+            <h4>Test Instructions:</h4>
+            <ul class="feature-list">
+                <li>Load the Prompto extension in Chrome</li>
+                <li>The floating action button should appear next to the textarea</li>
+                <li>Click the FAB to see "Enhance Prompt" and "Token Optimizer" options</li>
+                <li>Try enhancing a prompt to test GPT-4 connection</li>
+                <li>Try the Token Optimizer to see the construction banner</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h3>🎯 Test Area - ChatGPT Simulator</h3>
+            <div class="mock-chatgpt">
+                <p><strong>Enter your prompt below:</strong></p>
+                <textarea placeholder="Write a short story about a robot learning to love..." data-testid="prompt-textarea"></textarea>
+                <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 15px; gap: 10px;">
+                    <div id="prompto-mount-point" style="display: flex; align-items: center;">
+                        <!-- Prompto FAB should mount here -->
+                    </div>
+                    <button style="background: #10a37f; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer;">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 Connection Status</h3>
+            <div id="connection-status" class="status info">
+                Testing backend connection...
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>✅ Expected Features</h3>
+            <ul class="feature-list">
+                <li><strong>Enhance Prompt:</strong> Green sparkle icon - GPT-4 style enhancement</li>
+                <li><strong>Token Optimizer:</strong> Construction icon - Shows "Under Construction" banner</li>
+                <li><strong>Success Banner:</strong> Green gradient banner with checkmark</li>
+                <li><strong>Error Banner:</strong> Red gradient banner with warning</li>
+                <li><strong>Construction Banner:</strong> Orange gradient with construction icon</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Test backend connection
+        async function testBackendConnection() {
+            const statusDiv = document.getElementById('connection-status');
+            
+            try {
+                const response = await fetch('http://localhost:8002/api/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = `✅ Backend Connected - Version: ${data.version}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `❌ Backend Offline - ${error.message}<br><small>Start backend with: cd backend && python src/main.py</small>`;
+            }
+        }
+        
+        // Test the connection on page load
+        testBackendConnection();
+        
+        // Add some helpful logging
+        console.log('🚀 Prompto Test Page Loaded');
+        console.log('Waiting for extension to mount...');
+        
+        // Check for extension presence
+        setTimeout(() => {
+            const promptoElements = document.querySelectorAll('[class*="prompto"]');
+            if (promptoElements.length > 0) {
+                console.log('✅ Prompto extension detected!', promptoElements);
+            } else {
+                console.log('❌ Prompto extension not detected. Make sure it\'s loaded and refresh the page.');
+            }
+        }, 3000);
+    </script>
+</body>
+</html> 

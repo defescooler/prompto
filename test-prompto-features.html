@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompto Feature Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+        }
+        
+        h2 {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #0DA30D 0%, #51D071 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 10px 10px 10px 0;
+            transition: all 0.2s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13,163,13,0.3);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .demo-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .feature-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .feature-list h3 {
+            color: #28a745;
+            margin-top: 0;
+        }
+        
+        .feature-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .feature-list li:before {
+            content: "✅ ";
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🚀 Prompto Feature Test</h1>
+        
+        <div class="test-section">
+            <h2>📝 Fancy Banner Testing</h2>
+            <p>Test the new premium banner notifications:</p>
+            <div class="demo-buttons">
+                <button onclick="testBanner('success', '✨')">Success Banner</button>
+                <button onclick="testBanner('error', '🚨')">Error Banner</button>
+                <button onclick="testBanner('warn', '⚠️')">Warning Banner</button>
+                <button onclick="testBanner('info', 'ℹ️')">Info Banner</button>
+                <button onclick="testBanner('loading', '🤖')">Loading Banner</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎯 Validation Testing</h2>
+            <textarea id="testPrompt" placeholder="Enter a prompt to test validation..."></textarea>
+            <div class="demo-buttons">
+                <button onclick="testValidation()">Test Short Prompt (< 5 chars)</button>
+                <button onclick="testLongValidation()">Test Long Prompt (> 4000 chars)</button>
+                <button onclick="testEmptyValidation()">Test Empty Prompt</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔧 OpenAI Integration</h2>
+            <p>Backend now uses OpenAI GPT-4 instead of Gemini:</p>
+            <textarea id="enhancePrompt" placeholder="Enter a prompt to enhance with OpenAI...">Write a blog post about AI</textarea>
+            <div class="demo-buttons">
+                <button onclick="testEnhancement()">Test Enhancement</button>
+                <button onclick="testOptimization()">Test Token Optimization</button>
+            </div>
+        </div>
+        
+        <div class="feature-list">
+            <h3>🎉 New Features Implemented</h3>
+            <ul>
+                <li>Super fancy banners with blur effects and gradients</li>
+                <li>Smart error messages with contextual icons</li>
+                <li>Character count validation with live feedback</li>
+                <li>Loading states with progress animations</li>
+                <li>OpenAI GPT-4 integration (replacing Gemini)</li>
+                <li>Enhanced prompt structure with XML formatting</li>
+                <li>Token optimization preparation (Phase 2)</li>
+                <li>Statistics tracking with Chrome storage</li>
+                <li>Graceful error handling with friendly messages</li>
+                <li>Cross-platform textarea detection</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Mock the Prompto banner functions for testing
+        function testBanner(type, icon) {
+            const messages = {
+                success: 'Prompt successfully enhanced!',
+                error: 'Backend not available - please check connection',
+                warn: `Need at least 5 characters to enhance (currently 2)`,
+                info: 'Token optimizer launching soon!',
+                loading: 'Enhancing your prompt with AI...'
+            };
+            
+            showFancyBanner(messages[type], type, icon);
+        }
+        
+        function testValidation() {
+            const prompt = document.getElementById('testPrompt').value;
+            if (prompt.length < 5) {
+                showFancyBanner(`Need at least 5 characters to enhance (currently ${prompt.length})`, 'warn', '📝');
+            } else {
+                showFancyBanner('Prompt length is valid!', 'success', '✅');
+            }
+        }
+        
+        function testLongValidation() {
+            const longText = 'A'.repeat(4001);
+            showFancyBanner(`Prompt exceeds maximum length (${longText.length}/4000 chars)`, 'warn', '📏');
+        }
+        
+        function testEmptyValidation() {
+            showFancyBanner('Unable to locate text input field', 'error', '🔍');
+        }
+        
+        function testEnhancement() {
+            const prompt = document.getElementById('enhancePrompt').value;
+            if (prompt.length < 5) {
+                return testValidation();
+            }
+            
+            showFancyBanner('Enhancing your prompt with OpenAI GPT-4...', 'loading', '🤖');
+            
+            setTimeout(() => {
+                hideBanner(document.querySelector('.prompto-banner-loading'));
+                showFancyBanner('Prompt enhanced with OpenAI GPT-4!', 'success', '🚀');
+            }, 3000);
+        }
+        
+        function testOptimization() {
+            showFancyBanner('Token optimizer launching soon!', 'info', '⚡');
+        }
+        
+        // Copy the banner functions from content.js
+        function showFancyBanner(message, type = 'info', icon = null) {
+            document.querySelectorAll('.prompto-banner').forEach(t => t.remove());
+            
+            const banner = document.createElement('div');
+            banner.className = `prompto-banner prompto-banner-${type}`;
+            
+            const iconMap = {
+                warn: '⚠️',
+                error: '🚨',
+                success: '✨',
+                info: 'ℹ️',
+                loading: '⏳'
+            };
+            
+            const displayIcon = icon || iconMap[type] || '💡';
+            
+            banner.innerHTML = `
+                <div class="prompto-banner-content">
+                    <div class="prompto-banner-icon">${displayIcon}</div>
+                    <div class="prompto-banner-text">
+                        <div class="prompto-banner-message">${message}</div>
+                        <div class="prompto-banner-subtitle">Prompto AI Assistant</div>
+                    </div>
+                    <div class="prompto-banner-close">×</div>
+                </div>
+                <div class="prompto-banner-progress"></div>
+            `;
+            
+            const closeBtn = banner.querySelector('.prompto-banner-close');
+            closeBtn.onclick = () => hideBanner(banner);
+            
+            document.body.appendChild(banner);
+            requestAnimationFrame(() => banner.classList.add('visible'));
+            
+            setTimeout(() => hideBanner(banner), type === 'loading' ? 10000 : 4000);
+        }
+        
+        function hideBanner(banner) {
+            if (banner && banner.parentNode) {
+                banner.classList.remove('visible');
+                setTimeout(() => banner.remove(), 400);
+            }
+        }
+        
+        // Add the CSS for banners
+        const style = document.createElement('style');
+        style.textContent = `
+            .prompto-banner {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                width: 380px;
+                border-radius: 16px;
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1);
+                z-index: 999999999;
+                transform: translateX(120%) translateZ(0);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                isolation: isolate;
+                overflow: hidden;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            }
+            
+            .prompto-banner.visible {
+                transform: translateX(0) translateZ(0);
+                opacity: 1;
+            }
+            
+            .prompto-banner-content {
+                display: flex;
+                align-items: center;
+                padding: 18px 20px;
+                position: relative;
+                z-index: 2;
+            }
+            
+            .prompto-banner-icon {
+                font-size: 28px;
+                margin-right: 16px;
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+                animation: prompto-pulse 2s ease-in-out infinite;
+            }
+            
+            @keyframes prompto-pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+            }
+            
+            .prompto-banner-text {
+                flex: 1;
+            }
+            
+            .prompto-banner-message {
+                font-size: 15px;
+                font-weight: 600;
+                margin-bottom: 4px;
+                line-height: 1.3;
+            }
+            
+            .prompto-banner-subtitle {
+                font-size: 12px;
+                opacity: 0.8;
+                font-weight: 500;
+            }
+            
+            .prompto-banner-close {
+                font-size: 20px;
+                cursor: pointer;
+                opacity: 0.6;
+                transition: opacity 0.2s ease;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                margin-left: 12px;
+            }
+            
+            .prompto-banner-close:hover {
+                opacity: 1;
+                background: rgba(255,255,255,0.1);
+            }
+            
+            .prompto-banner-progress {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                height: 3px;
+                background: linear-gradient(90deg, transparent 0%, currentColor 50%, transparent 100%);
+                animation: prompto-progress 4s linear forwards;
+                border-radius: 0 0 16px 16px;
+            }
+            
+            @keyframes prompto-progress {
+                0% { width: 0%; opacity: 0.8; }
+                100% { width: 100%; opacity: 0; }
+            }
+            
+            .prompto-banner-warn {
+                background: linear-gradient(135deg, rgba(255,193,7,0.95) 0%, rgba(255,235,59,0.95) 100%);
+                color: #663c00;
+                border: 1px solid rgba(255,193,7,0.3);
+            }
+            
+            .prompto-banner-error {
+                background: linear-gradient(135deg, rgba(220,53,69,0.95) 0%, rgba(255,105,135,0.95) 100%);
+                color: white;
+                border: 1px solid rgba(220,53,69,0.3);
+            }
+            
+            .prompto-banner-success {
+                background: linear-gradient(135deg, rgba(13,163,13,0.95) 0%, rgba(81,208,113,0.95) 100%);
+                color: white;
+                border: 1px solid rgba(13,163,13,0.3);
+            }
+            
+            .prompto-banner-info {
+                background: linear-gradient(135deg, rgba(0,123,255,0.95) 0%, rgba(102,16,242,0.95) 100%);
+                color: white;
+                border: 1px solid rgba(0,123,255,0.3);
+            }
+            
+            .prompto-banner-loading {
+                background: linear-gradient(135deg, rgba(108,117,125,0.95) 0%, rgba(173,181,189,0.95) 100%);
+                color: white;
+                border: 1px solid rgba(108,117,125,0.3);
+            }
+            
+            .prompto-banner-loading .prompto-banner-progress {
+                animation: prompto-progress-loading 10s linear forwards;
+            }
+            
+            @keyframes prompto-progress-loading {
+                0% { width: 0%; opacity: 0.8; }
+                100% { width: 100%; opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 
