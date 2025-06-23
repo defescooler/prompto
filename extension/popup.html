@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 380px;
+      min-height: 500px;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      overflow: hidden;
+    }
+    
+    .popup-container {
+      padding: 24px;
+      position: relative;
+    }
+    
+    .popup-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .popup-logo {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    
+    .popup-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      background: linear-gradient(135deg, #0DA30D 0%, #51D071 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .popup-subtitle {
+      font-size: 14px;
+      opacity: 0.8;
+      margin: 0;
+    }
+    
+    .popup-stats {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0DA30D;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .popup-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .popup-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .popup-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+    
+    .popup-btn.primary {
+      background: linear-gradient(135deg, #0DA30D 0%, #51D071 100%);
+      border-color: transparent;
+    }
+    
+    .popup-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(13, 163, 13, 0.3);
+    }
+    
+    .btn-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    
+    .popup-footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .popup-footer p {
+      font-size: 12px;
+      opacity: 0.6;
+      margin: 0;
+    }
+    
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .error-message {
+      background: rgba(220, 53, 69, 0.2);
+      border: 1px solid rgba(220, 53, 69, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="popup-container">
+    <div class="popup-header">
+      <div class="popup-logo">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="12" fill="white" fill-opacity="0.3"/>
+          <mask id="mask0_popup" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="7" y="6" width="10" height="13">
+            <path d="M12.4959 15.1605C11.6682 15.1605 10.9936 14.9683 10.4721 14.5839C9.96185 14.1881 9.64439 13.6454 9.51967 12.9557L9.68974 12.9388V18.4676H7.54688V6.34147H9.63872V8.29183L9.46865 8.25792C9.62738 7.61345 9.9902 7.10466 10.5571 6.73154C11.124 6.35843 11.8156 6.17188 12.6319 6.17188C13.4029 6.17188 14.0719 6.35843 14.6387 6.73154C15.217 7.09335 15.6648 7.60779 15.9823 8.27487C16.2998 8.94196 16.4585 9.72775 16.4585 10.6323C16.4585 11.5481 16.2941 12.3452 15.9653 13.0236C15.6365 13.702 15.1773 14.2277 14.5877 14.6008C13.9982 14.9739 13.3009 15.1605 12.4959 15.1605ZM11.9517 13.3967C12.6433 13.3967 13.1932 13.1593 13.6013 12.6844C14.0095 12.1982 14.2136 11.5198 14.2136 10.6492C14.2136 9.77863 14.0038 9.1059 13.5843 8.63103C13.1762 8.15616 12.6263 7.91872 11.9347 7.91872C11.2544 7.91872 10.7045 8.16181 10.285 8.64799C9.86548 9.12286 9.65573 9.79559 9.65573 10.6662C9.65573 11.5368 9.86548 12.2095 10.285 12.6844C10.7045 13.1593 11.26 13.3967 11.9517 13.3967Z" fill="white"/>
+          </mask>
+          <g mask="url(#mask0_popup)">
+            <rect x="9.62891" y="6.02441" width="2.1433" height="5.18904" fill="white"/>
+            <rect x="11.9414" y="5.74121" width="2.1433" height="5.35825" fill="white"/>
+            <rect x="14.2539" y="5.46094" width="2.1433" height="3.83538" fill="white"/>
+            <rect x="13.8594" y="9.4082" width="2.98934" height="2.53812" fill="white"/>
+            <rect x="14.2539" y="12.0596" width="2.1997" height="3.04574" fill="white"/>
+            <rect x="12" y="10.5371" width="2.0869" height="5.30184" fill="white"/>
+            <rect x="9.62891" y="10.5371" width="2.1997" height="5.13264" fill="white"/>
+          </g>
+        </svg>
+      </div>
+      <h1 class="popup-title">Prompto AI</h1>
+      <p class="popup-subtitle">AI-powered prompt enhancement</p>
+    </div>
+    
+    <div id="error-container"></div>
+    
+    <div class="popup-stats" id="stats-container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-value" id="enhancements-count">0</span>
+          <span class="stat-label">Enhanced</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="time-saved">0s</span>
+          <span class="stat-label">Time Saved</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="tokens-saved">0</span>
+          <span class="stat-label">Tokens Saved</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="characters-processed">0</span>
+          <span class="stat-label">Characters</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="popup-actions">
+      <button class="popup-btn primary" id="dashboard-btn">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Open Dashboard
+      </button>
+      
+      <button class="popup-btn" id="settings-btn">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Settings
+      </button>
+      
+      <button class="popup-btn" id="help-btn">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Help & Support
+      </button>
+    </div>
+    
+    <div class="popup-footer">
+      <p>Version 0.1.0 • Made with ❤️ for nFactorial</p>
+    </div>
+  </div>
+
+  <script>
+    // Load and display stats
+    async function loadStats() {
+      try {
+        const response = await chrome.runtime.sendMessage({ action: 'getStats' });
+        
+        if (response && response.success) {
+          const stats = response.stats;
+          
+          document.getElementById('enhancements-count').textContent = 
+            stats.total_enhancements + stats.total_optimizations;
+          
+          document.getElementById('time-saved').textContent = 
+            formatTime(stats.time_saved);
+          
+          document.getElementById('tokens-saved').textContent = 
+            formatNumber(stats.tokens_saved);
+          
+          document.getElementById('characters-processed').textContent = 
+            formatNumber(stats.characters_processed);
+        }
+      } catch (error) {
+        console.error('Failed to load stats:', error);
+        showError('Failed to load statistics');
+      }
+    }
+    
+    function formatTime(seconds) {
+      if (seconds < 60) return seconds + 's';
+      if (seconds < 3600) return Math.floor(seconds / 60) + 'm';
+      return Math.floor(seconds / 3600) + 'h';
+    }
+    
+    function formatNumber(num) {
+      if (num < 1000) return num.toString();
+      if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
+      return (num / 1000000).toFixed(1) + 'M';
+    }
+    
+    function showError(message) {
+      const errorContainer = document.getElementById('error-container');
+      errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+    }
+    
+    // Event listeners
+    document.getElementById('dashboard-btn').addEventListener('click', () => {
+      chrome.tabs.create({ url: 'http://localhost:5173' });
+      window.close();
+    });
+    
+    document.getElementById('settings-btn').addEventListener('click', () => {
+      chrome.runtime.openOptionsPage();
+      window.close();
+    });
+    
+    document.getElementById('help-btn').addEventListener('click', () => {
+      chrome.tabs.create({ url: 'https://github.com/your-repo/prompto-extension' });
+      window.close();
+    });
+    
+    // Load stats when popup opens
+    document.addEventListener('DOMContentLoaded', loadStats);
+  </script>
+</body>
+</html>
+

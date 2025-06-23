@@ -1,0 +1,142 @@
+/* Prompto Extension - SIMPLE WORKING STYLES */
+/* Based on Alejandro AO tutorial - clean and minimal */
+
+.prompto-enhance-btn {
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+  border-radius: 6px !important;
+  background: #f0f0f0 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 4px !important;
+  padding: 0 !important;
+  transition: all 0.2s ease !important;
+  font-family: inherit !important;
+  border: 1px solid #d0d0d0 !important;
+  box-sizing: border-box !important;
+}
+
+.prompto-enhance-btn:hover {
+  background: #e8e8e8 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.prompto-enhance-btn:active {
+  transform: translateY(0) !important;
+}
+
+.prompto-enhance-btn:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.prompto-enhance-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Notifications */
+.prompto-notification {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: white !important;
+  z-index: 10000 !important;
+  transform: translateX(100%) !important;
+  transition: transform 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  max-width: 300px !important;
+  word-wrap: break-word !important;
+}
+
+.prompto-notification.visible {
+  transform: translateX(0) !important;
+}
+
+.prompto-notification.success {
+  background: #0DA30D !important;
+}
+
+.prompto-notification.error {
+  background: #dc3545 !important;
+}
+
+.prompto-notification.warning {
+  background: #ffc107 !important;
+  color: #333 !important;
+}
+
+.prompto-notification.info {
+  background: #007bff !important;
+}
+
+/* Loading animation */
+@keyframes prompto-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.prompto-enhance-btn svg circle {
+  animation: prompto-spin 1s linear infinite;
+}
+
+/* Ensure no conflicts with page styles */
+.prompto-enhance-btn,
+.prompto-notification {
+  all: unset !important;
+}
+
+/* Re-apply button styles */
+.prompto-enhance-btn {
+  width: 32px !important;
+  height: 32px !important;
+  border: 1px solid #d0d0d0 !important;
+  border-radius: 6px !important;
+  background: #f0f0f0 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 4px !important;
+  padding: 0 !important;
+  transition: all 0.2s ease !important;
+  font-family: inherit !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+}
+
+/* Re-apply notification styles */
+.prompto-notification {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: white !important;
+  z-index: 10000 !important;
+  transform: translateX(100%) !important;
+  transition: transform 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  max-width: 300px !important;
+  word-wrap: break-word !important;
+  display: block !important;
+}
+
