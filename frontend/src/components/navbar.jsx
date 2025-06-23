@@ -21,7 +21,7 @@ export default function Navbar() {
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="sticky top-0 z-50 flex items-center justify-between h-14 mx-auto max-w-7xl px-6 bg-slate-900/70 backdrop-blur border-b border-slate-800"
+      className="sticky top-0 z-50 flex items-center justify-between h-14 mx-auto max-w-7xl px-6 bg-slate-900/70 border-b border-slate-800"
     >
       {/** Logo **/}
       <Link to="/" aria-label="Prompt Copilot Home" className="flex items-center">
