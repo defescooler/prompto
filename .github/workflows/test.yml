@@ -1,0 +1,67 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: prompto_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+        cache-dependency-path: frontend/pnpm-lock.yaml
+    
+    - name: Install Python dependencies
+      run: |
+        pip install -r backend/requirements.txt
+        pip install -r tests/requirements.txt
+    
+    - name: Install Node dependencies
+      run: |
+        cd frontend
+        corepack enable
+        pnpm install
+    
+    - name: Run backend tests
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/prompto_test
+        FLASK_ENV: testing
+      run: python tests/run_tests.py --backend
+    
+    - name: Run integration tests
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/prompto_test
+        FLASK_ENV: testing
+      run: python tests/run_tests.py --integration
+    
+    - name: Run extension tests
+      run: python tests/run_tests.py --extension 

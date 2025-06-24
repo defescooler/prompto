@@ -88,6 +88,7 @@ temp/
 *.swp
 *.swo
 *~
+.cursorrules
 
 # OS generated files
 .DS_Store
@@ -119,9 +120,32 @@ instance/
 *.sqlite
 *.sqlite3
 
+# Virtual environments
+venv/
+.venv/
+*/venv/
+*/.venv/
+
+# Extension files
+*.crx
+chrome-extension.crx
+
+# macOS files
+*.DS_Store
+.DS_Store?
+._*
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
 # Backup files
 *.backup
 .env.backup
+
+# Performance reports
+PERFORMANCE_OPTIMIZATION_REPORT.md
 
 # Test files
 test_*.py

@@ -3,21 +3,22 @@ import {
   ArrowRight,
   Sparkles,
   TrendingUp,
+  TrendingDown,
   CheckCircle,
   Users,
   Clock,
   Github,
   Twitter,
+  Zap,
+  Cpu,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import Footer from "@/components/ui/footer"
+import PromptDemoMono from "@/components/PromptDemoMono"
+import FeatureCard from "@/components/FeatureCard"
+import Counter from "@/components/Counter"
+import CTA from "@/components/CTA"
 
 export default function Home({ onGetStarted }) {
   /* ---------- helpers ---------- */
@@ -32,27 +33,30 @@ export default function Home({ onGetStarted }) {
   }, [])
 
   const stats = [
-    { label: 'Prompts Optimized', value: '10,000+', icon: Sparkles },
-    { label: 'Average Reduction', value: '60%', icon: TrendingUp },
-    { label: 'Happy Users', value: '500+', icon: Users },
-    { label: 'Uptime', value: '99.9%', icon: Clock }
+    { label: 'Prompts zapped', value: 10000, suffix: '+', icon: Sparkles },
+    { label: 'Fat trimmed', value: 60, suffix: '%', icon: TrendingDown },
+    { label: 'Humans smiling', value: 500, suffix: '+', icon: Users },
+    { label: 'Time alive', value: 99.9, suffix: '%', icon: Clock }
   ]
 
   const features = [
     {
-      title: '60% Token Reduction',
-      description: 'Dramatically reduce API costs while maintaining output quality',
-      icon: TrendingUp
+      title: '60% Token Diet',
+      blurb: 'Lose weight—keep brains.',
+      icon: TrendingDown,
+      accent: 'from-emerald-500/30 to-emerald-500/5'
     },
     {
-      title: 'AI-Powered',
-      description: 'Advanced algorithms understand context and preserve meaning',
-      icon: Sparkles
+      title: 'AI-Turbo',
+      blurb: 'Context? Nuance? Sorted.',
+      icon: Cpu,
+      accent: 'from-blue-500/30 to-blue-500/5'
     },
     {
-      title: 'Universal Support',
-      description: 'Works with GPT-4, Claude, Gemini, Grok, and more',
-      icon: CheckCircle
+      title: 'Plugs Anywhere',
+      blurb: 'GPT-4, Claude, Gemini—same button.',
+      icon: Zap,
+      accent: 'from-purple-500/30 to-purple-500/5'
     }
   ]
 
@@ -100,11 +104,15 @@ export default function Home({ onGetStarted }) {
       </section>
 
       {/* Two Optimization Methods */}
-      {/* <PromptOptimizationDemo /> removed as demo is no longer a separate page */}
+      <PromptDemoMono />
 
-      {/* Features Section */}
-      <section id="features" className="py-20 bg-slate-900">
-        <div className="container mx-auto px-4">
+      {/* Unified Features → Stats → CTA Band */}
+      <section className="relative isolate overflow-hidden py-24 md:py-32 bg-slate-900">
+        {/* Grain texture overlay */}
+        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.04] pointer-events-none" />
+        
+        <div className="relative container mx-auto px-4">
+          {/* Section intro */}
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Why choose Prompt Copilot?
@@ -114,73 +122,51 @@ export default function Home({ onGetStarted }) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {/* 1️⃣ Feature cards with glassmorphism */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
             {features.map((feature, index) => (
-              <Card key={index} className="text-center bg-slate-800/60 backdrop-blur border border-slate-700 rounded-xl p-6 hover:-translate-y-1 hover:shadow-xl transition">
-                <CardHeader>
-                  <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-green-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <feature.icon className="w-8 h-8 text-green-200" />
-                  </div>
-                  <CardTitle className="text-xl text-white">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-300">{feature.description}</p>
-                </CardContent>
-              </Card>
+              <FeatureCard
+                key={index}
+                title={feature.title}
+                blurb={feature.blurb}
+                icon={feature.icon}
+                accent={feature.accent}
+              />
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Stats Section (shares dark bg) */}
-      <section className="py-20 bg-slate-900">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center mt-12 max-w-4xl mx-auto">
+          {/* Hairline divider */}
+          <div className="mb-20 h-px bg-gradient-to-r from-transparent via-slate-700/30 to-transparent" />
+
+          {/* 2️⃣ KPI counters with count-up animations */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center max-w-5xl mx-auto">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <stat.icon className="w-8 h-8 text-green-400" />
-                </div>
-                <div className="text-4xl font-bold bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent mb-2">{stat.value}</div>
-                <div className="text-slate-400">{stat.label}</div>
-              </div>
+              <Counter
+                key={index}
+                value={stat.value}
+                suffix={stat.suffix}
+                label={stat.label}
+                icon={stat.icon}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-[linear-gradient(120deg,#18181b_0%,#312e81_100%)]">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to optimize your prompts?
-          </h2>
-          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-            Join thousands saving 60% on AI costs while improving prompt quality.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full shadow-lg"
-              onClick={onGetStarted}
-            >
-              Boost my prompt
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-green-600 text-green-400 hover:bg-green-600 hover:text-white px-8 py-4 rounded-full"
-              onClick={() => window.location.href = '/demo'}
-            >
-              30-sec demo
-              <Sparkles className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-          <p className="text-slate-400 mt-4">
-            No credit card required • Start optimizing immediately
-          </p>
-        </div>
-      </section>
+      {/* 3️⃣ CTA banner with sparkles */}
+      <CTA
+        headline="Let's supercharge your prompt right now"
+        sub="Skip the card, save the cash, blow their minds."
+        primary={{ 
+          text: "Boost my prompt", 
+          href: "/auth",
+          icon: Sparkles 
+        }}
+        secondary={{ 
+          text: "30-second tour", 
+          href: "/demo" 
+        }}
+      />
 
       {/* Footer */}
       <Footer
