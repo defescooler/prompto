@@ -1,21 +1,8 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Sun, Moon } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 
 export default function Navbar() {
-  const [dark, setDark] = useState(false)
-
-  useEffect(() => {
-    const root = document.documentElement
-    if (dark) {
-      root.classList.add('dark')
-    } else {
-      root.classList.remove('dark')
-    }
-  }, [dark])
-
   return (
     <motion.nav
       initial={{ y: -40, opacity: 0 }}
@@ -66,14 +53,8 @@ export default function Navbar() {
         <Link to="/#download" className="hover:text-white transition">Download</Link>
       </div>
 
-      {/** Auth + theme toggle **/}
-      <div className="flex items-center space-x-4">
-        <button
-          onClick={() => setDark(!dark)}
-          className="p-2 rounded-full hover:bg-slate-800 text-slate-300"
-        >
-          {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-        </button>
+      {/** Auth **/}
+      <div className="flex items-center">
         <Link to="/auth">
           <Button
             size="sm"

@@ -19,6 +19,8 @@ import PromptDemoMono from "@/components/PromptDemoMono"
 import FeatureCard from "@/components/FeatureCard"
 import Counter from "@/components/Counter"
 import CTA from "@/components/CTA"
+import { Component as PricingSection } from "@/components/ui/squishy-pricing"
+import AnimatedBackground from "@/components/AnimatedBackground"
 
 export default function Home({ onGetStarted }) {
   /* ---------- helpers ---------- */
@@ -64,147 +66,162 @@ export default function Home({ onGetStarted }) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 antialiased">
       {/* Hero Section */}
-      <section id="hero" className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 bg-gradient-radial from-slate-900 via-slate-900 to-slate-800">
-        <div className="max-w-4xl mx-auto">
-          <p className="mb-2 text-base sm:text-lg font-medium text-slate-400 flex items-center justify-center">
-            <Sparkles className="w-4 h-4 mr-2 text-green-400" />
-            LLM-turbo for text
-          </p>
-          
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Turn messy thoughts<br />
-            <span className="bg-gradient-to-r from-green-500 to-green-300 bg-clip-text text-transparent">
-              into killer prompts
-            </span>
-          </h1>
-          
-          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-            Slash token spend, keep every ounce of meaning. Plays nice with GPT-4, Claude, Gemini — whatever you feed it.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Button
-              size="lg"
-              className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full shadow-lg"
-              onClick={onGetStarted}
-            >
-              Boost my prompt
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-green-600 text-green-400 hover:bg-green-600 hover:text-white px-8 py-4 rounded-full"
-              onClick={() => window.location.href = '/demo'}
-            >
-              30-sec demo
-              <Sparkles className="w-5 h-5 ml-2" />
-            </Button>
+      <AnimatedBackground shapes="circles" speed={0.8} variant="blend">
+        <section id="hero" className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 bg-gradient-radial from-slate-900 via-slate-900 to-slate-800">
+          <div className="max-w-4xl mx-auto">
+            <p className="mb-2 text-base sm:text-lg font-medium text-slate-400 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 mr-2 text-green-400" />
+              LLM-turbo for text
+            </p>
+            
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+              Turn messy thoughts<br />
+              <span className="bg-gradient-to-r from-green-500 to-green-300 bg-clip-text text-transparent">
+                into killer prompts
+              </span>
+            </h1>
+            
+            <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+              Slash token spend, keep every ounce of meaning. Plays nice with GPT-4, Claude, Gemini — whatever you feed it.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+              <Button
+                size="lg"
+                className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full shadow-lg"
+                onClick={onGetStarted}
+              >
+                Boost my prompt
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-green-600 text-green-400 hover:bg-green-600 hover:text-white px-8 py-4 rounded-full"
+                onClick={() => window.location.href = '/demo'}
+              >
+                30-sec demo
+                <Sparkles className="w-5 h-5 ml-2" />
+              </Button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </AnimatedBackground>
 
       {/* Two Optimization Methods */}
-      <PromptDemoMono />
+      <AnimatedBackground shapes="rects" speed={1.2} variant="dark">
+        <PromptDemoMono />
+      </AnimatedBackground>
 
       {/* Unified Features → Stats → CTA Band */}
-      <section className="relative isolate overflow-hidden py-24 md:py-32 bg-slate-900">
-        {/* Grain texture overlay */}
-        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.04] pointer-events-none" />
-        
-        <div className="relative container mx-auto px-4">
-          {/* Section intro */}
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Why choose Prompt Copilot?
-            </h2>
-            <p className="text-xl text-slate-300">
-              Advanced AI optimization for all your prompting needs
-            </p>
-          </div>
+      <AnimatedBackground shapes="triangles" speed={0.6} variant="blend">
+        <section className="relative isolate overflow-hidden py-24 md:py-32 bg-slate-900">
+          {/* Grain texture overlay */}
+          <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.04] pointer-events-none" />
+          
+          <div className="relative container mx-auto px-4">
+            {/* Section intro */}
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Why choose Prompt Copilot?
+              </h2>
+              <p className="text-xl text-slate-300">
+                Advanced AI optimization for all your prompting needs
+              </p>
+            </div>
 
-          {/* 1️⃣ Feature cards with glassmorphism */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
-            {features.map((feature, index) => (
-              <FeatureCard
-                key={index}
-                title={feature.title}
-                blurb={feature.blurb}
-                icon={feature.icon}
-                accent={feature.accent}
-              />
-            ))}
-          </div>
+            {/* 1️⃣ Feature cards with glassmorphism */}
+            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
+              {features.map((feature, index) => (
+                <FeatureCard
+                  key={index}
+                  title={feature.title}
+                  blurb={feature.blurb}
+                  icon={feature.icon}
+                  accent={feature.accent}
+                />
+              ))}
+            </div>
 
-          {/* Hairline divider */}
-          <div className="mb-20 h-px bg-gradient-to-r from-transparent via-slate-700/30 to-transparent" />
+            {/* Hairline divider */}
+            <div className="mb-20 h-px bg-gradient-to-r from-transparent via-slate-700/30 to-transparent" />
 
-          {/* 2️⃣ KPI counters with count-up animations */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center max-w-5xl mx-auto">
-            {stats.map((stat, index) => (
-              <Counter
-                key={index}
-                value={stat.value}
-                suffix={stat.suffix}
-                label={stat.label}
-                icon={stat.icon}
-              />
-            ))}
+            {/* 2️⃣ KPI counters with count-up animations */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center max-w-5xl mx-auto">
+              {stats.map((stat, index) => (
+                <Counter
+                  key={index}
+                  value={stat.value}
+                  suffix={stat.suffix}
+                  label={stat.label}
+                  icon={stat.icon}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </AnimatedBackground>
+
+      {/* Pricing Section */}
+      <AnimatedBackground shapes="circles" speed={1.0} variant="light">
+        <PricingSection />
+      </AnimatedBackground>
 
       {/* 3️⃣ CTA banner with sparkles */}
-      <CTA
-        headline="Let's supercharge your prompt right now"
-        sub="Skip the card, save the cash, blow their minds."
-        primary={{ 
-          text: "Boost my prompt", 
-          href: "/auth",
-          icon: Sparkles 
-        }}
-        secondary={{ 
-          text: "30-second tour", 
-          href: "/demo" 
-        }}
-      />
+      <AnimatedBackground shapes="rects" speed={0.5} variant="blend">
+        <CTA
+          headline="Ready to supercharge your prompts?"
+          sub="Join thousands of users saving time and money with AI optimization."
+          primary={{ 
+            text: "Start Free Trial", 
+            href: "/auth",
+            icon: Sparkles 
+          }}
+          secondary={{ 
+            text: "See how it works", 
+            href: "/demo" 
+          }}
+        />
+      </AnimatedBackground>
 
       {/* Footer */}
-      <Footer
-        socialLinks={[
-          {
-            icon: <Twitter className="h-5 w-5" />,
-            href: "https://twitter.com/defescooler",
-            label: "Twitter",
-          },
-          {
-            icon: <Github className="h-5 w-5" />,
-            href: "https://github.com/defescooler",
-            label: "GitHub",
-          },
-        ]}
-        mainLinks={[
-          { href: "#features", label: "Features" },
-          { href: "/demo", label: "Demo" },
-          { href: "/dashboard", label: "Dashboard" },
-        ]}
-        legalLinks={[
-          { href: "/privacy", label: "Privacy" },
-          { href: "/terms", label: "Terms" },
-        ]}
-        copyright={{
-          text: "Made with ❤️ by",
-          license: (
-            <a
-              href="https://github.com/defescooler"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold hover:text-white"
-            >
-              defescooler
-            </a>
-          ),
-        }}
-      />
+      <AnimatedBackground shapes="triangles" speed={0.3} variant="dark">
+        <Footer
+          socialLinks={[
+            {
+              icon: <Twitter className="h-5 w-5" />,
+              href: "https://twitter.com/defescooler",
+              label: "Twitter",
+            },
+            {
+              icon: <Github className="h-5 w-5" />,
+              href: "https://github.com/defescooler",
+              label: "GitHub",
+            },
+          ]}
+          mainLinks={[
+            { href: "#features", label: "Features" },
+            { href: "/demo", label: "Demo" },
+            { href: "/dashboard", label: "Dashboard" },
+          ]}
+          legalLinks={[
+            { href: "/privacy", label: "Privacy" },
+            { href: "/terms", label: "Terms" },
+          ]}
+          copyright={{
+            text: "Made with ❤️ by",
+            license: (
+              <a
+                href="https://github.com/defescooler"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold hover:text-white"
+              >
+                defescooler
+              </a>
+            ),
+          }}
+        />
+      </AnimatedBackground>
     </div>
   )
 }
