@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompto Performance Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .metric-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .metric-icon {
+            font-size: 2rem;
+            margin-right: 12px;
+        }
+        
+        .metric-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .metric-value {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #4f46e5;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-healthy { background: #10b981; }
+        .status-warning { background: #f59e0b; }
+        .status-error { background: #ef4444; }
+        
+        .progress-bar {
+            background: #f3f4f6;
+            border-radius: 6px;
+            height: 8px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .controls {
+            padding: 0 30px 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280, #374151);
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            height: 150px;
+            margin-top: 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>⚡ Performance Dashboard</h1>
+            <p>Real-time monitoring of Prompto's lightning-fast enhancement system</p>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-icon">🚀</span>
+                    <span class="metric-title">Response Time</span>
+                </div>
+                <div class="metric-value" id="avgResponseTime">--</div>
+                <div class="metric-label">Average milliseconds</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="responseTimeBar" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-icon">⚡</span>
+                    <span class="metric-title">Cache Hit Rate</span>
+                </div>
+                <div class="metric-value" id="cacheHitRate">--</div>
+                <div class="metric-label">Percentage cached</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="cacheHitBar" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-icon">📊</span>
+                    <span class="metric-title">Total Requests</span>
+                </div>
+                <div class="metric-value" id="totalRequests">--</div>
+                <div class="metric-label">Enhancements processed</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-icon">💾</span>
+                    <span class="metric-title">Cache Size</span>
+                </div>
+                <div class="metric-value" id="cacheSize">--</div>
+                <div class="metric-label">Cached entries</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-icon">🧠</span>
+                    <span class="metric-title">Memory Usage</span>
+                </div>
+                <div class="metric-value" id="memoryUsage">--</div>
+                <div class="metric-label">Megabytes</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="memoryBar" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-icon">⚙️</span>
+                    <span class="metric-title">Server Status</span>
+                </div>
+                <div id="serverStatus">
+                    <span class="status-indicator status-healthy"></span>
+                    <span>Loading...</span>
+                </div>
+                <div class="metric-label" id="serverUptime">Checking connection...</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="refreshMetrics()">
+                <span id="refreshBtn">🔄 Refresh Metrics</span>
+            </button>
+            <button class="btn btn-secondary" onclick="clearCache()">
+                🗑️ Clear Cache
+            </button>
+            <button class="btn btn-secondary" onclick="exportMetrics()">
+                📊 Export Data
+            </button>
+        </div>
+        
+        <div class="footer">
+            <p>Last updated: <span id="lastUpdate">Never</span></p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8002/api';
+        let metricsInterval;
+        
+        async function fetchMetrics() {
+            try {
+                const response = await fetch(`${API_BASE}/performance`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                console.error('Failed to fetch metrics:', error);
+                updateServerStatus('error', 'Backend Offline', 'Check if backend server is running');
+                throw error;
+            }
+        }
+        
+        function updateMetrics(data) {
+            // Response time
+            const avgTime = data.performance.avg_response_time_ms || 0;
+            document.getElementById('avgResponseTime').textContent = Math.round(avgTime);
+            const responseTimePercent = Math.min((avgTime / 5000) * 100, 100);
+            document.getElementById('responseTimeBar').style.width = `${responseTimePercent}%`;
+            
+            // Cache metrics
+            const hitRate = data.cache.hit_rate || 0;
+            document.getElementById('cacheHitRate').textContent = `${hitRate}%`;
+            document.getElementById('cacheHitBar').style.width = `${hitRate}%`;
+            document.getElementById('cacheSize').textContent = data.cache.size || 0;
+            
+            // Request metrics
+            document.getElementById('totalRequests').textContent = data.performance.total_requests || 0;
+            
+            // Memory usage
+            const memoryMB = data.system.memory_usage_mb || 0;
+            document.getElementById('memoryUsage').textContent = `${memoryMB}MB`;
+            const memoryPercent = Math.min((memoryMB / 100) * 100, 100);
+            document.getElementById('memoryBar').style.width = `${memoryPercent}%`;
+            
+            // Server status
+            const uptime = data.server.uptime_seconds || 0;
+            const uptimeText = uptime > 3600 ? 
+                `${Math.floor(uptime / 3600)}h ${Math.floor((uptime % 3600) / 60)}m` :
+                `${Math.floor(uptime / 60)}m ${uptime % 60}s`;
+                
+            updateServerStatus('healthy', 'Online', `Uptime: ${uptimeText}`);
+            
+            // Update timestamp
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+        }
+        
+        function updateServerStatus(status, text, subtitle) {
+            const statusEl = document.getElementById('serverStatus');
+            const uptimeEl = document.getElementById('serverUptime');
+            
+            statusEl.innerHTML = `
+                <span class="status-indicator status-${status}"></span>
+                <span>${text}</span>
+            `;
+            uptimeEl.textContent = subtitle;
+        }
+        
+        async function refreshMetrics() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            const originalText = refreshBtn.innerHTML;
+            
+            refreshBtn.innerHTML = '<span class="loading"></span> Refreshing...';
+            
+            try {
+                const data = await fetchMetrics();
+                updateMetrics(data);
+            } catch (error) {
+                console.error('Refresh failed:', error);
+            } finally {
+                setTimeout(() => {
+                    refreshBtn.innerHTML = originalText;
+                }, 500);
+            }
+        }
+        
+        async function clearCache() {
+            if (!confirm('Clear performance cache? This will reset all cached enhancements.')) return;
+            
+            try {
+                // Note: This would need a backend endpoint to actually clear cache
+                alert('Cache clear functionality requires backend endpoint implementation');
+            } catch (error) {
+                alert('Failed to clear cache: ' + error.message);
+            }
+        }
+        
+        function exportMetrics() {
+            // Export current metrics as JSON
+            fetchMetrics().then(data => {
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `prompto-metrics-${new Date().toISOString().slice(0, 16)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }).catch(error => {
+                alert('Failed to export metrics: ' + error.message);
+            });
+        }
+        
+        function startAutoRefresh() {
+            metricsInterval = setInterval(refreshMetrics, 5000); // Refresh every 5 seconds
+        }
+        
+        function stopAutoRefresh() {
+            if (metricsInterval) {
+                clearInterval(metricsInterval);
+                metricsInterval = null;
+            }
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshMetrics();
+            startAutoRefresh();
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', stopAutoRefresh);
+    </script>
+</body>
+</html> 

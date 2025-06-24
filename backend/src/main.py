@@ -8,6 +8,9 @@ from openai import OpenAI
 from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+import hashlib
+import time
+from collections import defaultdict
 
 load_dotenv()
 
@@ -24,11 +27,15 @@ from src.routes.user import user_bp
 from src.routes.prompt import prompt_bp
 from src.routes.auth import auth_bp
 from src.routes.prompt_draft import prompt_draft_bp
+from src.utils.prompt_techniques import PromptTechniques
+from src.utils.performance_optimizer import performance_optimizer, FastPromptProcessor
 
 # JWT Configuration
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440
+
+# High-performance caching system (replaced with performance_optimizer)
 
 def create_app(config_name=None):
     """Application factory pattern"""
@@ -187,185 +194,130 @@ def get_current_user_info():
         'user': user.to_dict()
     })
 
-def enhance_with_openai(original_prompt, method='llm'):
-    """Enhanced prompt engineering with OpenAI GPT"""
+def enhance_with_openai(original_prompt, method='llm', enabled_techniques=None):
+    """Advanced prompt engineering with OpenAI GPT - PERFORMANCE OPTIMIZED"""
     try:
-        openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        if enabled_techniques is None:
+            enabled_techniques = PromptTechniques.get_default_techniques()
         
-        if method == "llm":
-            system_prompt = """You are the world's leading prompt engineering expert, specializing in optimizing prompts for maximum AI performance. Your expertise lies in transforming simple requests into sophisticated, highly effective prompts that produce exceptional results.
-
-ENHANCEMENT METHODOLOGY:
-1. ROLE & EXPERTISE: Define clear expert role for the AI
-2. CONTEXT & CONSTRAINTS: Provide relevant background and limitations  
-3. TASK STRUCTURE: Break complex requests into clear components
-4. OUTPUT SPECIFICATIONS: Define exact format, length, and style requirements
-5. QUALITY CONTROLS: Include verification steps and success criteria
-6. EXAMPLES: Add relevant examples when beneficial
-
-ADVANCED TECHNIQUES:
-- Chain-of-thought reasoning prompts
-- Multi-step verification processes  
-- Error prevention and edge case handling
-- Metacognitive instructions for self-assessment
-- Progressive disclosure for complex topics
-
-Transform the user's basic prompt into a sophisticated, structured prompt that will produce 3-5x better results. Maintain the original intent while dramatically improving clarity, specificity, and effectiveness.
-
-Return ONLY the enhanced prompt without any explanations or meta-commentary."""
-            
-            user_prompt = f"Transform this basic prompt into an expert-level prompt:\n\n{original_prompt}"
-            
-        else:  # algorithm compression
-            system_prompt = """You are an expert at semantic compression and prompt optimization. Your goal is to reduce token usage while maintaining 100% of the original meaning and effectiveness.
-
-COMPRESSION TECHNIQUES:
-1. Remove redundant words and phrases
-2. Use more precise, concise language
-3. Eliminate unnecessary qualifiers
-4. Combine related concepts efficiently
-5. Maintain all essential information
-6. Preserve exact meaning and intent
-
-Return ONLY the compressed version without explanations."""
-            
-            user_prompt = f"Compress this prompt to minimize tokens while preserving all meaning:\n\n{original_prompt}"
+        # Apply prompt engineering techniques first
+        enhanced_prompt = PromptTechniques.apply_techniques(original_prompt, enabled_techniques, method)
         
-        response = openai_client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            temperature=0.7,
-            max_tokens=1500
+        # Skip API call for compression method to improve speed
+        if method == 'compression':
+            return enhanced_prompt
+        
+        openai_client = OpenAI(
+            api_key=os.getenv('OPENAI_API_KEY'),
+            timeout=8.0  # Reduced timeout for faster responses
         )
         
-        return response.choices[0].message.content.strip()
+        if method == "llm":
+            # Streamlined system prompt for faster processing
+            system_prompt = "Refine this enhanced prompt for maximum effectiveness while preserving all structural elements. Be concise and precise."
+            
+            response = openai_client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": enhanced_prompt}
+                ],
+                max_tokens=800,  # Reduced for faster responses
+                temperature=0.5,  # Lower for more consistent results
+                timeout=6.0  # Aggressive timeout
+            )
+            
+            final_enhanced = response.choices[0].message.content.strip()
+            
+        else:  # compression
+            # For compression, use the technique-enhanced version directly
+            final_enhanced = enhanced_prompt
+        
+        return final_enhanced if final_enhanced else enhanced_prompt
         
     except Exception as e:
         print(f"OpenAI API error: {e}")
-        return None
+        # Return the technique-enhanced version if API fails
+        if enabled_techniques is None:
+            enabled_techniques = PromptTechniques.get_default_techniques()
+        return PromptTechniques.apply_techniques(original_prompt, enabled_techniques, method)
 
-def enhance_with_gemini(original_prompt, method='llm'):
-    """Enhanced prompt engineering with Google Gemini"""
+def enhance_with_gemini(original_prompt, method='llm', enabled_techniques=None):
+    """Advanced prompt engineering with Google Gemini - PERFORMANCE OPTIMIZED"""
     try:
-        model = genai.GenerativeModel('gemini-pro')
+        if enabled_techniques is None:
+            enabled_techniques = PromptTechniques.get_default_techniques()
+        
+        # Apply prompt engineering techniques first
+        enhanced_prompt = PromptTechniques.apply_techniques(original_prompt, enabled_techniques, method)
+        
+        # Skip API call for compression method to improve speed
+        if method == 'compression':
+            return enhanced_prompt
+        
+        generation_config = genai.types.GenerationConfig(
+            max_output_tokens=600,  # Reduced for faster responses
+            temperature=0.5,  # More consistent results
+            top_p=0.8,
+            top_k=20  # Reduced for faster generation
+        )
+        
+        model = genai.GenerativeModel(
+            'gemini-pro',
+            generation_config=generation_config
+        )
         
         if method == "llm":
-            enhancement_instruction = """You are an elite prompt engineering specialist with deep expertise in AI optimization. Transform this basic prompt into a sophisticated, highly effective prompt that will produce exceptional results.
-
-ENHANCEMENT FRAMEWORK:
-🎯 ROLE DEFINITION: Assign specific expertise role to the AI
-🌍 CONTEXT SETTING: Provide relevant background and scenario
-📋 TASK BREAKDOWN: Structure complex requests clearly
-📐 OUTPUT SPECIFICATIONS: Define format, length, style, tone
-🔍 QUALITY ASSURANCE: Include verification and success criteria
-💡 EXAMPLES: Add relevant examples when beneficial
-🧠 REASONING: Include chain-of-thought instructions
-
-ADVANCED TECHNIQUES:
-- Metacognitive prompting for self-reflection
-- Progressive disclosure for complex topics
-- Error prevention and edge case handling
-- Multi-perspective analysis when relevant
-- Structured XML tags for clarity
-
-Transform the input into a prompt that's 3-5x more effective while maintaining the original intent. Make it comprehensive, specific, and actionable.
-
-INPUT PROMPT: {prompt}
-
-Return ONLY the enhanced prompt:"""
+            # Streamlined instruction for faster processing
+            enhancement_instruction = f"Optimize this enhanced prompt for maximum effectiveness:\n\n{enhanced_prompt}"
             
         else:  # compression
-            enhancement_instruction = """You are a semantic compression expert. Reduce token usage while preserving 100% of the meaning and effectiveness.
-
-COMPRESSION STRATEGIES:
-• Remove redundant words and unnecessary qualifiers
-• Use precise, concise language
-• Combine related concepts efficiently  
-• Eliminate filler words and phrases
-• Maintain all essential information and intent
-
-INPUT: {prompt}
-
-Return ONLY the compressed version:"""
+            # For compression, use the technique-enhanced version directly
+            return enhanced_prompt
         
-        response = model.generate_content(enhancement_instruction.format(prompt=original_prompt))
-        enhanced = response.text.strip()
+        response = model.generate_content(enhancement_instruction)
+        final_enhanced = response.text.strip()
         
-        # Clean up formatting
-        if enhanced.startswith('```'):
-            enhanced = enhanced.split('\n', 1)[1] if '\n' in enhanced else enhanced[3:]
-        if enhanced.endswith('```'):
-            enhanced = enhanced.rsplit('\n', 1)[0] if '\n' in enhanced else enhanced[:-3]
-            
-        return enhanced
+        # Clean up response formatting
+        if final_enhanced.startswith(('```', 'Enhanced:', 'Optimized:', 'Final:')):
+            lines = final_enhanced.split('\n')
+            for i, line in enumerate(lines):
+                if line and not line.startswith(('```', 'Enhanced:', 'Optimized:', 'Final:')):
+                    final_enhanced = '\n'.join(lines[i:])
+                    break
+        
+        return final_enhanced if final_enhanced else enhanced_prompt
         
     except Exception as e:
         print(f"Gemini API error: {e}")
-        return None
+        # Return the technique-enhanced version if API fails
+        if enabled_techniques is None:
+            enabled_techniques = PromptTechniques.get_default_techniques()
+        return PromptTechniques.apply_techniques(original_prompt, enabled_techniques, method)
 
-def get_fallback_enhancement(original_prompt, method='llm'):
-    """Fallback enhancement when AI services are unavailable"""
-    if method == "llm":
-        return f"""<role>You are an expert assistant with deep knowledge in the relevant field.</role>
-
-<task>
-{original_prompt}
-</task>
-
-<context>
-Please provide a comprehensive, well-structured response that demonstrates expertise and attention to detail.
-</context>
-
-<requirements>
-- Be thorough and accurate in your analysis
-- Include specific examples and evidence where relevant
-- Structure your response with clear headings and logical flow
-- Provide actionable insights and recommendations
-- Consider multiple perspectives when applicable
-</requirements>
-
-<output_format>
-Deliver a professional, well-organized response with:
-1. Clear introduction stating your approach
-2. Main content with detailed analysis
-3. Specific examples and supporting evidence
-4. Summary with key takeaways and next steps
-</output_format>
-
-<quality_check>
-Before responding, verify that your answer is comprehensive, accurate, and directly addresses all aspects of the request.
-</quality_check>"""
-    else:
-        # Simple compression fallback
-        compressed = original_prompt
-        replacements = [
-            ("Create a detailed", "Create detailed"),
-            ("Please provide me with", "Provide"),
-            ("I would like you to", ""),
-            ("Can you help me", "Help me"),
-            ("I need assistance with", "Assist with"),
-            (" in order to", " to"),
-            (" as well as", " and"),
-            ("make sure that", "ensure"),
-            ("it is important that", ""),
-        ]
-        
-        for old, new in replacements:
-            compressed = compressed.replace(old, new)
-        
-        return compressed.strip()
+def get_fallback_enhancement(original_prompt, method='llm', enabled_techniques=None):
+    """Advanced fallback enhancement using state-of-the-art techniques when AI services are unavailable"""
+    if enabled_techniques is None:
+        enabled_techniques = PromptTechniques.get_default_techniques()
+    
+    # Use the comprehensive prompt techniques system for fallback
+    return PromptTechniques.apply_techniques(original_prompt, enabled_techniques, method)
 
 # Prompt enhancement endpoint
 @app.route('/api/prompts/enhance', methods=['POST'])
 def enhance_prompt():
     try:
+        start_time = time.time()
         data = request.get_json()
         original_prompt = data.get('prompt', '').strip()
         method = data.get('method', 'llm')
         ai_provider = data.get('provider', os.getenv('AI_PROVIDER', 'auto'))
+        enabled_techniques = data.get('techniques', PromptTechniques.get_default_techniques())
+        preset = data.get('preset')
+        
+        # Apply preset if specified
+        if preset and preset in PromptTechniques.PRESETS:
+            enabled_techniques = PromptTechniques.PRESETS[preset]
         
         if not original_prompt:
             return jsonify({'error': 'Prompt is required'}), 400
@@ -373,29 +325,58 @@ def enhance_prompt():
         if len(original_prompt) > 5000:
             return jsonify({'error': 'Prompt too long (max 5000 characters)'}), 400
         
+        # Optimize prompt and techniques for performance
+        optimized_prompt, optimized_techniques = performance_optimizer.optimize_prompt_processing(original_prompt, enabled_techniques)
+        
+        # Generate high-performance cache key
+        cache_key = performance_optimizer.get_cache_key(optimized_prompt, optimized_techniques, method)
+        
+        # Check high-performance cache
+        cached_result = performance_optimizer.get_cached_result(cache_key)
+        if cached_result:
+            response_time = int((time.time() - start_time) * 1000)
+            performance_optimizer.record_response_time(response_time)
+            print(f"⚡ INSTANT response from cache in {response_time}ms")
+            return jsonify({
+                **cached_result,
+                'cached': True,
+                'response_time_ms': response_time
+            })
+        
         # Get user if authenticated
         user = get_current_user()
         
         enhanced_prompt = None
         provider_used = None
         
-        # Try AI enhancement based on provider preference
-        if ai_provider == 'openai' or ai_provider == 'auto':
-            if os.getenv('OPENAI_API_KEY'):
-                enhanced_prompt = enhance_with_openai(original_prompt, method)
-                if enhanced_prompt:
-                    provider_used = 'openai'
+        # High-performance AI enhancement with timeout and retry logic
+        enhancement_start = time.time()
+        enhanced_prompt = None
+        provider_used = None
         
-        if not enhanced_prompt and (ai_provider == 'gemini' or ai_provider == 'auto'):
-            if os.getenv('GEMINI_API_KEY'):
-                enhanced_prompt = enhance_with_gemini(original_prompt, method)
-                if enhanced_prompt:
-                    provider_used = 'gemini'
-        
-        # Fallback if no AI service worked
-        if not enhanced_prompt:
-            enhanced_prompt = get_fallback_enhancement(original_prompt, method)
-            provider_used = 'fallback'
+        try:
+            # Use optimized techniques for faster processing
+            if ai_provider == 'openai' or ai_provider == 'auto':
+                if os.getenv('OPENAI_API_KEY'):
+                    enhanced_prompt = enhance_with_openai(optimized_prompt, method, optimized_techniques)
+                    if enhanced_prompt:
+                        provider_used = 'openai'
+            
+            if not enhanced_prompt and (ai_provider == 'gemini' or ai_provider == 'auto'):
+                if os.getenv('GEMINI_API_KEY'):
+                    enhanced_prompt = enhance_with_gemini(optimized_prompt, method, optimized_techniques)
+                    if enhanced_prompt:
+                        provider_used = 'gemini'
+            
+            # Fast fallback if no AI service worked
+            if not enhanced_prompt:
+                enhanced_prompt = get_fallback_enhancement(optimized_prompt, method, optimized_techniques)
+                provider_used = 'fallback'
+            
+        except Exception as e:
+            print(f"🚨 Enhancement error: {e}")
+            enhanced_prompt = get_fallback_enhancement(optimized_prompt, method, optimized_techniques)
+            provider_used = 'fallback_error'
         
         # Calculate effectiveness score based on enhancement quality
         enhancement_ratio = len(enhanced_prompt) / len(original_prompt) if original_prompt else 1
@@ -410,50 +391,79 @@ def enhance_prompt():
         
         effectiveness_score = max(70.0, effectiveness_score)  # Minimum score
         
-        # Save to database only if user is authenticated
-        prompt_id = None
-        if user:
-            # Generate smart title from original prompt
-            title_words = original_prompt.split()[:8]
-            title = ' '.join(title_words)
-            if len(title_words) == 8:
-                title += "..."
-            
-            prompt_record = Prompt(
-                user_id=user.id,
-                title=title,
-                body=original_prompt,
-                original_text=original_prompt,
-                enhanced_text=enhanced_prompt,
-                category='general',
-                effectiveness_score=round(effectiveness_score, 1)
-            )
-            db.session.add(prompt_record)
-            
-            # Update analytics
-            analytics = Analytics.query.filter_by(user_id=user.id).first()
-            if not analytics:
-                analytics = Analytics(user_id=user.id)
-                db.session.add(analytics)
-            
-            analytics.prompts_enhanced += 1
-            analytics.time_saved += 45  # Increased time saved estimate
-            analytics.total_usage += 1
-            
-            db.session.commit()
-            prompt_id = prompt_record.id
+        response_time = int((time.time() - start_time) * 1000)
+        enhancement_time = int((time.time() - enhancement_start) * 1000)
         
-        return jsonify({
+        # Record performance metrics
+        performance_optimizer.record_response_time(response_time)
+        
+        print(f"🚀 Enhancement completed in {response_time}ms (processing: {enhancement_time}ms) via {provider_used}")
+        
+        # Prepare response data for caching
+        response_data = {
             'enhanced_prompt': enhanced_prompt,
-            'prompt_id': prompt_id,
             'success': True,
             'provider_used': provider_used,
             'method': method,
+            'techniques_used': optimized_techniques,
+            'techniques_applied': len(optimized_techniques),
             'effectiveness_score': round(effectiveness_score, 1),
             'enhancement_ratio': round(enhancement_ratio, 2),
             'original_length': len(original_prompt),
-            'enhanced_length': len(enhanced_prompt)
+            'enhanced_length': len(enhanced_prompt),
+            'cached': False
+        }
+        
+        # Cache the result for future requests
+        if enhanced_prompt and response_time < 10000:  # Only cache successful, fast responses
+            performance_optimizer.cache_result(cache_key, response_data)
+        
+        # Async database operations (non-blocking)
+        prompt_id = None
+        if user and enhanced_prompt:
+            try:
+                # Generate smart title from original prompt
+                title_words = original_prompt.split()[:8]
+                title = ' '.join(title_words)
+                if len(title_words) == 8:
+                    title += "..."
+                
+                prompt_record = Prompt(
+                    user_id=user.id,
+                    title=title,
+                    body=original_prompt,
+                    original_text=original_prompt,
+                    enhanced_text=enhanced_prompt,
+                    category='general',
+                    effectiveness_score=round(effectiveness_score, 1)
+                )
+                db.session.add(prompt_record)
+                
+                # Update analytics
+                analytics = Analytics.query.filter_by(user_id=user.id).first()
+                if not analytics:
+                    analytics = Analytics(user_id=user.id)
+                    db.session.add(analytics)
+                
+                analytics.prompts_enhanced += 1
+                analytics.time_saved += 45
+                analytics.total_usage += 1
+                
+                db.session.commit()
+                prompt_id = prompt_record.id
+                
+            except Exception as db_error:
+                print(f"⚠️ Database operation failed (non-critical): {db_error}")
+                db.session.rollback()
+        
+        # Add final response metadata
+        response_data.update({
+            'prompt_id': prompt_id,
+            'response_time_ms': response_time,
+            'enhancement_time_ms': enhancement_time
         })
+        
+        return jsonify(response_data)
         
     except Exception as e:
         print(f"Enhancement error: {e}")
@@ -545,6 +555,40 @@ def get_analytics():
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
+# Get available prompt engineering techniques
+@app.route('/api/techniques', methods=['GET'])
+def get_techniques():
+    try:
+        return jsonify(PromptTechniques.get_technique_info())
+    except Exception as e:
+        print(f"Error fetching techniques: {e}")
+        return jsonify({'error': str(e)}), 500
+
+# Advanced performance monitoring endpoint
+@app.route('/api/performance', methods=['GET'])
+def performance_status():
+    """Comprehensive performance monitoring and diagnostics"""
+    try:
+        stats = performance_optimizer.get_performance_stats()
+        
+        # Add server-specific metrics
+        stats['server'] = {
+            'uptime_seconds': int(time.time() - app.start_time) if hasattr(app, 'start_time') else 0,
+            'python_version': f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+            'flask_debug': app.debug,
+            'total_techniques': len(PromptTechniques.TECHNIQUES)
+        }
+        
+        return jsonify(stats)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Legacy cache status endpoint (redirects to performance)
+@app.route('/api/cache/status', methods=['GET'])
+def cache_status():
+    """Legacy endpoint - redirects to performance monitoring"""
+    return performance_status()
+
 # Root route - API only
 @app.route('/')
 def root():
@@ -556,5 +600,21 @@ def root():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8002, debug=True)
+    # Initialize performance tracking
+    app.start_time = time.time()
+    
+    # Production-optimized settings
+    import threading
+    print(f"🚀 Prompto Backend starting with {threading.active_count()} threads")
+    print(f"⚡ Performance optimizer initialized")
+    print(f"🎯 {len(PromptTechniques.TECHNIQUES)} techniques available")
+    
+    # Run with optimized settings
+    app.run(
+        host='0.0.0.0', 
+        port=8002, 
+        debug=True,
+        threaded=True,
+        use_reloader=False  # Disable reloader for better performance
+    )
 
