@@ -10,9 +10,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-gradient-to-r from-emerald-400 to-lime-500 text-slate-950 font-semibold shadow-lg hover:shadow-xl motion-safe:hover:scale-105 motion-reduce:hover:scale-100 active:scale-97 rounded-full",
+          "bg-gradient-to-r from-[var(--accent-start)] to-[var(--accent-end)] text-slate-950 font-semibold shadow-lg hover:shadow-xl motion-safe:hover:scale-105 motion-reduce:hover:scale-100 active:scale-97 rounded-full",
         secondary:
-          "text-emerald-400 ring-1 ring-emerald-500/30 hover:bg-emerald-500/10 motion-safe:hover:scale-105 motion-reduce:hover:scale-100 active:scale-97 rounded-full backdrop-blur-sm",
+          "text-emerald-400 ring-1 ring-emerald-500/40 hover:bg-white/5 motion-safe:hover:scale-105 motion-reduce:hover:scale-100 active:scale-97 rounded-full",
         link: 
           "text-emerald-400 underline-offset-4 hover:underline p-0 h-auto",
       },

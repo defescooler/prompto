@@ -55,12 +55,20 @@ export default function Navbar() {
 
       {/** Auth **/}
       <div className="flex items-center">
-        <Link to="/auth">
+        <Link to="/auth/sign-in">
           <Button
             size="sm"
             className="bg-violet-600 hover:bg-violet-700 text-white rounded-full px-5"
           >
-            Sign In
+            Log in
+          </Button>
+        </Link>
+        <Link to="/auth/sign-up" className="ml-3">
+          <Button
+            size="sm"
+            className="border border-white text-white hover:bg-white hover:text-slate-900 rounded-full px-5"
+          >
+            Sign up
           </Button>
         </Link>
       </div>

@@ -9,6 +9,8 @@ import Navbar from './components/navbar.jsx'
 import Home from './pages/home.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Auth from './pages/Auth.jsx'
+import SignIn from './pages/SignIn.jsx'
+import SignUp from './pages/SignUp.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 // API Configuration - Updated for Flask backend
@@ -144,17 +146,6 @@ function PageTransition({ children }) {
 function App() {
   const { user, token, logout, loading } = useAuth()
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <Router>
       <div className="min-h-screen bg-slate-950">
@@ -163,6 +154,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<ProtectedRoute><SidebarLayout><Dashboard /></SidebarLayout></ProtectedRoute>} />
+            <Route path="/auth/sign-in" element={<SignIn />} />
+            <Route path="/auth/sign-up" element={<SignUp />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

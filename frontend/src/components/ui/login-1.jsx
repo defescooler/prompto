@@ -1,13 +1,19 @@
 "use client";
 
+import { useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
 import { Link } from "react-router-dom";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
 
-// Google icon SVG
+// Social icon (Google)
 function GoogleIcon(props) {
   return (
     <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
@@ -16,75 +22,214 @@ function GoogleIcon(props) {
   );
 }
 
-export default function Login01() {
-  const [email, setEmail] = useState("");
+// ----- Validation Schemas -----
+const signInSchema = z.object({
+  email: z.string().email({ message: "Enter a valid e-mail" }),
+  password: z.string().min(6, { message: "Password ≥ 6 chars" }),
+});
+
+const signUpSchema = z.object({
+  name: z.string().min(2, { message: "Name too short" }),
+  email: z.string().email({ message: "Enter a valid e-mail" }),
+  password: z.string().min(6, { message: "Password ≥ 6 chars" }),
+});
+
+// ----- Stubs (replace with API calls) -----
+function signIn(values) {
+  toast.promise(
+    new Promise((res) => setTimeout(res, 800)),
+    {
+      loading: "Signing in…",
+      success: () => `Welcome back, ${values.email}!`,
+      error: "Sign-in failed",
+    },
+  );
+}
+
+function register(values) {
+  toast.promise(
+    new Promise((res) => setTimeout(res, 800)),
+    {
+      loading: "Creating account…",
+      success: () => `Account created for ${values.email}!`,
+      error: "Registration failed",
+    },
+  );
+}
+
+function signInWithGoogle() {
+  toast("Redirecting to Google OAuth…");
+  // window.location.href = "/api/auth/google"; // real world flow
+}
+
+// ----- Forms -----
+function SignInForm() {
+  const {
+    register: rhfRegister,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(signInSchema) });
+
+  // ⌘/Ctrl + Enter shortcut
+  const onSubmit = useCallback((data) => signIn(data), []);
+  useEffect(() => {
+    function onKey(e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        handleSubmit(onSubmit)();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [handleSubmit, onSubmit]);
+
   return (
-    <div className="flex items-center justify-center min-h-screen text-gray-900 dark:text-gray-100">
-      <div className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="text-center text-xl font-semibold">
-            Log in or create account
-          </h2>
-          <form
-            action="#"
-            method="post"
-            className="mt-6"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <Label htmlFor="email" className="font-medium">
-              Email
-            </Label>
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              autoComplete="email"
-              placeholder="john@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-2"
-              required
-            />
-            <Button type="submit" className="mt-4 w-full">
-              Sign in
-            </Button>
-          </form>
-
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <Separator className="w-full" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-gray-50 dark:bg-background px-2 text-gray-500 dark:text-muted-foreground">
-                or with
-              </span>
-            </div>
-          </div>
-
-          <Button
-            variant="outline"
-            className="inline-flex w-full items-center justify-center space-x-2"
-            asChild
-          >
-            <Link to="#">
-              <GoogleIcon className="size-5" aria-hidden={true} />
-              <span className="text-sm font-medium">Sign in with Google</span>
-            </Link>
-          </Button>
-
-          <p className="mt-4 text-xs text-gray-600 dark:text-muted-foreground">
-            By signing in, you agree to our{" "}
-            <Link to="#" className="underline underline-offset-4">
-              terms of service
-            </Link>{" "}
-            and{" "}
-            <Link to="#" className="underline underline-offset-4">
-              privacy policy
-            </Link>
-            .
-          </p>
-        </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <div>
+        <Label htmlFor="signin_email">Email</Label>
+        <Input
+          id="signin_email"
+          type="email"
+          inputMode="email"
+          enterKeyHint="next"
+          autoComplete="email"
+          aria-invalid={!!errors.email}
+          {...rhfRegister("email")}
+          placeholder="john@company.com"
+        />
+        {errors.email && (
+          <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>
+        )}
       </div>
+      <div>
+        <Label htmlFor="signin_password">Password</Label>
+        <Input
+          id="signin_password"
+          type="password"
+          autoComplete="current-password"
+          enterKeyHint="go"
+          aria-invalid={!!errors.password}
+          {...rhfRegister("password")}
+          placeholder="••••••••"
+        />
+        {errors.password && (
+          <p className="mt-1 text-xs text-red-400">{errors.password.message}</p>
+        )}
+      </div>
+      <Button type="submit" className="w-full">
+        Continue
+      </Button>
+    </form>
+  );
+}
+
+function SignUpForm() {
+  const {
+    register: rhfRegister,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(signUpSchema) });
+
+  const onSubmit = useCallback((data) => register(data), []);
+  useEffect(() => {
+    function onKey(e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        handleSubmit(onSubmit)();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [handleSubmit, onSubmit]);
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <div>
+        <Label htmlFor="signup_name">Name</Label>
+        <Input
+          id="signup_name"
+          autoComplete="name"
+          enterKeyHint="next"
+          aria-invalid={!!errors.name}
+          {...rhfRegister("name")}
+          placeholder="Jane Doe"
+        />
+        {errors.name && (
+          <p className="mt-1 text-xs text-red-400">{errors.name.message}</p>
+        )}
+      </div>
+      <div>
+        <Label htmlFor="signup_email">Email</Label>
+        <Input
+          id="signup_email"
+          type="email"
+          inputMode="email"
+          enterKeyHint="next"
+          autoComplete="email"
+          aria-invalid={!!errors.email}
+          {...rhfRegister("email")}
+          placeholder="jane@company.com"
+        />
+        {errors.email && (
+          <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>
+        )}
+      </div>
+      <div>
+        <Label htmlFor="signup_password">Password</Label>
+        <Input
+          id="signup_password"
+          type="password"
+          autoComplete="new-password"
+          enterKeyHint="go"
+          aria-invalid={!!errors.password}
+          {...rhfRegister("password")}
+          placeholder="At least 6 characters"
+        />
+        {errors.password && (
+          <p className="mt-1 text-xs text-red-400">{errors.password.message}</p>
+        )}
+      </div>
+      <Button type="submit" className="w-full">
+        Create account
+      </Button>
+    </form>
+  );
+}
+
+export default function AuthCard() {
+  return (
+    <div className="auth-card w-full max-w-md rounded-2xl bg-white/5 p-10 backdrop-blur-md shadow-xl">
+      <Tabs defaultValue="signin" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsTrigger value="signin">Sign In</TabsTrigger>
+          <TabsTrigger value="signup">Sign Up</TabsTrigger>
+        </TabsList>
+
+        <div className="space-y-3">
+          <Button variant="outline" className="w-full" onClick={signInWithGoogle}>
+            <GoogleIcon className="size-5" aria-hidden />
+            Continue with Google
+          </Button>
+        </div>
+
+        <Separator className="my-6" />
+
+        <TabsContent value="signin">
+          <SignInForm />
+        </TabsContent>
+        <TabsContent value="signup">
+          <SignUpForm />
+        </TabsContent>
+
+        <p className="mt-6 text-center text-xs text-slate-400">
+          By continuing you agree to our{' '}
+          <Link to="#" className="underline">
+            Terms
+          </Link>{' '}
+          and{' '}
+          <Link to="#" className="underline">
+            Privacy
+          </Link>
+        </p>
+      </Tabs>
     </div>
   );
 } 

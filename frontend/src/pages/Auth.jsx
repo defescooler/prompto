@@ -1,11 +1,7 @@
 "use client";
 
-import Login01 from "@/components/ui/login-1";
+import { Navigate } from "react-router-dom";
 
 export default function Auth() {
-  return (
-    <div className="flex justify-center items-center h-screen bg-slate-950 text-slate-100">
-      <Login01 />
-    </div>
-  );
+  return <Navigate to="/auth/sign-in" replace />;
 }

@@ -17,6 +17,8 @@
   --color-green-700: #15803D;   /* Dark green */
   --color-green-800: #166534;   /* Very dark green */
   --color-green-900: #14532D;   /* Near black green for deep contrast */
+  --accent-start: #4ade80; /* emerald-400 */
+  --accent-end: #a3e635;   /* lime-500 */
   
   /* Prompto specific colors */
   --color-prompto-dark: #005F16;
