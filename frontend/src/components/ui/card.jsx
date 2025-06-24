@@ -1,20 +1,44 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { tokens } from "@/lib/tokens"
 
-function Card({
-  className,
-  ...props
+export default function Card({ 
+  children, 
+  className, 
+  variant = "default",
+  interactive = false,
+  ...props 
 }) {
+  const baseStyles = [
+    tokens.radius.xl,
+    "shadow-lg"
+  ]
+
+  const variantStyles = {
+    default: tokens.colors.surface[2],
+    glass: tokens.colors.surface[1]
+  }
+
+  const interactiveStyles = interactive ? [
+    "transition-all duration-300",
+    "hover:shadow-xl/20",
+    "hover:ring-white/20"
+  ] : []
+
   return (
-    <div
-      data-slot="card"
+    <div 
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        ...baseStyles,
+        ...(Array.isArray(variantStyles[variant]) ? variantStyles[variant] : [variantStyles[variant]]),
+        ...interactiveStyles,
         className
       )}
-      {...props} />
-  );
+      {...props}
+    >
+      {children}
+    </div>
+  )
 }
 
 function CardHeader({

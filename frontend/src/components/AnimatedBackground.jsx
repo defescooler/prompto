@@ -51,10 +51,11 @@ export default function AnimatedBackground({
     }
   }, [])
 
-  // Smooth spring so shapes glide instead of jumping
+  // Smooth spring so shapes glide instead of jumping (using consistent easing)
   const prog = useSpring(scrollYProgress, { 
     stiffness: isMobile ? 40 : 60, 
-    damping: isMobile ? 30 : 20 
+    damping: isMobile ? 30 : 20,
+    ease: [0.32, 0.72, 0, 1] // Consistent with design tokens
   })
 
   // Reduce motion intensity on mobile and low battery

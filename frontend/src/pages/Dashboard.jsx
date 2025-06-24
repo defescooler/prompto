@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.j
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog.jsx'
 import { Sparkles, Heart, BarChart3, Settings, User, LogOut, CheckCircle, Zap, Clock, TrendingUp, Star, BookOpen, Plus, Search, Filter } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import Section from '@/components/ui/section'
 
 const API_BASE_URL = 'http://localhost:8002'
 
@@ -188,7 +189,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col flex-1">
-      <div className="container mx-auto px-4 py-8">
+      <Section className="bg-gray-50">
         {/* Analytics Section */}
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           <StatCard 
@@ -336,7 +337,7 @@ export default function Dashboard() {
             </Card>
           </div>
         </div>
-      </div>
+      </Section>
     </div>
   )
 }
