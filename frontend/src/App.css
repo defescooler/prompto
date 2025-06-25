@@ -183,7 +183,8 @@ input:focus, .rounded-lg:focus {
   background: #fff;
 }
 
-button, .btn, .shadcn-button {
+/* Removed global button styling to prevent conflicts with navbar buttons */
+.btn, .shadcn-button {
   border-radius: 0.5rem !important; /* Match input corners */
   font-weight: 600; /* Slightly less bold */
   letter-spacing: normal; /* Remove letter spacing */
@@ -192,7 +193,7 @@ button, .btn, .shadcn-button {
   background: var(--color-primary);
   color: white;
 }
-button:hover, .btn:hover, .shadcn-button:hover {
+.btn:hover, .shadcn-button:hover {
   background: var(--color-primary-dark);
   border-color: var(--color-primary-light);
 }

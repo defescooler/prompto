@@ -2,13 +2,16 @@ import { useState, useEffect, createContext, useContext } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import './App.css'
-import SidebarLayout from './sidebar-layouts.jsx'
-import Navbar from './components/navbar.jsx'
+
 import { Logo } from './components/icons.jsx'
 
 // Import page components
 import Home from './pages/home.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import SimpleDashboard from './pages/SimpleDashboard.jsx'
+import TestDashboard from './pages/TestDashboard.jsx'
+import DebugDashboard from './pages/DebugDashboard.jsx'
+import WorkingDashboard from './pages/WorkingDashboard.jsx'
 import Auth from './pages/Auth.jsx'
 import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/SignUp.jsx'
@@ -150,20 +153,65 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-slate-950">
-        <Navbar />
-        <PageTransition>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<ProtectedRoute><SidebarLayout><Dashboard /></SidebarLayout></ProtectedRoute>} />
-            <Route path="/auth/sign-in" element={<SignIn />} />
-            <Route path="/auth/sign-up" element={<SignUp />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/404" element={<NotFound />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </PageTransition>
-      </div>
+      <Routes>
+        <Route path="/" element={
+          <div className="min-h-screen bg-slate-950">
+            <PageTransition>
+              <Home />
+            </PageTransition>
+          </div>
+        } />
+        <Route path="/dashboard" element={
+          <WorkingDashboard />
+        } />
+        <Route path="/dashboard-test" element={
+          <div className="min-h-screen bg-slate-950">
+            <PageTransition>
+              <TestDashboard />
+            </PageTransition>
+          </div>
+        } />
+        <Route path="/dashboard-protected" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/auth/sign-in" element={
+          <div className="min-h-screen bg-slate-950">
+            <PageTransition>
+              <SignIn />
+            </PageTransition>
+          </div>
+        } />
+        <Route path="/auth/sign-up" element={
+          <div className="min-h-screen bg-slate-950">
+            <PageTransition>
+              <SignUp />
+            </PageTransition>
+          </div>
+        } />
+        <Route path="/auth" element={
+          <div className="min-h-screen bg-slate-950">
+            <PageTransition>
+              <Auth />
+            </PageTransition>
+          </div>
+        } />
+        <Route path="/404" element={
+          <div className="min-h-screen bg-slate-950">
+            <PageTransition>
+              <NotFound />
+            </PageTransition>
+          </div>
+        } />
+        <Route path="*" element={
+          <div className="min-h-screen bg-slate-950">
+            <PageTransition>
+              <NotFound />
+            </PageTransition>
+          </div>
+        } />
+      </Routes>
     </Router>
   )
 }
