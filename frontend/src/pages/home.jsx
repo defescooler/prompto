@@ -22,6 +22,8 @@ import Stat from "@/components/ui/stat"
 import CTA from "@/components/CTA"
 import { Component as PricingSection } from "@/components/ui/squishy-pricing"
 import AnimatedBackground from "@/components/AnimatedBackground"
+import HomeNavbar from "@/components/HomeNavbar"
+import { Logo } from "@/components/icons.jsx"
 import { tokens } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 
@@ -68,6 +70,7 @@ export default function Home({ onGetStarted }) {
   /* ---------- UI ---------- */
   return (
     <div className="min-h-screen bg-[#0e1629] text-slate-100 antialiased">
+      <HomeNavbar />
       {/* Hero Section */}
       <AnimatedBackground shapes="circles" speed={0.8} variant="blend">
         <Section 
@@ -120,12 +123,14 @@ export default function Home({ onGetStarted }) {
 
       {/* Two Optimization Methods */}
       <AnimatedBackground shapes="rects" speed={1.2} variant="dark">
-        <PromptDemoMono />
+        <div id="demo">
+          <PromptDemoMono />
+        </div>
       </AnimatedBackground>
 
       {/* Unified Features → Stats → CTA Band */}
       <AnimatedBackground shapes="triangles" speed={0.6} variant="blend">
-        <Section className="bg-slate-900">
+        <Section id="features" className="bg-slate-900">
           {/* Grain texture overlay */}
           <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.04] pointer-events-none" />
           
@@ -174,7 +179,9 @@ export default function Home({ onGetStarted }) {
 
       {/* Pricing Section */}
       <AnimatedBackground shapes="circles" speed={1.0} variant="light">
-        <PricingSection />
+        <div id="pricing">
+          <PricingSection />
+        </div>
       </AnimatedBackground>
 
       {/* 3️⃣ CTA banner with sparkles */}
