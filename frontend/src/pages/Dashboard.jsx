@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Sparkles, Heart, BarChart3, Settings, User, LogOut, CheckCircle, Zap, Clock, TrendingUp, Star, BookOpen, Plus, Search, Filter } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import Section from '@/components/ui/section'
+import { Logo } from '@/components/icons.jsx'
 
 const API_BASE_URL = 'http://localhost:8002'
 
@@ -168,7 +169,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <Logo className="h-12 w-12 text-emerald-400 mx-auto mb-4" />
           <p className="text-gray-600">Authenticating...</p>
         </div>
       </div>
@@ -180,7 +181,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <Logo className="h-12 w-12 text-emerald-400 mx-auto mb-4" />
           <p className="text-gray-600">Loading dashboard data...</p>
         </div>
       </div>

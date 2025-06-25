@@ -51,11 +51,11 @@ export default function AnimatedBackground({
     }
   }, [])
 
-  // Smooth spring so shapes glide instead of jumping (using consistent easing)
+  // Smooth spring so shapes glide instead of jumping
   const prog = useSpring(scrollYProgress, { 
     stiffness: isMobile ? 40 : 60, 
     damping: isMobile ? 30 : 20,
-    ease: [0.32, 0.72, 0, 1] // Consistent with design tokens
+    ease: [0.32, 0.72, 0, 1]
   })
 
   // Reduce motion intensity on mobile and low battery
@@ -63,9 +63,9 @@ export default function AnimatedBackground({
   const speedAdjusted = speed * motionMultiplier
 
   // Map scroll → transforms (scale by speed prop)
-  const y = useTransform(prog, [0, 1], [`${-10 * speedAdjusted}%`, `${10 * speedAdjusted}%`])
-  const rotate = useTransform(prog, [0, 1], ["0deg", `${15 * speedAdjusted}deg`])
-  const scale = useTransform(prog, [0, 1], [1, 1 + (0.15 * speedAdjusted)])
+  const y = useTransform(prog, [0, 1], [`${-15 * speedAdjusted}%`, `${15 * speedAdjusted}%`])
+  const rotate = useTransform(prog, [0, 1], ["0deg", `${25 * speedAdjusted}deg`])
+  const scale = useTransform(prog, [0, 1], [0.8, 1.2 + (0.2 * speedAdjusted)])
 
   // Skip animation if disabled, reduced motion preferred, or performance constraints
   if (disable || prefersReducedMotion || (isMobile && batteryLow)) {
@@ -77,20 +77,18 @@ export default function AnimatedBackground({
   }
 
   const getOpacity = () => {
-    const baseOpacity = isMobile ? 0.5 : 1 // Reduce opacity on mobile
     switch (variant) {
-      case "light": return `opacity-${Math.round(15 * baseOpacity)} dark:opacity-${Math.round(8 * baseOpacity)}`
-      case "dark": return `opacity-${Math.round(8 * baseOpacity)} dark:opacity-${Math.round(15 * baseOpacity)}`
-      default: return `opacity-${Math.round(20 * baseOpacity)} dark:opacity-${Math.round(10 * baseOpacity)}`
+      case "light": return "opacity-[0.12]"
+      case "dark": return "opacity-[0.08]"
+      default: return "opacity-[0.10]" // blend
     }
   }
 
   const getSecondaryOpacity = () => {
-    const baseOpacity = isMobile ? 0.3 : 1 // Further reduce secondary opacity on mobile
     switch (variant) {
-      case "light": return `opacity-${Math.round(10 * baseOpacity)} dark:opacity-${Math.round(5 * baseOpacity)}`
-      case "dark": return `opacity-${Math.round(5 * baseOpacity)} dark:opacity-${Math.round(10 * baseOpacity)}`
-      default: return "opacity-[0.07] dark:opacity-[0.05]"
+      case "light": return "opacity-[0.08]"
+      case "dark": return "opacity-[0.06]"
+      default: return "opacity-[0.07]"
     }
   }
 
@@ -102,15 +100,37 @@ export default function AnimatedBackground({
       case "rects":
         return (
           <>
-            {/* Back-layer rectangles */}
+            {/* Primary animated rectangle */}
             <motion.svg
               aria-hidden
               className={`pointer-events-none absolute -left-40 top-0 h-[480px] w-[480px] ${getOpacity()}`}
               style={{ y, rotate, scale }}
               viewBox="0 0 320 320"
               fill="none"
+              animate={{
+                x: [-20, 20, -20],
+                y: [-10, 10, -10],
+                rotate: [0, 5, -5, 0],
+              }}
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
             >
-              <rect x="60" y="60" width="200" height="200" rx="20" fill="url(#rectGrad1)" />
+              <motion.rect 
+                x="60" y="60" width="200" height="200" rx="20" 
+                fill="url(#rectGrad1)"
+                animate={{
+                  rx: [20, 40, 20],
+                  opacity: [0.8, 1, 0.8]
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
               <defs>
                 <linearGradient id="rectGrad1" x1="0" y1="0" x2="1" y2="1" gradientUnits="userSpaceOnUse">
                   <stop stopColor="#10b981" />
@@ -120,20 +140,35 @@ export default function AnimatedBackground({
               </defs>
             </motion.svg>
 
-            {!isMobile && ( // Skip secondary shape on mobile
+            {!isMobile && (
               <motion.svg
                 aria-hidden
                 className={`pointer-events-none absolute right-[-180px] bottom-[-120px] h-[380px] w-[380px] ${getSecondaryOpacity()}`}
                 style={{ y: useTransform(y, v => `calc(${v} * -0.6)`), scale }}
                 viewBox="0 0 400 400"
                 fill="none"
+                animate={{
+                  x: [10, -10, 10],
+                  y: [15, -15, 15],
+                }}
+                transition={{
+                  duration: 25,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
               >
                 <motion.rect
                   x="100" y="100" width="200" height="200" rx="40"
                   fill="url(#rectGrad2)"
                   animate={{ 
                     rotate: [0, 360],
-                    transition: { repeat: Infinity, duration: 80, ease: "linear" }
+                    scale: [1, 1.1, 1],
+                    rx: [40, 60, 40]
+                  }}
+                  transition={{ 
+                    rotate: { repeat: Infinity, duration: 30, ease: "linear" },
+                    scale: { repeat: Infinity, duration: 12, ease: "easeInOut" },
+                    rx: { repeat: Infinity, duration: 15, ease: "easeInOut" }
                   }}
                 />
                 <defs>
@@ -151,15 +186,37 @@ export default function AnimatedBackground({
       case "triangles":
         return (
           <>
-            {/* Back-layer triangles */}
+            {/* Primary animated triangle */}
             <motion.svg
               aria-hidden
               className={`pointer-events-none absolute -left-40 top-0 h-[480px] w-[480px] ${getOpacity()}`}
               style={{ y, rotate, scale }}
               viewBox="0 0 320 320"
               fill="none"
+              animate={{
+                x: [-15, 15, -15],
+                y: [-20, 20, -20],
+                rotate: [0, 10, -10, 0],
+              }}
+              transition={{
+                duration: 18,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
             >
-              <polygon points="160,40 280,280 40,280" fill="url(#triGrad1)" />
+              <motion.polygon 
+                points="160,40 280,280 40,280" 
+                fill="url(#triGrad1)"
+                animate={{
+                  opacity: [0.7, 1, 0.7],
+                  scale: [1, 1.05, 1]
+                }}
+                transition={{
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
               <defs>
                 <linearGradient id="triGrad1" x1="0" y1="0" x2="1" y2="1" gradientUnits="userSpaceOnUse">
                   <stop stopColor="#10b981" />
@@ -168,20 +225,33 @@ export default function AnimatedBackground({
               </defs>
             </motion.svg>
 
-            {!isMobile && ( // Skip secondary shape on mobile
+            {!isMobile && (
               <motion.svg
                 aria-hidden
                 className={`pointer-events-none absolute right-[-180px] bottom-[-120px] h-[380px] w-[380px] ${getSecondaryOpacity()}`}
                 style={{ y: useTransform(y, v => `calc(${v} * -0.6)`), scale }}
                 viewBox="0 0 400 400"
                 fill="none"
+                animate={{
+                  x: [20, -20, 20],
+                  y: [10, -10, 10],
+                }}
+                transition={{
+                  duration: 22,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
               >
                 <motion.polygon
                   points="200,50 350,350 50,350"
                   fill="url(#triGrad2)"
                   animate={{ 
                     rotate: [0, -360],
-                    transition: { repeat: Infinity, duration: 100, ease: "linear" }
+                    scale: [1, 1.15, 1]
+                  }}
+                  transition={{ 
+                    rotate: { repeat: Infinity, duration: 40, ease: "linear" },
+                    scale: { repeat: Infinity, duration: 14, ease: "easeInOut" }
                   }}
                 />
                 <defs>
@@ -199,15 +269,37 @@ export default function AnimatedBackground({
       default: // circles
         return (
           <>
-            {/* Back-layer shapes */}
+            {/* Primary animated circle */}
             <motion.svg
               aria-hidden
               className={`pointer-events-none absolute -left-40 top-0 h-[480px] w-[480px] ${getOpacity()}`}
               style={{ y, rotate, scale }}
               viewBox="0 0 320 320"
               fill="none"
+              animate={{
+                x: [-25, 25, -25],
+                y: [-15, 15, -15],
+                rotate: [0, 15, -15, 0],
+              }}
+              transition={{
+                duration: 16,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
             >
-              <circle cx="160" cy="160" r="140" fill="url(#grad1)" />
+              <motion.circle 
+                cx="160" cy="160" r="140" 
+                fill="url(#grad1)"
+                animate={{
+                  r: [140, 160, 140],
+                  opacity: [0.8, 1, 0.8]
+                }}
+                transition={{
+                  duration: 12,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
               <defs>
                 <radialGradient id="grad1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
                   gradientTransform="translate(160 160) rotate(90) scale(160)">
@@ -217,20 +309,35 @@ export default function AnimatedBackground({
               </defs>
             </motion.svg>
 
-            {!isMobile && ( // Skip complex blob on mobile
+            {!isMobile && (
               <motion.svg
                 aria-hidden
                 className={`pointer-events-none absolute right-[-180px] bottom-[-120px] h-[380px] w-[380px] ${getSecondaryOpacity()}`}
                 style={{ y: useTransform(y, v => `calc(${v} * -0.6)`), scale }}
                 viewBox="0 0 600 600"
                 fill="none"
+                animate={{
+                  x: [30, -30, 30],
+                  y: [20, -20, 20],
+                }}
+                transition={{
+                  duration: 28,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
               >
                 <motion.path
                   d="M300 37C349-7 429-7 478 37c49 43 78 128 78 227s-29 184-78 227c-49 44-129 44-178 0C221 448 192 363 192 264S251 80 300 37Z"
                   fill="url(#grad2)"
                   animate={{ 
                     rotate: [0, 360],
-                    transition: { repeat: Infinity, duration: 60, ease: "linear" }
+                    scale: [1, 1.2, 1],
+                    opacity: [0.6, 1, 0.6]
+                  }}
+                  transition={{ 
+                    rotate: { repeat: Infinity, duration: 35, ease: "linear" },
+                    scale: { repeat: Infinity, duration: 18, ease: "easeInOut" },
+                    opacity: { repeat: Infinity, duration: 8, ease: "easeInOut" }
                   }}
                 />
                 <defs>

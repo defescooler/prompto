@@ -105,21 +105,13 @@ export default function Home({ onGetStarted }) {
               Slash token spend, keep every ounce of meaning. Plays nice with GPT-4, Claude, Gemini — whatever you feed it.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="flex justify-center mb-16">
               <Button
                 size="lg"
                 variant="primary"
-                onClick={onGetStarted}
+                onClick={() => window.location.href = '/auth'}
               >
                 Boost my prompt
-              </Button>
-              <Button
-                size="lg"
-                variant="secondary"
-                onClick={() => window.location.href = '/demo'}
-              >
-                30-sec demo
-                <Sparkles className={cn(tokens.icon.className, "ml-2")} />
               </Button>
             </div>
           </div>

@@ -69,7 +69,7 @@ export default function Animated404() {
           <div
             className={cn(
               "text-8xl md:text-9xl font-black",
-              tokens.colors.accent.primary,
+              tokens.colors.text.accent,
               "tracking-tight cursor-pointer select-none",
               "transition-all duration-75",
               glitchCount > 0 && "animate-pulse"

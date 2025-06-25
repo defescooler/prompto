@@ -589,15 +589,49 @@ def cache_status():
     """Legacy endpoint - redirects to performance monitoring"""
     return performance_status()
 
-# Root route - API only
+# Serve SPA root (home page)
 @app.route('/')
-def root():
+def root_spa():
+    """Serve the React application entry point for the site root."""
+    dist_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'frontend', 'dist')
+    return send_from_directory(dist_dir, 'index.html')
+
+# Optional: expose lightweight API metadata at /api
+@app.route('/api', methods=['GET'])
+def api_root():
     return jsonify({
         'message': 'Prompt Copilot API',
         'status': 'running',
-        'frontend': 'http://localhost:5173',
-        'docs': 'API endpoints available at /api/*'
+        'docs': 'All API endpoints are prefixed with /api/*',
     })
+
+# --- React SPA fallback --------------------------------------------------
+# This must be the last route so it only triggers if no previous route was
+# matched. It ensures that direct navigation or refresh on any frontend URL
+# (e.g. /dashboard, /random-page) is handled by the React application
+# rather than returning a 404 from Flask. All files from the built frontend
+# located in frontend/dist are served as static assets; if the requested
+# file is not found we fall back to index.html so React Router can render
+# its internal 404 component.
+
+@app.route('/<path:path>', methods=['GET'])
+def serve_spa(path):
+    """Serve React single-page application assets and index.html fallback."""
+    # Allow API routes to return 404 normally so we don't shadow them.
+    if path.startswith('api/'):
+        return jsonify({'error': 'Not found'}), 404
+
+    # Absolute path to the Vite build output directory.
+    dist_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'frontend', 'dist')
+
+    # If the requested file exists, serve it directly (e.g. JS, CSS, images).
+    requested = os.path.join(dist_dir, path)
+    if os.path.isfile(requested):
+        return send_from_directory(dist_dir, path)
+
+    # Otherwise, return the SPA entry point so React Router can handle the URL.
+    return send_from_directory(dist_dir, 'index.html')
+# -------------------------------------------------------------------------
 
 if __name__ == '__main__':
     # Initialize performance tracking

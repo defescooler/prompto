@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Brain, Settings, Sparkles, Code, Zap, Copy, Check } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -120,6 +121,15 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
     "Context Setting",
   ]
 
+  const techniqueTooltips = {
+    "Chain-of-Thought": "Encourages reasoning step by step",
+    "Few-Shot": "Provides examples to guide the AI",
+    "Role Prompting": "Defines a role for the AI to assume",
+    "XML Structuring": "Wraps input in XML schema to control response style",
+    "Output Formatting": "Specifies how the output should be formatted",
+    "Context Setting": "Provides contextual information to improve relevance",
+  }
+
   /* cost maths for the compression banner */
   const originalTokens = countTokens(samplePrompt)
   const compressedTokens = results.algo ? countTokens(results.algo) : originalTokens
@@ -131,7 +141,8 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
     <section className="min-h-screen w-full bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         {/* ---------- HEADER ---------- */}
-        <header className="text-center mb-16 space-y-2">
+        <header className="text-center mb-16 space-y-4">
+          <p className="text-sm uppercase text-slate-400">Prompt Copilot AI v2</p>
           <h2 className="text-4xl font-extrabold tracking-tight drop-shadow-sm">
             Two Powerful Optimization Methods
           </h2>
@@ -142,7 +153,7 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
 
         {/* ---------- TAB SELECTOR ---------- */}
         <Tabs defaultValue="llm" className="w-full">
-          <div className="flex justify-center mb-12">
+          <div className="flex justify-center mb-16">
             <TabsList className="backdrop-blur-sm bg-slate-800/80 shadow-inner border border-slate-700/60 rounded-full inline-flex gap-1 p-1">
               <TabsTrigger
                 value="llm"
@@ -163,21 +174,21 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
           </div>
 
           {/* ---------- LLM ENHANCEMENT ---------- */}
-          <TabsContent value="llm" className="space-y-12">
+          <TabsContent value="llm" className="space-y-16">
             <h3 className="text-center text-3xl font-bold">LLM Enhancement with Prompting Techniques</h3>
 
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
               {/* Original Prompt Card */}
               <Card className="bg-slate-900/90 border border-slate-700/60 shadow-lg rounded-2xl">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-white">
+                <CardHeader className="py-6 gap-3">
+                  <CardTitle className="flex items-center gap-4 text-white">
                     <Code className="h-5 w-5" /> Original Prompt
                   </CardTitle>
                   <CardDescription className="text-slate-400">
                     Simple, basic prompt without structure
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   <pre className="bg-slate-800/80 p-4 rounded-lg text-slate-200 whitespace-pre-wrap">
                     {samplePrompt}
                   </pre>
@@ -186,8 +197,8 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
 
               {/* Enhanced Prompt Card */}
               <Card className="bg-gradient-to-br from-blue-900/30 to-cyan-900/20 border border-blue-700/40 shadow-xl rounded-2xl">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-white">
+                <CardHeader className="py-6 gap-3">
+                  <CardTitle className="flex items-center gap-4 text-white">
                     <Settings className="h-5 w-5" /> LLM Enhanced
                   </CardTitle>
                   <CardDescription className="text-blue-300">
@@ -195,12 +206,12 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
                   </CardDescription>
                 </CardHeader>
 
-                <CardContent>
+                <CardContent className="pt-6">
                   <AnimatePresence mode="wait">
                     {!show.llm ? (
                       <motion.div
                         key="apply-llm"
-                        className="flex flex-col items-center justify-center h-80"
+                        className="flex flex-col items-center justify-start h-80 space-y-4"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                       >
@@ -212,15 +223,20 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
                         {/* badges */}
                         <div className="flex flex-wrap justify-center gap-2 mb-6">
                           {techniques.map((t, i) => (
-                            <motion.span
-                              key={t}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: i * 0.06 }}
-                              className="px-2 py-1 text-xs bg-blue-500/20 border border-blue-500/40 rounded text-blue-300"
-                            >
-                              {t}
-                            </motion.span>
+                            <Tooltip key={t} delayDuration={200}>
+                              <TooltipTrigger asChild>
+                                <motion.span
+                                  key={t}
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: i * 0.06 }}
+                                  className="px-2 py-1 text-xs bg-blue-500/20 border border-blue-500/40 rounded text-blue-300"
+                                >
+                                  {t}
+                                </motion.span>
+                              </TooltipTrigger>
+                              <TooltipContent sideOffset={4}>{techniqueTooltips[t]}</TooltipContent>
+                            </Tooltip>
                           ))}
                         </div>
                         <Button
@@ -271,19 +287,22 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
             </div>
           </TabsContent>
 
-          {/* ---------- ALGORITHM COMPRESSION ---------- */}
-          <TabsContent value="algo" className="space-y-12">
-            <h3 className="text-center text-3xl font-bold">Algorithm Compression</h3>
+          {/* ---------- TOKEN OPTIMIZATION ---------- */}
+          <TabsContent value="algo" className="space-y-16">
+            <h3 className="text-center text-3xl font-bold">Token Optimization</h3>
+            <p className="text-center text-slate-400 text-base mb-12">
+              Compress prompts while preserving essential information using advanced semantic analysis
+            </p>
 
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
               <Card className="bg-slate-900/90 border border-slate-700/60 shadow-lg rounded-2xl">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-white">
+                <CardHeader className="py-6 gap-3">
+                  <CardTitle className="flex items-center gap-4 text-white">
                     <Code className="h-5 w-5" /> Original Prompt
                   </CardTitle>
                   <CardDescription className="text-slate-400">{originalTokens} tokens</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-4 pb-6 px-4">
                   <pre className="bg-slate-800/80 p-4 rounded-lg text-slate-200 whitespace-pre-wrap">
                     {samplePrompt}
                   </pre>
@@ -291,8 +310,8 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
               </Card>
 
               <Card className="bg-gradient-to-br from-purple-900/30 to-pink-900/20 border border-purple-700/40 shadow-xl rounded-2xl">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-white">
+                <CardHeader className="py-6 gap-3">
+                  <CardTitle className="flex items-center gap-4 text-white">
                     <Brain className="h-5 w-5" /> Compressed
                   </CardTitle>
                   {show.algo && (
@@ -304,7 +323,7 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
                   )}
                 </CardHeader>
 
-                <CardContent>
+                <CardContent className="pt-4 pb-6 px-4">
                   <AnimatePresence mode="wait">
                     {!show.algo ? (
                       <motion.div
@@ -347,17 +366,23 @@ Chain-of-Thought • Few-Shot • Role Prompting • Structured Output
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                       >
-                        <pre className="bg-purple-900/30 border border-purple-700/50 p-4 rounded-lg text-purple-100 h-80 overflow-y-auto whitespace-pre-wrap shadow-inner">
+                        <pre className="relative bg-purple-900/30 border border-purple-700/50 p-4 rounded-lg text-purple-100 h-80 overflow-y-auto whitespace-pre-wrap shadow-inner">
                           {results.algo}
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="absolute top-2 right-2 text-purple-300 hover:text-purple-100"
+                            onClick={() => copyToClipboard(results.algo, 'algo')}
+                          >
+                            {copied.algo ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                          </Button>
                         </pre>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="absolute top-2 right-2 text-purple-300 hover:text-purple-100"
-                          onClick={() => copyToClipboard(results.algo, 'algo')}
-                        >
-                          {copied.algo ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                        </Button>
+                        {show.algo && (
+                          <div className="mt-4 text-sm text-purple-200 flex items-center gap-4">
+                            <span>🔍 {originalTokens} → {compressedTokens} tokens ({tokenReduction}% saved)</span>
+                            <span>💸 ${savings.toFixed(4)} saved</span>
+                          </div>
+                        )}
                       </motion.div>
                     )}
                   </AnimatePresence>

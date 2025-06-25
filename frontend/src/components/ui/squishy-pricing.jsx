@@ -37,10 +37,9 @@ export const Component = () => {
               "400 enhanced prompts/month",
               "All 25+ AI techniques",
               "Advanced compression",
-              "Email support <24h",
-              "API access"
+              "Email support <24h"
             ]}
-            cta="Start Pro Trial"
+            cta="Get Pro"
             background="bg-gradient-to-br from-green-600 to-green-700"
             popular={false}
             BGComponent={BGComponent2}
@@ -53,7 +52,7 @@ export const Component = () => {
 
 const PricingCard = ({ label, monthlyPrice, description, features, cta, background, popular, BGComponent }) => {
   const handleClick = () => {
-    if (cta === "Get Started" || cta === "Start Pro Trial") {
+    if (cta === "Get Started" || cta === "Get Pro") {
       window.location.href = "/auth";
     } else if (cta === "Book Demo") {
       window.location.href = "/demo";
@@ -80,11 +79,11 @@ const PricingCard = ({ label, monthlyPrice, description, features, cta, backgrou
               className="origin-top-left"
             >
               {monthlyPrice === "Free" ? (
-                <span className="font-mono text-6xl font-black leading-[1.1] text-white">
+                <span className="font-['Montserrat'] text-6xl font-black leading-[1.1] text-white">
                   Free
                 </span>
               ) : (
-                <span className="font-mono text-6xl font-black leading-[1.1] text-white">
+                <span className="font-['Montserrat'] text-6xl font-black leading-[1.1] text-white">
                   ${monthlyPrice}<span className="text-3xl font-normal">/mo</span>
                 </span>
               )}
@@ -93,7 +92,7 @@ const PricingCard = ({ label, monthlyPrice, description, features, cta, backgrou
           
           <p className="text-white/90 mb-8 leading-relaxed text-base">{description}</p>
           
-          <ul className="space-y-4 text-sm">
+          <ul className="space-y-4 text-sm h-40 flex flex-col justify-start">
             {features.map((feature, index) => (
               <li key={index} className="flex items-start gap-3 text-white/90">
                 <svg className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -105,14 +104,16 @@ const PricingCard = ({ label, monthlyPrice, description, features, cta, backgrou
           </ul>
         </div>
         
-        <motion.button 
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleClick}
-          className="w-full mt-8 rounded-xl border-2 border-white bg-white py-4 text-center font-semibold text-slate-900 backdrop-blur-sm transition-all duration-200 hover:bg-white/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent"
-        >
-          {cta}
-        </motion.button>
+        <div className="mt-6">
+          <motion.button 
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleClick}
+            className="w-full rounded-xl border-2 border-white bg-white py-4 text-center font-semibold text-slate-900 backdrop-blur-sm transition-all duration-200 hover:bg-white/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent"
+          >
+            {cta}
+          </motion.button>
+        </div>
       </div>
       
       <BGComponent />

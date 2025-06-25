@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Logo } from "@/components/icons";
 
 // Social icon (Google)
 function GoogleIcon(props) {
@@ -83,25 +84,13 @@ function PasswordField({ id, register, error, autoComplete, placeholder }) {
   );
 }
 
-function Spinner(props) {
+function LoadingLogo(props) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      className="size-5 animate-spin text-emerald-400"
+    <Logo
+      className="size-5 text-emerald-400"
       aria-hidden
       {...props}
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="10"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="4"
-        strokeDasharray="60 20"
-        strokeLinecap="round"
-      />
-    </svg>
+    />
   );
 }
 
@@ -195,7 +184,7 @@ function SignInForm() {
         variant="secondary"
         disabled={!isValid || isSubmitting}
       >
-        {isSubmitting ? <Spinner /> : null}
+        {isSubmitting ? <LoadingLogo /> : null}
         {isSubmitting ? <span className="sr-only">Signing in…</span> : "Sign in →"}
       </Button>
     </form>
@@ -304,7 +293,7 @@ function SignUpForm() {
         variant="secondary"
         disabled={!isValid || isSubmitting}
       >
-        {isSubmitting ? <Spinner /> : null}
+        {isSubmitting ? <LoadingLogo /> : null}
         {isSubmitting ? <span className="sr-only">Creating…</span> : "Create account →"}
       </Button>
     </form>
@@ -336,7 +325,7 @@ export default function AuthCard({ mode = "sign-in" }) {
           aria-label="Sign in with Google"
           disabled={googleLoading}
         >
-          {googleLoading ? <Spinner /> : <GoogleIcon className="size-5" />}
+          {googleLoading ? <LoadingLogo /> : <GoogleIcon className="size-5" />}
           {googleLoading ? <span className="sr-only">Redirecting…</span> : "Sign in with Google"}
         </Button>
       </div>

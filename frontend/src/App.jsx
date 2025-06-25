@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import './App.css'
 import SidebarLayout from './sidebar-layouts.jsx'
 import Navbar from './components/navbar.jsx'
+import { Logo } from './components/icons.jsx'
 
 // Import page components
 import Home from './pages/home.jsx'
@@ -113,7 +114,7 @@ function ProtectedRoute({ children }) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <Logo className="h-12 w-12 mx-auto mb-4" />
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
@@ -128,13 +129,14 @@ function PageTransition({ children }) {
   const location = useLocation()
   
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="w-full"
       >
         {children}
       </motion.div>
@@ -157,6 +159,7 @@ function App() {
             <Route path="/auth/sign-in" element={<SignIn />} />
             <Route path="/auth/sign-up" element={<SignUp />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </PageTransition>

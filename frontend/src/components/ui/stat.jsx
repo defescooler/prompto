@@ -57,11 +57,11 @@ export default function Stat({
       <div className="mb-2">
         <span 
           ref={counterRef}
-          className="font-mono text-5xl font-semibold tracking-tight bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent"
+          className="font-['Montserrat'] text-5xl font-semibold tracking-tight text-white"
         >
           0
         </span>
-        <span className="font-mono text-5xl font-semibold tracking-tight bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
+        <span className="font-['Montserrat'] text-5xl font-semibold tracking-tight text-white">
           {suffix}
         </span>
       </div>
