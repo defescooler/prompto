@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Logo } from "@/components/icons";
+
 
 // Social icon (Google)
 function GoogleIcon(props) {
@@ -84,10 +84,10 @@ function PasswordField({ id, register, error, autoComplete, placeholder }) {
   );
 }
 
-function LoadingLogo(props) {
+function LoadingSpinner(props) {
   return (
-    <Logo
-      className="size-5 text-emerald-400"
+    <div
+      className="size-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"
       aria-hidden
       {...props}
     />
@@ -184,7 +184,7 @@ function SignInForm() {
         variant="secondary"
         disabled={!isValid || isSubmitting}
       >
-        {isSubmitting ? <LoadingLogo /> : null}
+        {isSubmitting ? <LoadingSpinner /> : null}
         {isSubmitting ? <span className="sr-only">Signing in…</span> : "Sign in →"}
       </Button>
     </form>
@@ -293,7 +293,7 @@ function SignUpForm() {
         variant="secondary"
         disabled={!isValid || isSubmitting}
       >
-        {isSubmitting ? <LoadingLogo /> : null}
+        {isSubmitting ? <LoadingSpinner /> : null}
         {isSubmitting ? <span className="sr-only">Creating…</span> : "Create account →"}
       </Button>
     </form>
@@ -325,7 +325,7 @@ export default function AuthCard({ mode = "sign-in" }) {
           aria-label="Sign in with Google"
           disabled={googleLoading}
         >
-          {googleLoading ? <LoadingLogo /> : <GoogleIcon className="size-5" />}
+          {googleLoading ? <LoadingSpinner /> : <GoogleIcon className="size-5" />}
           {googleLoading ? <span className="sr-only">Redirecting…</span> : "Sign in with Google"}
         </Button>
       </div>

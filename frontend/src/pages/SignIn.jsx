@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { GitHubIcon, GoogleIcon, Logo } from "@/components/icons";
+import { GitHubIcon, GoogleIcon } from "@/components/icons";
 import { AuthContext } from "../App";
 
 export default function SignInPage() {
@@ -23,7 +23,7 @@ export default function SignInPage() {
     setError("");
 
     try {
-      const result = await login({ email, password });
+      const result = await login({ username_or_email: email, password });
       if (result.success) {
         navigate("/dashboard");
       } else {
@@ -50,9 +50,7 @@ export default function SignInPage() {
     <div className="flex items-center justify-center min-h-screen bg-slate-950">
       <div className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="flex justify-center">
-            <Logo className="h-8 w-8" />
-          </div>
+
           <h3 className="mt-6 text-lg font-semibold text-white">
             Sign in to your account
           </h3>
@@ -141,14 +139,7 @@ export default function SignInPage() {
               className="mt-4 w-full py-2 font-medium" 
               disabled={isLoading}
             >
-              {isLoading ? (
-                <div className="flex items-center space-x-2">
-                  <Logo className="h-4 w-4" />
-                  <span>Signing in...</span>
-                </div>
-              ) : (
-                "Sign in"
-              )}
+              {isLoading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
           <p className="mt-6 text-sm text-slate-300">

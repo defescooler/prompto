@@ -45,11 +45,11 @@ console.log('🚀 Prompto: Content script loaded');
   const ICONS = {
     plus: '<svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="12" fill="url(#prompto-grad)"/><svg x="4" y="4" width="16" height="16" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet"><path d="M275 0H325V150H275V0ZM275 450H325V600H275V450ZM0 325V275H150V325H0ZM450 325V275H600V325H450ZM70.2 105.5L105.55 70.2L211.6 176.25L176.25 211.6L70.2 105.55V105.5ZM388.4 423.75L423.75 388.4L529.8 494.45L494.45 529.8L388.4 423.75ZM105.85 529.5L70.5 494.15L176.25 388.4L211.6 423.75L105.85 529.5ZM423.75 211.6L388.4 176.25L494.45 70.2L529.8 105.55L423.75 211.6Z" fill="white"/></svg></svg>',
     minus: '<svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="12" fill="url(#prompto-grad)"/><svg x="4" y="4" width="16" height="16" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet"><rect x="150" y="275" width="300" height="50" fill="white"/></svg></svg>',
-    sparkles: '<svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 2l1.09 3.41a1 1 0 00.95.69h3.58l-2.9 2.11a1 1 0 00-.36 1.12l1.09 3.41-2.9-2.11a1 1 0 00-1.18 0l-2.9 2.11 1.09-3.41a1 1 0 00-.36-1.12L4.38 6.1h3.58a1 1 0 00.95-.69L10 2z" fill="#fff"/></svg>',
+    sparkles: '<svg viewBox="0 0 24 24" width="20" height="20"><path d="M4.85,10.87 C4.91,10.73 5.09,10.73 5.15,10.87 L5.29,11.16 C5.89,12.4 6.85,13.45 8.05,14.15 L8.26,14.27 C8.36,14.32 8.36,14.48 8.26,14.53 L8.05,14.65 C6.85,15.35 5.89,16.4 5.29,17.64 L5.15,17.93 C5.09,18.07 4.91,18.07 4.85,17.93 L4.71,17.64 C4.11,16.4 3.15,15.35 1.95,14.65 L1.74,14.53 C1.64,14.48 1.64,14.32 1.74,14.27 L1.95,14.15 C3.15,13.45 4.11,12.4 4.71,11.16 L4.85,10.87 Z M12.11,2.29 C12.21,2.04 12.54,2.04 12.64,2.29 L12.77,2.58 L12.89,2.85 L13.05,3.21 L13.16,3.44 C13.97,5.05 15.16,6.46 16.64,7.54 L16.99,7.78 C17.24,7.95 17.49,8.11 17.75,8.26 C17.87,8.33 18,8.4 18.13,8.46 C18.31,8.56 18.31,8.81 18.13,8.91 C18,8.97 17.87,9.04 17.75,9.11 C17.56,9.22 17.37,9.34 17.19,9.47 L16.84,9.71 C15.36,10.79 14.17,12.2 13.36,13.81 L13.25,14.04 C13.14,14.27 13.04,14.5 12.95,14.74 L12.83,15.01 L12.7,15.28 C12.6,15.53 12.27,15.53 12.17,15.28 L12.04,15.01 L11.92,14.74 L11.76,14.38 L11.65,14.15 C10.84,12.54 9.65,11.13 8.17,10.05 L7.82,9.81 C7.57,9.64 7.32,9.48 7.06,9.33 C6.94,9.26 6.81,9.19 6.68,9.13 C6.5,9.03 6.5,8.78 6.68,8.68 C6.81,8.62 6.94,8.55 7.06,8.48 C7.25,8.37 7.44,8.25 7.62,8.12 L7.97,7.88 C9.45,6.8 10.64,5.39 11.45,3.78 L11.56,3.55 C11.67,3.32 11.77,3.09 11.86,2.85 L11.98,2.58 L12.11,2.29 Z M12.35,5.29 C11.52,6.54 10.46,7.65 9.22,8.55 C10.46,9.45 11.52,10.56 12.35,11.81 C13.18,10.56 14.24,9.45 15.48,8.55 C14.24,7.65 13.18,6.54 12.35,5.29 Z" fill="#fff"/></svg>',
     zap: '<svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 2 4 12h5v6l6-10h-5V2z" fill="#fff"/></svg>',
     spinner: '<svg viewBox="0 0 20 20" width="20" height="20"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="2" fill="none" stroke-dasharray="32" stroke-dashoffset="16"><animate attributeName="stroke-dashoffset" values="16;0;-16" dur="1s" repeatCount="indefinite"/></circle></svg>',
     construction: '<svg viewBox="0 0 36 36" width="20" height="20"><path fill="#FFCC4D" d="M36 15a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v8z"></path><path d="M6 3H4a4 4 0 0 0-4 4v2l6-6zm6 0L0 15c0 1.36.682 2.558 1.72 3.28L17 3h-5zM7 19h5L28 3h-5zm16 0L35.892 6.108A3.995 3.995 0 0 0 33.64 3.36L18 19h5zm13-4v-3l-7 7h3a4 4 0 0 0 4-4z" fill="#292F33"></path><path fill="#99AAB5" d="M4 19h5v14H4zm23 0h5v14h-5z"></path></svg>',
-    settings: '<svg viewBox="0 0 20 20" width="20" height="20"><path fill="#fff" d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill="#fff" fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>'
+    settings: '<svg viewBox="0 0 20 20" width="20" height="20"><path d="M15.0007 10C15.0007 11.6569 13.6576 13 12.0007 13C10.3439 13 9.00073 11.6569 9.00073 10C9.00073 8.3431 10.3439 7 12.0007 7C13.6576 7 15.0007 8.3431 15.0007 10Z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M12.0012 3C7.52354 3 3.73326 5.94288 2.45898 10C3.73324 14.0571 7.52354 17 12.0012 17C16.4788 17 20.2691 14.0571 21.5434 10C20.2691 5.94291 16.4788 3 12.0012 3Z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
   };
 
   const $ = (selector, root = document) => safeQuerySelector(selector, root);
@@ -1108,16 +1108,10 @@ console.log('🚀 Prompto: Content script loaded');
       ICONS.settings,
       'Advanced Technique Configuration',
       () => {
-        chrome.runtime.sendMessage({ action: 'openOptions' }, (response) => {
-          if (chrome.runtime.lastError) {
-            // Fallback: try to open options page directly
-            if (chrome.runtime.openOptionsPage) {
-              chrome.runtime.openOptionsPage();
-            } else {
-              showBanner('⚙️ Please access settings via the extension popup', 'info', ICONS.settings);
-            }
-          }
-        });
+        // Open dashboard with advanced settings parameter
+        const dashboardUrl = 'http://localhost:5176?settings=advanced';
+        window.open(dashboardUrl, '_blank');
+        showBanner('🚀 Opening Advanced Settings in Dashboard...', 'info', ICONS.settings);
       },
       'settings',
       'Advanced Settings'

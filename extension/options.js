@@ -1,5 +1,5 @@
 // Prompto Options Page - Advanced Technique Configuration
-// State-of-the-art prompt engineering configuration interface
+// Production-ready prompt engineering configuration interface
 
 console.log('🚀 Prompto: Options page loaded');
 
@@ -15,433 +15,493 @@ const TECHNIQUES_CATALOG = {
     few_shot_cot: {
         name: 'Few-Shot CoT',
         description: 'Include reasoning examples to steer both format and depth of the chain',
-        category: 'reasoning', 
+        category: 'reasoning',
         default: false,
-        icon: '📚'
+        icon: '🔗'
+    },
+    step_back_prompting: {
+        name: 'Step-Back Prompting',
+        description: 'Ask for high-level concepts before specific details',
+        category: 'reasoning',
+        default: false,
+        icon: '⬅️'
     },
     self_consistency: {
         name: 'Self-Consistency',
-        description: 'Multi-path reasoning verification to boost factual accuracy',
+        description: 'Generate multiple reasoning paths and select the most consistent answer',
         category: 'accuracy',
         default: false,
-        icon: '✅'
+        icon: '🎯'
     },
-    tree_of_thought: {
-        name: 'Tree-of-Thought',
-        description: 'Branch multiple reasoning paths and score each branch',
-        category: 'planning',
+    tree_of_thoughts: {
+        name: 'Tree of Thoughts',
+        description: 'Explore multiple reasoning branches systematically',
+        category: 'reasoning',
         default: false,
         icon: '🌳'
     },
-    reflection: {
-        name: 'Reflection/ReAct',
-        description: 'Interleave Thought-Action-Observation loops for better results',
-        category: 'reasoning',
+    plan_and_solve: {
+        name: 'Plan-and-Solve',
+        description: 'First make a plan, then execute each step systematically',
+        category: 'planning',
         default: false,
-        icon: '🔄'
+        icon: '📋'
     },
-    program_aided: {
-        name: 'Program-Aided Reasoning',
-        description: 'Let the model emit code and execute it for enhanced computation',
-        category: 'computation',
+    least_to_most: {
+        name: 'Least-to-Most',
+        description: 'Break complex problems into simpler sub-problems',
+        category: 'planning',
         default: false,
-        icon: '💻'
+        icon: '🧩'
     },
-    chain_verification: {
-        name: 'Chain-of-Verification',
-        description: 'Run a second pass that critiques and repairs reasoning steps',
+    generated_knowledge: {
+        name: 'Generated Knowledge',
+        description: 'Generate relevant background knowledge before answering',
+        category: 'accuracy',
+        default: false,
+        icon: '📚'
+    },
+    retrieval_augmented: {
+        name: 'Retrieval-Augmented',
+        description: 'Incorporate external knowledge sources',
         category: 'accuracy',
         default: false,
         icon: '🔍'
     },
-    compression: {
-        name: 'Prompt Compression',
-        description: 'Minimize tokens while preserving meaning to reduce costs',
+    program_aided: {
+        name: 'Program-Aided Language',
+        description: 'Use code generation for computational problems',
+        category: 'computation',
+        default: false,
+        icon: '💻'
+    },
+    active_prompting: {
+        name: 'Active Prompting',
+        description: 'Iteratively identify and focus on uncertain examples',
         category: 'efficiency',
-        default: true,
-        icon: '📦'
+        default: false,
+        icon: '🎯'
     },
-    role_prompting: {
-        name: 'Role Prompting', 
-        description: 'Expert persona assignment to prime style and domain vocabulary',
+    directional_stimulus: {
+        name: 'Directional Stimulus',
+        description: 'Use keywords to guide model behavior in desired direction',
         category: 'style',
-        default: true,
-        icon: '👨‍💼'
+        default: false,
+        icon: '🧭'
     },
-    clockwork: {
-        name: 'Clockwork Prompting',
-        description: 'Embed timestamps so cached answers stay fresh',
+    multimodal_cot: {
+        name: 'Multimodal CoT',
+        description: 'Apply chain-of-thought to vision-language tasks',
+        category: 'multimodal',
+        default: false,
+        icon: '👁️'
+    },
+    temporal_prompting: {
+        name: 'Temporal Prompting',
+        description: 'Structure prompts with explicit time relationships',
         category: 'temporal',
         default: false,
         icon: '⏰'
     },
-    xml_schema: {
-        name: 'XML/JSON Schema Guardrails',
-        description: 'Structured output formatting with explicit tags',
-        category: 'structure',
-        default: true,
-        icon: '📋'
-    },
-    rubric_critique: {
-        name: 'Rubric-based Critique',
-        description: 'Self-evaluation and improvement against scoring criteria',
-        category: 'quality',
-        default: false,
-        icon: '📊'
-    },
-    contrastive: {
-        name: 'Contrastive Prompting',
-        description: 'Good vs bad example guidance for sharper style transfer',
-        category: 'style',
-        default: false,
-        icon: '⚖️'
-    },
-    negative_prompts: {
-        name: 'Negative/Anti-prompts',
-        description: 'Explicit behavior constraints to reduce jailbreak risks',
-        category: 'safety',
-        default: true,
-        icon: '🚫'
-    },
-    dynamic_memory: {
-        name: 'Dynamic Memory',
-        description: 'Context-aware information injection using vector similarity',
-        category: 'context',
-        default: false,
-        icon: '🧠'
-    },
-    rag_augmented: {
-        name: 'RAG-Augmented Prompts',
-        description: 'Source-cited factual enhancement with retrieved documents',
-        category: 'factuality',
-        default: false,
-        icon: '📖'
-    },
-    multimodal_cot: {
-        name: 'Multimodal CoT',
-        description: 'Cross-modal reasoning mixing text, images, and code tokens',
-        category: 'multimodal',
-        default: false,
-        icon: '🖼️'
-    },
-    custom_instructions: {
-        name: 'Parameter-Efficient Instructions',
-        description: 'Learned prefix optimization without touching base model weights',
-        category: 'efficiency',
-        default: false,
-        icon: '⚙️'
-    },
-    triple_prime: {
-        name: 'System/Developer/User Roles',
-        description: 'Hierarchical role separation to enforce hierarchy',
-        category: 'structure',
-        default: true,
-        icon: '👥'
-    },
-    temperature_scheduling: {
-        name: 'Temperature Scheduling',
-        description: 'Dynamic creativity control from ideation to polish',
-        category: 'generation',
-        default: false,
-        icon: '🌡️'
-    },
-    iterative_decomposition: {
-        name: 'Iterative Decomposition',
-        description: 'Atomic sub-task breakdown with automatic scratchpad',
-        category: 'planning',
-        default: false,
-        icon: '📋'
-    },
-    speculative_decoding: {
-        name: 'Speculative Decoding',
-        description: 'Draft and verify approach to halve latency invisibly',
-        category: 'efficiency',
-        default: false,
-        icon: '⚡'
-    },
-    voice_anchor: {
-        name: 'Voice Anchor Style Transfer',
-        description: 'Persona-consistent responses using voice samples',
-        category: 'style',
-        default: false,
-        icon: '🎤'
-    },
-    ethical_constraints: {
-        name: 'Ethical Constraint Plugins',
-        description: 'Policy-compliant output filtering via external policy engine',
-        category: 'safety',
-        default: true,
-        icon: '🛡️'
-    },
-    meta_prompts: {
-        name: 'Meta-Prompts',
-        description: 'Recursive prompt improvement by enhancing the prompt itself',
+    meta_prompting: {
+        name: 'Meta-Prompting',
+        description: 'Use the model to improve its own prompts',
         category: 'meta',
         default: false,
         icon: '🔄'
+    },
+    constitutional_ai: {
+        name: 'Constitutional AI',
+        description: 'Apply constitutional principles for safer responses',
+        category: 'safety',
+        default: false,
+        icon: '⚖️'
+    },
+    role_prompting: {
+        name: 'Role Prompting',
+        description: 'Assign specific roles or personas to the model',
+        category: 'style',
+        default: true,
+        icon: '🎭'
+    },
+    emotional_prompting: {
+        name: 'Emotional Prompting',
+        description: 'Use emotional cues to improve model performance',
+        category: 'style',
+        default: false,
+        icon: '❤️'
+    },
+    contrastive_prompting: {
+        name: 'Contrastive Prompting',
+        description: 'Show what TO do vs what NOT to do',
+        category: 'structure',
+        default: false,
+        icon: '⚡'
+    },
+    uncertainty_quantification: {
+        name: 'Uncertainty Quantification',
+        description: 'Ask model to express confidence levels',
+        category: 'quality',
+        default: false,
+        icon: '🎲'
+    },
+    perspective_taking: {
+        name: 'Perspective Taking',
+        description: 'Consider multiple viewpoints before concluding',
+        category: 'reasoning',
+        default: false,
+        icon: '👥'
+    },
+    analogical_reasoning: {
+        name: 'Analogical Reasoning',
+        description: 'Use analogies to explain complex concepts',
+        category: 'reasoning',
+        default: false,
+        icon: '🔗'
+    },
+    context_stuffing: {
+        name: 'Context Stuffing',
+        description: 'Pack maximum relevant context into prompt',
+        category: 'context',
+        default: false,
+        icon: '📦'
+    },
+    factual_grounding: {
+        name: 'Factual Grounding',
+        description: 'Anchor responses in verifiable facts',
+        category: 'factuality',
+        default: false,
+        icon: '🏗️'
+    },
+    output_formatting: {
+        name: 'Output Formatting',
+        description: 'Specify exact output format and structure',
+        category: 'structure',
+        default: true,
+        icon: '📄'
     }
 };
 
-// Preset configurations matching backend
+// Preset configurations
 const PRESETS = {
-    lite: ['zero_shot_cot', 'role_prompting', 'xml_schema', 'negative_prompts'],
-    reasoning: ['zero_shot_cot', 'few_shot_cot', 'self_consistency', 'reflection', 'chain_verification'],
-    data_centric: ['rag_augmented', 'dynamic_memory', 'chain_verification', 'xml_schema'],
-    creative: ['role_prompting', 'voice_anchor', 'contrastive', 'temperature_scheduling'],
-    production: ['xml_schema', 'negative_prompts', 'ethical_constraints', 'compression', 'triple_prime'],
-    research: ['tree_of_thought', 'program_aided', 'iterative_decomposition', 'multimodal_cot']
+    lite: ['zero_shot_cot', 'role_prompting', 'output_formatting'],
+    reasoning: ['zero_shot_cot', 'few_shot_cot', 'tree_of_thoughts', 'step_back_prompting', 'perspective_taking'],
+    creative: ['role_prompting', 'emotional_prompting', 'analogical_reasoning', 'directional_stimulus'],
+    production: ['zero_shot_cot', 'self_consistency', 'generated_knowledge', 'output_formatting', 'uncertainty_quantification'],
+    research: ['generated_knowledge', 'retrieval_augmented', 'factual_grounding', 'meta_prompting', 'uncertainty_quantification'],
+    data_centric: ['program_aided', 'retrieval_augmented', 'context_stuffing', 'factual_grounding']
 };
 
-let currentTechniques = {};
+// Category colors for badges
+const CATEGORY_COLORS = {
+    reasoning: '#6366f1',
+    accuracy: '#10b981', 
+    planning: '#8b5cf6',
+    computation: '#3b82f6',
+    efficiency: '#f59e0b',
+    style: '#ec4899',
+    temporal: '#f97316',
+    structure: '#06b6d4',
+    quality: '#10b981',
+    safety: '#ef4444',
+    context: '#8b5cf6',
+    factuality: '#14b8a6',
+    multimodal: '#f43f5e',
+    generation: '#f59e0b',
+    meta: '#64748b'
+};
+
+// State management
+let currentTechniques = new Set();
+let activePresets = new Set();
 
 // Initialize the options page
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('🚀 Prompto: Initializing options page...');
+    console.log('🔧 Initializing Prompto options...');
     
-    // Load current settings
-    await loadCurrentSettings();
-    
-    // Render techniques grid
-    renderTechniquesGrid();
-    
-    // Setup preset handlers
-    setupPresetHandlers();
-    
-    // Setup save handler
-    setupSaveHandler();
-    
-    // Update stats
+    await loadUserSettings();
+    renderTechniques();
+    setupEventListeners();
     updateStats();
     
-    console.log('🚀 Prompto: Options page initialized');
+    console.log('✅ Options page ready');
 });
 
-async function loadCurrentSettings() {
+// Load user settings from storage
+async function loadUserSettings() {
     try {
-        const result = await chrome.storage.sync.get(['promptoTechniques']);
-        if (result.promptoTechniques && typeof result.promptoTechniques === 'object') {
-            currentTechniques = { ...result.promptoTechniques };
+        const result = await chrome.storage.sync.get(['enabledTechniques', 'activePresets']);
+        
+        // Load enabled techniques
+        if (result.enabledTechniques) {
+            currentTechniques = new Set(result.enabledTechniques);
         } else {
-            // Use defaults
-            currentTechniques = {};
-            Object.entries(TECHNIQUES_CATALOG).forEach(([key, technique]) => {
-                currentTechniques[key] = technique.default;
-            });
+            // Default enabled techniques
+            currentTechniques = new Set(
+                Object.entries(TECHNIQUES_CATALOG)
+                    .filter(([_, config]) => config.default)
+                    .map(([key, _]) => key)
+            );
         }
-        console.log('🚀 Prompto: Loaded current settings:', currentTechniques);
-    } catch (error) {
-        console.error('🚀 Prompto: Error loading settings:', error);
-        // Fallback to defaults
-        currentTechniques = {};
-        Object.entries(TECHNIQUES_CATALOG).forEach(([key, technique]) => {
-            currentTechniques[key] = technique.default;
+        
+        // Load active presets
+        if (result.activePresets) {
+            activePresets = new Set(result.activePresets);
+        }
+        
+        console.log('📚 Loaded settings:', { 
+            techniques: currentTechniques.size, 
+            presets: activePresets.size 
         });
+        
+    } catch (error) {
+        console.error('❌ Failed to load settings:', error);
+        // Use defaults
+        currentTechniques = new Set(
+            Object.entries(TECHNIQUES_CATALOG)
+                .filter(([_, config]) => config.default)
+                .map(([key, _]) => key)
+        );
     }
 }
 
-function renderTechniquesGrid() {
+// Render all techniques in the grid
+function renderTechniques() {
     const grid = document.getElementById('techniquesGrid');
+    if (!grid) return;
+    
     grid.innerHTML = '';
     
-    // Group techniques by category
+    // Group techniques by category for better organization
     const categories = {};
-    Object.entries(TECHNIQUES_CATALOG).forEach(([key, technique]) => {
-        if (!categories[technique.category]) {
-            categories[technique.category] = [];
+    Object.entries(TECHNIQUES_CATALOG).forEach(([key, config]) => {
+        if (!categories[config.category]) {
+            categories[config.category] = [];
         }
-        categories[technique.category].push({ key, ...technique });
+        categories[config.category].push([key, config]);
     });
     
-    // Render all techniques
-    Object.entries(TECHNIQUES_CATALOG).forEach(([key, technique]) => {
-        const card = createTechniqueCard(key, technique);
-        grid.appendChild(card);
+    // Render techniques by category
+    Object.entries(categories).forEach(([category, techniques]) => {
+        techniques.forEach(([key, config]) => {
+            const card = createTechniqueCard(key, config);
+            grid.appendChild(card);
+        });
     });
+    
+    console.log('🎨 Rendered', Object.keys(TECHNIQUES_CATALOG).length, 'technique cards');
 }
 
-function createTechniqueCard(key, technique) {
+// Create a technique card element
+function createTechniqueCard(key, config) {
+    const isEnabled = currentTechniques.has(key);
+    
     const card = document.createElement('div');
-    card.className = 'technique-card';
+    card.className = 'glass-card technique-card';
     card.innerHTML = `
         <div class="technique-header">
             <div class="technique-info">
-                <div class="technique-name">${technique.icon} ${technique.name}</div>
-                <div class="technique-description">${technique.description}</div>
-                <span class="technique-category">${technique.category}</span>
+                <div class="technique-name">${config.icon} ${config.name}</div>
+                <div class="technique-description">${config.description}</div>
+                <div class="technique-category category-${config.category}">
+                    ${config.category}
+                </div>
             </div>
             <label class="toggle-switch">
-                <input type="checkbox" class="toggle-input" data-technique="${key}" ${currentTechniques[key] ? 'checked' : ''}>
+                <input type="checkbox" class="toggle-input" ${isEnabled ? 'checked' : ''} 
+                       data-technique="${key}">
                 <span class="toggle-slider"></span>
             </label>
         </div>
     `;
     
-    // Add change handler
-    const toggle = card.querySelector('.toggle-input');
-    toggle.addEventListener('change', (e) => {
-        currentTechniques[key] = e.target.checked;
-        updateStats();
-        // Clear active preset since we're doing custom changes
-        clearActivePreset();
-    });
-    
     return card;
 }
 
-function setupPresetHandlers() {
-    const presetChips = document.querySelectorAll('.preset-chip');
-    presetChips.forEach(chip => {
-        chip.addEventListener('click', () => {
-            const preset = chip.dataset.preset;
-            applyPreset(preset);
-            
-            // Update UI
-            presetChips.forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-        });
+// Setup all event listeners
+function setupEventListeners() {
+    // Preset buttons
+    document.querySelectorAll('.preset-chip').forEach(chip => {
+        chip.addEventListener('click', handlePresetClick);
     });
-}
-
-function applyPreset(presetName) {
-    if (!PRESETS[presetName]) {
-        console.warn('🚀 Prompto: Unknown preset:', presetName);
-        return;
+    
+    // Technique toggles (using event delegation)
+    document.getElementById('techniquesGrid').addEventListener('change', handleTechniqueToggle);
+    
+    // Save button
+    const saveBtn = document.getElementById('saveBtn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveConfiguration);
     }
     
-    const presetTechniques = PRESETS[presetName];
+    // Update preset visual states
+    updatePresetStates();
     
-    // Reset all techniques to false
-    Object.keys(currentTechniques).forEach(key => {
-        currentTechniques[key] = false;
-    });
+    console.log('🎛️ Event listeners attached');
+}
+
+// Handle preset button clicks
+function handlePresetClick(event) {
+    const preset = event.target.dataset.preset;
+    if (!preset || !PRESETS[preset]) return;
     
-    // Enable preset techniques
-    presetTechniques.forEach(key => {
-        currentTechniques[key] = true;
-    });
+    const isActive = activePresets.has(preset);
+    
+    if (isActive) {
+        // Deactivate preset - remove its techniques
+        activePresets.delete(preset);
+        PRESETS[preset].forEach(tech => currentTechniques.delete(tech));
+    } else {
+        // Activate preset - add its techniques
+        activePresets.add(preset);
+        PRESETS[preset].forEach(tech => currentTechniques.add(tech));
+    }
     
     // Update UI
-    updateToggleStates();
+    updatePresetStates();
+    updateTechniqueToggles();
     updateStats();
     
-    console.log(`🚀 Prompto: Applied preset "${presetName}":`, presetTechniques);
+    console.log('🔄 Preset toggled:', preset, isActive ? 'OFF' : 'ON');
 }
 
-function updateToggleStates() {
-    const toggles = document.querySelectorAll('.toggle-input');
-    toggles.forEach(toggle => {
-        const key = toggle.dataset.technique;
-        toggle.checked = currentTechniques[key] || false;
-    });
+// Handle individual technique toggles
+function handleTechniqueToggle(event) {
+    if (!event.target.matches('.toggle-input')) return;
+    
+    const technique = event.target.dataset.technique;
+    const isEnabled = event.target.checked;
+    
+    if (isEnabled) {
+        currentTechniques.add(technique);
+    } else {
+        currentTechniques.delete(technique);
+    }
+    
+    // Clear presets that are no longer fully active
+    updateActivePresets();
+    updatePresetStates();
+    updateStats();
+    
+    console.log('🔧 Technique toggled:', technique, isEnabled ? 'ON' : 'OFF');
 }
 
-function clearActivePreset() {
-    document.querySelectorAll('.preset-chip').forEach(chip => {
-        chip.classList.remove('active');
-    });
-}
-
-function updateStats() {
-    const enabledCount = Object.values(currentTechniques).filter(Boolean).length;
-    const totalCount = Object.keys(TECHNIQUES_CATALOG).length;
+// Update which presets are considered active based on current techniques
+function updateActivePresets() {
+    activePresets.clear();
     
-    // Calculate effectiveness score based on enabled techniques
-    let effectivenessScore = 60; // Base score
-    
-    // Add points for key techniques
-    if (currentTechniques.zero_shot_cot) effectivenessScore += 8;
-    if (currentTechniques.role_prompting) effectivenessScore += 6;
-    if (currentTechniques.xml_schema) effectivenessScore += 5;
-    if (currentTechniques.chain_verification) effectivenessScore += 7;
-    if (currentTechniques.self_consistency) effectivenessScore += 6;
-    if (currentTechniques.negative_prompts) effectivenessScore += 4;
-    if (currentTechniques.ethical_constraints) effectivenessScore += 3;
-    
-    // Bonus for having multiple reasoning techniques
-    const reasoningTechniques = ['zero_shot_cot', 'few_shot_cot', 'self_consistency', 'reflection', 'tree_of_thought'];
-    const enabledReasoning = reasoningTechniques.filter(key => currentTechniques[key]).length;
-    if (enabledReasoning >= 2) effectivenessScore += 5;
-    if (enabledReasoning >= 3) effectivenessScore += 3;
-    
-    effectivenessScore = Math.min(99, effectivenessScore);
-    
-    // Update UI
-    document.getElementById('enabledCount').textContent = enabledCount;
-    document.getElementById('totalCount').textContent = totalCount;
-    document.getElementById('effectivenessScore').textContent = effectivenessScore;
-}
-
-function setupSaveHandler() {
-    const saveBtn = document.getElementById('saveBtn');
-    const saveStatus = document.getElementById('saveStatus');
-    
-    saveBtn.addEventListener('click', async () => {
-        try {
-            saveBtn.disabled = true;
-            saveBtn.textContent = '💾 Saving...';
-            
-            // Save to Chrome storage
-            await chrome.storage.sync.set({ promptoTechniques: currentTechniques });
-            
-            // Show success message
-            showSaveStatus('✅ Configuration saved successfully!', 'success');
-            
-            console.log('🚀 Prompto: Settings saved:', currentTechniques);
-            
-        } catch (error) {
-            console.error('🚀 Prompto: Error saving settings:', error);
-            showSaveStatus('❌ Error saving configuration', 'error');
-        } finally {
-            saveBtn.disabled = false;
-            saveBtn.textContent = '💾 Save Configuration';
+    Object.entries(PRESETS).forEach(([presetName, techniques]) => {
+        const allEnabled = techniques.every(tech => currentTechniques.has(tech));
+        if (allEnabled) {
+            activePresets.add(presetName);
         }
     });
 }
 
-function showSaveStatus(message, type) {
+// Update preset button visual states
+function updatePresetStates() {
+    document.querySelectorAll('.preset-chip').forEach(chip => {
+        const preset = chip.dataset.preset;
+        const isActive = activePresets.has(preset);
+        
+        chip.classList.toggle('active', isActive);
+    });
+}
+
+// Update technique toggle states
+function updateTechniqueToggles() {
+    document.querySelectorAll('.toggle-input').forEach(toggle => {
+        const technique = toggle.dataset.technique;
+        toggle.checked = currentTechniques.has(technique);
+    });
+}
+
+// Update statistics display
+function updateStats() {
+    const enabledCount = document.getElementById('enabledCount');
+    const totalCount = document.getElementById('totalCount');
+    const effectivenessScore = document.getElementById('effectivenessScore');
+    
+    if (enabledCount) {
+        enabledCount.textContent = currentTechniques.size;
+    }
+    
+    if (totalCount) {
+        totalCount.textContent = Object.keys(TECHNIQUES_CATALOG).length;
+    }
+    
+    if (effectivenessScore) {
+        // Calculate effectiveness score based on enabled techniques
+        const baseScore = 65;
+        const techniqueBonus = Math.min(currentTechniques.size * 3, 35);
+        const score = baseScore + techniqueBonus;
+        effectivenessScore.textContent = score;
+    }
+}
+
+// Save configuration to storage
+async function saveConfiguration() {
+    const saveBtn = document.getElementById('saveBtn');
     const saveStatus = document.getElementById('saveStatus');
-    saveStatus.textContent = message;
+    
+    try {
+        // Disable save button during save
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'SAVING...';
+        
+        // Save to chrome storage
+        await chrome.storage.sync.set({
+            enabledTechniques: Array.from(currentTechniques),
+            activePresets: Array.from(activePresets),
+            lastUpdated: Date.now()
+        });
+        
+        // Show success status
+        showSaveStatus('success', 'Configuration saved successfully ✓');
+        
+        console.log('💾 Configuration saved:', {
+            techniques: currentTechniques.size,
+            presets: activePresets.size
+        });
+        
+    } catch (error) {
+        console.error('❌ Save failed:', error);
+        showSaveStatus('error', 'Failed to save configuration');
+    } finally {
+        // Re-enable save button
+        setTimeout(() => {
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'SAVE CONFIGURATION';
+        }, 1000);
+    }
+}
+
+// Show save status message
+function showSaveStatus(type, message) {
+    const saveStatus = document.getElementById('saveStatus');
+    if (!saveStatus) return;
+    
     saveStatus.className = `save-status ${type}`;
+    saveStatus.textContent = message;
     saveStatus.style.display = 'block';
     
+    // Hide after 3 seconds
     setTimeout(() => {
         saveStatus.style.display = 'none';
     }, 3000);
 }
 
-// Auto-save functionality (save after 2 seconds of inactivity)
-let saveTimeout;
-function autoSave() {
-    clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(async () => {
-        try {
-            await chrome.storage.sync.set({ promptoTechniques: currentTechniques });
-            console.log('🚀 Prompto: Settings auto-saved');
-        } catch (error) {
-            console.error('🚀 Prompto: Auto-save failed:', error);
-        }
-    }, 2000);
+// Utility: Get enabled techniques for other scripts
+window.getEnabledTechniques = () => Array.from(currentTechniques);
+
+// Export for debugging
+if (typeof window !== 'undefined') {
+    window.prompto = {
+        techniques: TECHNIQUES_CATALOG,
+        presets: PRESETS,
+        getCurrentTechniques: () => Array.from(currentTechniques),
+        getActivePresets: () => Array.from(activePresets)
+    };
 }
-
-// Add auto-save to all technique toggles
-document.addEventListener('change', (e) => {
-    if (e.target.classList.contains('toggle-input')) {
-        autoSave();
-    }
-});
-
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    // Ctrl+S or Cmd+S to save
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        e.preventDefault();
-        document.getElementById('saveBtn').click();
-    }
-    
-    // Escape to close (if opened as popup)
-    if (e.key === 'Escape') {
-        window.close();
-    }
-});
 
 console.log('🚀 Prompto: Options script loaded successfully'); 

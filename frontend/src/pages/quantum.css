@@ -1,0 +1,76 @@
+/* Dashboard Performance Optimizations */
+.dashboard-container {
+  /* Force hardware acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  
+  /* Optimize repaints */
+  will-change: auto; /* Don't force will-change unless animating */
+}
+
+.stat-card {
+  /* GPU acceleration for smooth animations */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  
+  /* Optimize for hover states */
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover {
+  will-change: transform;
+}
+
+.stat-card:not(:hover) {
+  will-change: auto;
+}
+
+/* Optimize gradient backgrounds */
+.gradient-bg {
+  /* Use contain for better performance */
+  background-attachment: local;
+  background-repeat: no-repeat;
+}
+
+/* Smooth scroll optimization */
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
+/* Animation optimization */
+@media (prefers-reduced-motion: reduce) {
+  .stat-card,
+  .motion-element {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Loading optimization */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  will-change: transform;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Memory optimization for large lists */
+.virtual-list {
+  contain: layout style paint;
+}
+
+/* Prevent layout thrashing */
+.no-layout-shift {
+  contain: layout;
+  min-height: 1px; /* Prevent collapse */
+} 

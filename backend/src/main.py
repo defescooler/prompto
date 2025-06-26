@@ -57,12 +57,18 @@ def create_app(config_name=None):
     OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
     AI_PROVIDER = os.getenv('AI_PROVIDER', 'auto')
     
-    if GEMINI_API_KEY:
-        genai.configure(api_key=GEMINI_API_KEY)
+    if GEMINI_API_KEY and GEMINI_API_KEY != 'your-gemini-api-key-here':
+        try:
+            genai.configure(api_key=GEMINI_API_KEY)
+        except Exception as e:
+            print(f"Warning: Gemini API configuration failed: {e}")
     
     openai_client = None
-    if OPENAI_API_KEY:
-        openai_client = OpenAI(api_key=OPENAI_API_KEY)
+    if OPENAI_API_KEY and OPENAI_API_KEY != 'your-openai-api-key-here':
+        try:
+            openai_client = OpenAI(api_key=OPENAI_API_KEY)
+        except Exception as e:
+            print(f"Warning: OpenAI client initialization failed: {e}")
 
     # Create database tables
     with app.app_context():
@@ -477,7 +483,7 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'timestamp': datetime.utcnow().isoformat(),
-        'version': '2.0.0'
+        'version': '1.0.0'
     })
 
 # Get user's prompts

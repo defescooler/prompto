@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
-import { Logo } from "@/components/icons";
+
 import { AuthContext } from "../App";
 
 export default function SignUpPage() {
@@ -60,7 +60,7 @@ export default function SignUpPage() {
       <div className="w-full max-w-md">
         <Card className="border-none shadow-lg pb-0 bg-slate-900/50 backdrop-blur">
           <CardHeader className="flex flex-col items-center space-y-1.5 pb-4 pt-6">
-            <Logo className="w-12 h-12" />
+
             <div className="space-y-0.5 flex flex-col items-center">
               <h2 className="text-2xl font-semibold text-white">
                 Create an account
@@ -177,14 +177,7 @@ export default function SignUpPage() {
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                 disabled={isLoading}
               >
-                {isLoading ? (
-                  <div className="flex items-center space-x-2">
-                    <Logo className="h-4 w-4" />
-                    <span>Creating account...</span>
-                  </div>
-                ) : (
-                  "Create free account"
-                )}
+                {isLoading ? "Creating account..." : "Create free account"}
               </Button>
             </form>
           </CardContent>

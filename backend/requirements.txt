@@ -2,6 +2,7 @@ Flask==2.3.3
 Flask-SQLAlchemy==3.0.5
 Flask-Migrate==4.0.5
 Flask-CORS==4.0.0
+flask-login==0.6.3
 SQLAlchemy==2.0.19
 Alembic==1.11.1
 PyJWT==2.8.0

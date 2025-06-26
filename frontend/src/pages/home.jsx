@@ -92,30 +92,48 @@ export default function Home({ onGetStarted }) {
             <h1 className={cn(
               tokens.typography.display,
               tokens.colors.text.primary,
-              "mb-6"
+              "mb-6 font-bold tracking-tight"
             )}>
-              Turn messy thoughts<br />
-              <span className={tokens.colors.text.accent}>
-                into killer prompts
+              <span className="inline-block animate-in fade-in-50 slide-in-from-bottom-8 duration-1000">
+                Turn messy thoughts
+              </span>
+              <br />
+              <span className="relative inline-block animate-in fade-in-50 slide-in-from-bottom-8 duration-1000 delay-200">
+                <span className="bg-gradient-to-r from-emerald-400 via-emerald-300 to-lime-400 bg-clip-text text-transparent animate-pulse">
+                  into killer prompts
+                </span>
+                {/* Subtle glow effect */}
+                <span className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 via-emerald-300/20 to-lime-400/20 blur-2xl -z-10" />
               </span>
             </h1>
             
             <p className={cn(
               tokens.typography['body-lg'],
               tokens.colors.text.secondary,
-              "mb-8 max-w-2xl mx-auto"
+              "mb-12 max-w-2xl mx-auto animate-in fade-in-50 slide-in-from-bottom-8 duration-1000 delay-300 leading-relaxed"
             )}>
-              Slash token spend, keep every ounce of meaning. Plays nice with GPT-4, Claude, Gemini — whatever you feed it.
+              Slash token spend, keep every ounce of meaning. Plays nice with GPT-4, 
+              Claude, Gemini — whatever you feed it.
             </p>
             
-            <div className="flex justify-center mb-16">
-              <Button
-                size="lg"
-                variant="primary"
+            <div className="flex justify-center mb-16 animate-in fade-in-50 slide-in-from-bottom-8 duration-1000 delay-500">
+              <button
                 onClick={() => window.location.href = '/auth'}
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 text-base font-semibold text-white bg-white/5 backdrop-blur-sm border border-white/10 rounded-full transition-all duration-500 hover:bg-white/10 hover:border-emerald-500/30 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/20 active:scale-95"
               >
-                Boost my prompt
-              </Button>
+                {/* Animated background gradient */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/0 via-emerald-400/0 to-lime-400/0 group-hover:from-emerald-500/10 group-hover:via-emerald-400/10 group-hover:to-lime-400/10 transition-all duration-500" />
+                
+                {/* Button content */}
+                <span className="relative z-10 flex items-center gap-3">
+                  <Sparkles className="w-5 h-5 text-emerald-400 group-hover:animate-spin transition-transform duration-500" />
+                  Boost my prompt
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </span>
+                
+                {/* Subtle inner glow */}
+                <div className="absolute inset-0.5 rounded-full bg-gradient-to-r from-transparent via-emerald-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </button>
             </div>
           </div>
         </Section>

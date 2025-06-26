@@ -15,6 +15,7 @@ class User(db.Model):
     is_premium = db.Column(db.Boolean, default=False)
     oauth_google_id = db.Column(db.String(255), nullable=True)
     oauth_github_id = db.Column(db.String(255), nullable=True)
+    technique_preferences = db.Column(db.Text, nullable=True)  # JSON string of technique preferences
     
     def set_password(self, password):
         """Hash and set the password"""
