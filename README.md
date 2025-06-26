@@ -135,8 +135,8 @@ npm run dev
 1. Register an account at http://localhost:5173
 2. Install the Chrome extension
 3. Go to any AI platform (ChatGPT, Claude, etc.)
-4. Start typing a prompt (10+ words)
-5. Click the "Enhance" button to improve your prompt
+4. Start typing a prompt (5+ characters)
+5. Click the "Enhance Prompt" button to improve your prompt
 
 ### Dashboard
 - View your prompt enhancement statistics
