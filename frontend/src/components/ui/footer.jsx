@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
-import { Github, Instagram } from 'lucide-react'
+import { Github } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { useEffect, useState, useRef } from 'react'
 
 // TikTok icon component
 const TikTokIcon = ({ className = "w-5 h-5" }) => (
@@ -9,57 +11,58 @@ const TikTokIcon = ({ className = "w-5 h-5" }) => (
 )
 
 export default function Footer() {
-  return (
-    <footer className="border-t border-slate-800 bg-slate-950/95 backdrop-blur-sm">
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between text-sm">
-          {/* Left side - Made with love */}
-          <div className="flex items-center gap-2 text-slate-400">
-            <span>Made with</span>
-            <span className="text-red-500">❤️</span>
-            <span>by</span>
-            <a 
-              href="https://github.com/defescooler"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-300 hover:text-white transition-colors duration-200 font-medium"
-            >
-              defescooler
-            </a>
-          </div>
+  const [isVisible, setIsVisible] = useState(false)
+  const observerRef = useRef(null)
 
-          {/* Right side - Social links */}
-          <div className="flex items-center gap-4">
-            <a
-              href="https://github.com/defescooler/prompto"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-400 hover:text-white transition-colors duration-200"
-              aria-label="GitHub"
-            >
-              <Github className="w-5 h-5" />
-            </a>
-            <a
-              href="https://www.instagram.com/engineerofvibes/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-400 hover:text-white transition-colors duration-200"
-              aria-label="Instagram"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a
-              href="https://www.tiktok.com/@engineerofvibes/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-400 hover:text-white transition-colors duration-200"
-              aria-label="TikTok"
-            >
-              <TikTokIcon />
-            </a>
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '-30% 0px -30% 0px'
+      }
+    )
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <>
+      {/* Trigger element positioned at 30% scroll */}
+      <div ref={observerRef} className="absolute top-[30%] w-full h-1 pointer-events-none" />
+      
+      <motion.footer 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="border-t border-slate-800/50 bg-slate-950/90 backdrop-blur-sm"
+      >
+        <div className="container mx-auto px-6 py-6">
+          <div className="flex items-center justify-center">
+            {/* Compact badge */}
+            <div className="flex items-center gap-3 text-sm bg-slate-800/50 px-4 py-2 rounded-full border border-slate-700/50">
+              <span className="text-slate-400">Built by</span>
+              <a 
+                href="https://github.com/defescooler"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-300 hover:text-white transition-colors duration-200 font-medium flex items-center gap-2"
+              >
+                <Github className="w-4 h-4" />
+                defescooler
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </footer>
+      </motion.footer>
+    </>
   )
 } 

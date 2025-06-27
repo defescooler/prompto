@@ -124,11 +124,9 @@ export default function Home() {
           {/* Subtitle with improved contrast */}
           <motion.p
             variants={itemVariants}
-            className="text-xl md:text-2xl text-white/90 mb-12 max-w-4xl mx-auto leading-relaxed font-medium"
+            className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed font-medium"
           >
-            Slash token spend by 60% while keeping every ounce of meaning.
-            <br className="hidden md:block" />
-            We integrate advanced AI into your prompt environment.
+            Save tokens, keep context—Prompto's AI cleans your prompts before you hit send.
           </motion.p>
 
           {/* Single Primary CTA - Following conversion best practices */}
@@ -152,7 +150,7 @@ export default function Home() {
           {/* Subtle Scroll Hint - Single conversion cue */}
           <motion.div
             variants={itemVariants}
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+            className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
           >
             <button
               onClick={() => {

@@ -34,7 +34,7 @@ export default function VideoDemo() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Watch Prompto in Action
+            See Prompto Edit a Prompt Live
           </h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
             See how our AI-powered optimization transforms your prompts in real-time
@@ -86,8 +86,8 @@ export default function VideoDemo() {
               {/* Video Placeholder Text */}
               <div className="text-center text-white/60">
                 <Video className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p className="text-lg font-medium">ScreenStudio Video Goes Here</p>
-                <p className="text-sm text-white/40 mt-2">Replace this placeholder with your video</p>
+                <p className="text-lg font-medium">Watch a 30-sec compress-to-Pro demo</p>
+                <p className="text-sm text-white/40 mt-2">See real prompts get optimized instantly</p>
               </div>
 
               {/* Current User Prompt */}
@@ -103,7 +103,7 @@ export default function VideoDemo() {
             {/* Prompto Suggestion Card */}
             <motion.div 
               variants={itemVariants}
-              className="absolute bottom-24 right-6 w-80 bg-slate-800/95 backdrop-blur-md rounded-xl p-4 border border-brand-green/30 shadow-xl"
+              className="absolute bottom-24 left-6 right-6 w-80 ml-auto bg-slate-800/95 backdrop-blur-md rounded-xl p-6 border border-brand-green/30 shadow-xl"
             >
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-6 h-6 rounded-full bg-brand-green/20 flex items-center justify-center">

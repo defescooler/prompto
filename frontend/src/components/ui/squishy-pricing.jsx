@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 export const Component = () => {
   return (
@@ -59,7 +59,7 @@ export const Component = () => {
               "API access integration",
               "Priority support"
             ]}
-            buttonText="Subscribe"
+            buttonText="Upgrade to Pro"
             popular={true}
             delay={0.1}
           />
@@ -94,7 +94,7 @@ const PricingCard = ({ title, subtitle, price, period, description, features, bu
         className={`relative h-full rounded-2xl p-4 backdrop-blur-md transition-all duration-300 hover:transform hover:scale-[1.02] ${
           popular 
             ? 'bg-slate-800/90 border-2 border-brand-green/50 shadow-2xl shadow-brand-green/20' 
-            : 'bg-slate-900/80 border border-slate-700/50 shadow-xl'
+            : 'bg-[#202635]/90 border border-slate-600/60 shadow-xl shadow-slate-900/30'
         }`}
       >
         {/* Background Glow Effects for Popular Card */}
@@ -132,8 +132,8 @@ const PricingCard = ({ title, subtitle, price, period, description, features, bu
                   transition={{ duration: 0.4, delay: delay + (index * 0.05) }}
                   className="flex items-start gap-3"
                 >
-                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-brand-green/20 flex items-center justify-center mt-0.5">
-                    <Check className="w-3 h-3 text-brand-green" />
+                  <div className="flex-shrink-0 flex items-center justify-center mt-0.5">
+                    <CheckCircle className="w-3.5 h-3.5 text-brand-green stroke-2" />
                   </div>
                   <span className="text-slate-300 text-sm leading-relaxed">{feature}</span>
                 </motion.li>
@@ -155,7 +155,7 @@ const PricingCard = ({ title, subtitle, price, period, description, features, bu
             className={`relative z-20 w-full rounded-full py-4 text-center font-bold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent min-h-[56px] text-base ${
               popular 
                 ? 'bg-gradient-to-r from-brand-green to-emerald-400 hover:from-emerald-400 hover:to-brand-green text-white shadow-xl focus:ring-brand-green/50'
-                : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 shadow-lg focus:ring-slate-500/50 rounded-full'
+                : 'bg-slate-700/80 hover:bg-slate-600/80 text-white border border-slate-500/50 shadow-lg focus:ring-slate-500/50 rounded-full'
             }`}
           >
             {buttonText}
