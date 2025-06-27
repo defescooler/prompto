@@ -7,14 +7,8 @@ import { Logo } from './components/icons.jsx'
 
 // Lazy load page components for better performance
 const Home = lazy(() => import('./pages/home.jsx'))
-const Dashboard = lazy(() => import('./pages/Dashboard.jsx'))
-const SimpleDashboard = lazy(() => import('./pages/SimpleDashboard.jsx'))
-const TestDashboard = lazy(() => import('./pages/TestDashboard.jsx'))
-const DebugDashboard = lazy(() => import('./pages/DebugDashboard.jsx'))
 const WorkingDashboard = lazy(() => import('./pages/WorkingDashboard.jsx'))
 const Auth = lazy(() => import('./pages/Auth.jsx'))
-const SignIn = lazy(() => import('./pages/SignIn.jsx'))
-const SignUp = lazy(() => import('./pages/SignUp.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 
 // API Configuration - Updated for Flask backend
@@ -233,11 +227,6 @@ function App() {
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <WorkingDashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/dashboard-protected" element={
-            <ProtectedRoute>
-              <Dashboard />
             </ProtectedRoute>
           } />
           <Route path="/auth" element={
