@@ -230,7 +230,11 @@ function App() {
               </PageTransition>
             </div>
           } />
-          <Route path="/dashboard" element={<WorkingDashboard />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <WorkingDashboard />
+            </ProtectedRoute>
+          } />
           <Route path="/dashboard-protected" element={
             <ProtectedRoute>
               <Dashboard />
