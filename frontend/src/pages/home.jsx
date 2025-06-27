@@ -46,30 +46,14 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-nebula-gradient text-white antialiased overflow-x-hidden">
+    <div className="min-h-screen bg-nebula-gradient text-white antialiased overflow-x-hidden scroll-smooth">
 
-
-      {/* Go to App Button - Top Right */}
-      <motion.div
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="fixed top-6 right-6 z-50"
-      >
-        <Button
-          onClick={() => window.location.href = '/dashboard'}
-          className="group flex items-center gap-2 px-4 py-2 rounded-button bg-black/40 backdrop-blur-md border border-white/20 hover:border-brand-green/40 text-white hover:text-brand-green transition-all duration-300 hover:scale-105 shadow-lg"
-        >
-          <span className="font-semibold text-sm">Go to App</span>
-          <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-        </Button>
-      </motion.div>
       
       {/* Particle Field Background */}
       <StarsCanvas particleCount={120} speed={0.3} />
       
       {/* Hero Section */}
-      <section className="relative isolate min-h-screen grid place-content-center text-center px-6 py-20 scroll-mt-24">
+      <section className="relative isolate min-h-screen grid place-content-center text-center px-6 py-20 scroll-mt-24 scroll-smooth">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -177,7 +161,7 @@ export default function Home() {
       <VideoDemo />
 
       {/* Pricing Section */}
-      <section id="pricing" className="relative py-32 scroll-mt-24">
+      <section id="pricing" className="relative py-32 scroll-mt-24 scroll-smooth">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-surface-dark/60 to-surface-darker" />
         <div className="relative z-10">
           <PricingSection />

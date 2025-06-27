@@ -157,9 +157,10 @@ const ProSettingsModal = memo(({ isOpen, onClose }) => {
   if (!isOpen) return null
 
   return (
-    <AnimatePresence>
+    <AnimatePresence key="pro-settings-modal">
       <style>{categoryStyles}</style>
       <motion.div
+        key="pro-settings-backdrop"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -167,6 +168,7 @@ const ProSettingsModal = memo(({ isOpen, onClose }) => {
         onClick={onClose}
       >
         <motion.div
+          key="pro-settings-dialog"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
@@ -605,23 +607,26 @@ function WorkingDashboard() {
   const ErrorDisplay = memo(() => {
     if (!error) return null
     return (
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        className="mx-8 mb-4 bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-red-200"
-      >
-        <div className="flex items-center gap-2">
-          <AlertCircle className="w-4 h-4" />
-          <span className="text-sm">{error}</span>
-          <button 
-            onClick={() => setError(null)}
-            className="ml-auto text-red-400 hover:text-red-300 transition-colors"
-          >
-            ×
-          </button>
-        </div>
-      </motion.div>
+      <AnimatePresence key="error-display">
+        <motion.div 
+          key="error-message"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="mx-8 mb-4 bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-red-200"
+        >
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4" />
+            <span className="text-sm">{error}</span>
+            <button 
+              onClick={() => setError(null)}
+              className="ml-auto text-red-400 hover:text-red-300 transition-colors"
+            >
+              ×
+            </button>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     )
   })
 
@@ -721,9 +726,10 @@ function WorkingDashboard() {
                 <ChevronDown className={`w-4 h-4 text-white/60 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
               </motion.button>
               
-              <AnimatePresence>
+              <AnimatePresence key="user-menu">
                 {isUserMenuOpen && (
                   <motion.div
+                    key="user-menu-dropdown"
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -773,6 +779,7 @@ function WorkingDashboard() {
           <div className="flex items-center justify-center">
             <div className="grid grid-cols-2 gap-3 max-w-md w-full">
               <motion.div
+                key="stat-prompts"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1 }}
@@ -784,6 +791,7 @@ function WorkingDashboard() {
               </motion.div>
 
               <motion.div
+                key="stat-score"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 }}
@@ -795,6 +803,7 @@ function WorkingDashboard() {
               </motion.div>
 
               <motion.div
+                key="stat-saved"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 }}
@@ -806,6 +815,7 @@ function WorkingDashboard() {
               </motion.div>
 
               <motion.div
+                key="stat-level"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4 }}
@@ -863,13 +873,16 @@ function WorkingDashboard() {
                 </button>
               </div>
               
-              {enhancedPrompt && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="mt-4"
-                >
+              <AnimatePresence key="enhanced-prompt">
+                {enhancedPrompt && (
+                  <motion.div
+                    key="enhanced-prompt-content"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="mt-4"
+                  >
                   <h3 className="text-emerald-400 font-medium mb-2 flex items-center gap-2">
                     <Check className="w-4 h-4" />
                     Enhanced Prompt
@@ -891,6 +904,7 @@ function WorkingDashboard() {
                   </div>
                 </motion.div>
               )}
+              </AnimatePresence>
             </div>
           </div>
         </div>

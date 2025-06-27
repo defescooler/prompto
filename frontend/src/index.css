@@ -13,6 +13,7 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-display: swap;
     scroll-behavior: smooth;
+    scroll-padding-top: 2rem;
   }
 
   body {
@@ -23,6 +24,8 @@
     min-height: 100vh;
     font-display: swap;
     font-feature-settings: 'rlig' 1, 'calt' 1;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
   }
 
   button, input, textarea, select {
