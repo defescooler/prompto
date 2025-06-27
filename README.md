@@ -2,8 +2,6 @@
   <br>
   <img src="https://github.com/user-attachments/assets/fc960221-0bcf-4f7e-9204-b83c1e2fdea2" alt="Prompto" width="400">
   <br>
-  Prompto
-  <br>
 </h1>
 
 <h4 align="center">AI-powered prompt enhancement for ChatGPT, Claude, and Gemini.</h4>
