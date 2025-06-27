@@ -1,24 +1,34 @@
-import { useState, useEffect, createContext, useContext } from 'react'
+import { useState, useEffect, createContext, useContext, Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import './App.css'
 
 import { Logo } from './components/icons.jsx'
 
-// Import page components
-import Home from './pages/home.jsx'
-import Dashboard from './pages/Dashboard.jsx'
-import SimpleDashboard from './pages/SimpleDashboard.jsx'
-import TestDashboard from './pages/TestDashboard.jsx'
-import DebugDashboard from './pages/DebugDashboard.jsx'
-import WorkingDashboard from './pages/WorkingDashboard.jsx'
-import Auth from './pages/Auth.jsx'
-import SignIn from './pages/SignIn.jsx'
-import SignUp from './pages/SignUp.jsx'
-import NotFound from './pages/NotFound.jsx'
+// Lazy load page components for better performance
+const Home = lazy(() => import('./pages/home.jsx'))
+const Dashboard = lazy(() => import('./pages/Dashboard.jsx'))
+const SimpleDashboard = lazy(() => import('./pages/SimpleDashboard.jsx'))
+const TestDashboard = lazy(() => import('./pages/TestDashboard.jsx'))
+const DebugDashboard = lazy(() => import('./pages/DebugDashboard.jsx'))
+const WorkingDashboard = lazy(() => import('./pages/WorkingDashboard.jsx'))
+const Auth = lazy(() => import('./pages/Auth.jsx'))
+const SignIn = lazy(() => import('./pages/SignIn.jsx'))
+const SignUp = lazy(() => import('./pages/SignUp.jsx'))
+const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 
 // API Configuration - Updated for Flask backend
 const API_BASE_URL = 'http://localhost:8002'
+
+// Loading component
+const LoadingFallback = () => (
+  <div className="min-h-screen bg-surface-darker flex items-center justify-center">
+    <div className="text-center">
+      <Logo className="h-12 w-12 mx-auto mb-4 text-brand-green motion-safe:animate-pulse" />
+      <p className="text-slate-400 font-mono">Loading...</p>
+    </div>
+  </div>
+)
 
 // Authentication Context
 export const AuthContext = createContext()
@@ -27,74 +37,121 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(localStorage.getItem('token'))
   const [loading, setLoading] = useState(true)
+  const [authError, setAuthError] = useState(null)
+
+  const validateSession = async (currentToken) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${currentToken}` }
+      })
+      
+      if (!response.ok) {
+        throw new Error('Session validation failed')
+      }
+      
+      const data = await response.json()
+      
+      if (data.user) {
+        setUser(data.user)
+        setAuthError(null)
+        return true
+      } else {
+        throw new Error('Invalid user data')
+      }
+    } catch (error) {
+      console.error('Session validation error:', error)
+      setAuthError('Session expired. Please sign in again.')
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      setToken(null)
+      setUser(null)
+      return false
+    }
+  }
 
   useEffect(() => {
-    if (token) {
-      // Verify token and get user info
-      fetch(`${API_BASE_URL}/api/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.user) {
-          setUser(data.user)
-        } else {
-          localStorage.removeItem('token')
-          setToken(null)
-        }
-      })
-      .catch(() => {
-        localStorage.removeItem('token')
-        setToken(null)
-      })
-      .finally(() => setLoading(false))
-    } else {
+    const initAuth = async () => {
+      if (token) {
+        await validateSession(token)
+      }
       setLoading(false)
     }
+    
+    initAuth()
   }, [token])
 
   const login = async (credentials) => {
-    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials)
-    })
-    const data = await response.json()
-    
-    if (data.token) {
-      localStorage.setItem('token', data.token)
-      setToken(data.token)
-      setUser(data.user)
-      return { success: true }
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials)
+      })
+      const data = await response.json()
+      
+      if (data.token) {
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('user', JSON.stringify(data.user))
+        setToken(data.token)
+        setUser(data.user)
+        setAuthError(null)
+        return { success: true }
+      }
+      return { success: false, error: data.error }
+    } catch (error) {
+      return { success: false, error: 'Network error. Please try again.' }
     }
-    return { success: false, error: data.error }
   }
 
   const register = async (userData) => {
-    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData)
-    })
-    const data = await response.json()
-    
-    if (data.token) {
-      localStorage.setItem('token', data.token)
-      setToken(data.token)
-      setUser(data.user)
-      return { success: true }
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      })
+      const data = await response.json()
+      
+      if (data.token) {
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('user', JSON.stringify(data.user))
+        setToken(data.token)
+        setUser(data.user)
+        setAuthError(null)
+        return { success: true }
+      }
+      return { success: false, error: data.error }
+    } catch (error) {
+      return { success: false, error: 'Network error. Please try again.' }
     }
-    return { success: false, error: data.error }
   }
 
   const logout = () => {
     localStorage.removeItem('token')
+    localStorage.removeItem('user')
     setToken(null)
     setUser(null)
+    setAuthError(null)
+  }
+
+  const refreshSession = async () => {
+    if (token) {
+      return await validateSession(token)
+    }
+    return false
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      token, 
+      login, 
+      register, 
+      logout, 
+      loading, 
+      authError,
+      refreshSession 
+    }}>
       {children}
     </AuthContext.Provider>
   )
@@ -109,25 +166,38 @@ function useAuth() {
   return context
 }
 
-// Protected Route Component
+// Protected Route Component with enhanced error handling
 function ProtectedRoute({ children }) {
-  const { user, loading } = useAuth()
+  const { user, loading, authError, refreshSession } = useAuth()
+  const [sessionChecked, setSessionChecked] = useState(false)
   
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <Logo className="h-12 w-12 mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    )
+  useEffect(() => {
+    const checkSession = async () => {
+      if (!loading && !user && !authError) {
+        // Try to refresh session one more time
+        const isValid = await refreshSession()
+        if (!isValid) {
+          // Session is truly invalid, will redirect to auth
+        }
+      }
+      setSessionChecked(true)
+    }
+    
+    checkSession()
+  }, [loading, user, authError, refreshSession])
+  
+  if (loading || !sessionChecked) {
+    return <LoadingFallback />
   }
   
-  return user ? children : <Navigate to="/auth" replace />
+  if (authError || !user) {
+    return <Navigate to="/auth" replace />
+  }
+  
+  return children
 }
 
-// Page Transition Component
+// Optimized Page Transition Component
 function PageTransition({ children }) {
   const location = useLocation()
   
@@ -135,10 +205,10 @@ function PageTransition({ children }) {
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         className="w-full"
       >
         {children}
@@ -149,69 +219,40 @@ function PageTransition({ children }) {
 
 // Main App Component
 function App() {
-  const { user, token, logout, loading } = useAuth()
-
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={
-          <div className="min-h-screen bg-slate-950">
-            <PageTransition>
-              <Home />
-            </PageTransition>
-          </div>
-        } />
-        <Route path="/dashboard" element={
-          <WorkingDashboard />
-        } />
-        <Route path="/dashboard-test" element={
-          <div className="min-h-screen bg-slate-950">
-            <PageTransition>
-              <TestDashboard />
-            </PageTransition>
-          </div>
-        } />
-        <Route path="/dashboard-protected" element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } />
-        <Route path="/auth/sign-in" element={
-          <div className="min-h-screen bg-slate-950">
-            <PageTransition>
-              <SignIn />
-            </PageTransition>
-          </div>
-        } />
-        <Route path="/auth/sign-up" element={
-          <div className="min-h-screen bg-slate-950">
-            <PageTransition>
-              <SignUp />
-            </PageTransition>
-          </div>
-        } />
-        <Route path="/auth" element={
-          <div className="min-h-screen bg-slate-950">
-            <PageTransition>
-              <Auth />
-            </PageTransition>
-          </div>
-        } />
-        <Route path="/404" element={
-          <div className="min-h-screen bg-slate-950">
-            <PageTransition>
-              <NotFound />
-            </PageTransition>
-          </div>
-        } />
-        <Route path="*" element={
-          <div className="min-h-screen bg-slate-950">
-            <PageTransition>
-              <NotFound />
-            </PageTransition>
-          </div>
-        } />
-      </Routes>
+      <Suspense fallback={<LoadingFallback />}>
+        <Routes>
+          <Route path="/" element={
+            <div className="min-h-screen bg-surface-darker">
+              <PageTransition>
+                <Home />
+              </PageTransition>
+            </div>
+          } />
+          <Route path="/dashboard" element={<WorkingDashboard />} />
+          <Route path="/dashboard-protected" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/auth" element={
+            <div className="min-h-screen bg-surface-darker">
+              <PageTransition>
+                <Auth />
+              </PageTransition>
+            </div>
+          } />
+          <Route path="/404" element={
+            <div className="min-h-screen bg-surface-darker">
+              <PageTransition>
+                <NotFound />
+              </PageTransition>
+            </div>
+          } />
+          <Route path="*" element={<Navigate to="/404" replace />} />
+        </Routes>
+      </Suspense>
     </Router>
   )
 }

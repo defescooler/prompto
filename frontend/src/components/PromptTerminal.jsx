@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Textarea } from '@/components/ui/textarea.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -16,17 +16,26 @@ const TerminalOutput = ({ content, isEnhanced = false, onCopy, copiedRecently = 
       setDisplayedContent('')
       
       let index = 0
-      const typeTimer = setInterval(() => {
-        if (index < content.length) {
-          setDisplayedContent(content.slice(0, index + 1))
-          index++
-        } else {
-          setIsTyping(false)
-          clearInterval(typeTimer)
+      let animationId
+      let lastTime = 0
+      const typeDelay = 16 // 60fps for smoother animation
+      
+      const typeCharacter = (currentTime) => {
+        if (currentTime - lastTime >= typeDelay) {
+          if (index < content.length) {
+            setDisplayedContent(content.slice(0, index + 1))
+            index++
+            lastTime = currentTime
+          } else {
+            setIsTyping(false)
+            return
+          }
         }
-      }, 20)
+        animationId = requestAnimationFrame(typeCharacter)
+      }
 
-      return () => clearInterval(typeTimer)
+      animationId = requestAnimationFrame(typeCharacter)
+      return () => cancelAnimationFrame(animationId)
     } else {
       setDisplayedContent(content)
       setIsTyping(false)
@@ -120,21 +129,22 @@ export default function PromptTerminal({
     return () => window.removeEventListener('reusePrompt', handleReusePrompt)
   }, [])
 
-  const models = [
+  // Memoized constants for better performance
+  const models = useMemo(() => [
     { value: 'gemini-pro', label: 'Gemini Pro', icon: '🧠' },
     { value: 'gpt-4', label: 'GPT-4', icon: '🤖' },
     { value: 'claude-3', label: 'Claude 3', icon: '⚡' }
-  ]
+  ], [])
 
-  const quickFormats = [
+  const quickFormats = useMemo(() => [
     { value: '', label: 'Choose format...' },
     { value: 'story', label: '📖 Story', template: 'Write a compelling story about: ' },
     { value: 'email', label: '📧 Email', template: 'Write a professional email about: ' },
     { value: 'summary', label: '📝 Summary', template: 'Summarize the following in 3 key points: ' },
     { value: 'code', label: '💻 Code', template: 'Write clean, well-documented code to: ' }
-  ]
+  ], [])
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (!prompt.trim()) return
     
     setIsEnhancing(true)
@@ -170,9 +180,9 @@ export default function PromptTerminal({
     } finally {
       setIsEnhancing(false)
     }
-  }
+  }, [prompt, selectedModel, onPromptEnhanced])
 
-  const handleCopy = async (text) => {
+  const handleCopy = useCallback(async (text) => {
     try {
       await navigator.clipboard.writeText(text)
       setCopiedRecently(true)
@@ -180,22 +190,22 @@ export default function PromptTerminal({
     } catch (err) {
       console.error('Failed to copy:', err)
     }
-  }
+  }, [])
 
-  const handleQuickFormat = (format) => {
+  const handleQuickFormat = useCallback((format) => {
     const template = quickFormats.find(f => f.value === format)?.template
     if (template && !prompt.startsWith(template)) {
       setPrompt(template + prompt)
     }
     setQuickFormat('')
-  }
+  }, [quickFormats, prompt])
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault()
       handleSubmit()
     }
-  }
+  }, [handleSubmit])
 
   return (
     <Card className="bg-[#1e293b] border border-[#334155] rounded-xl shadow-lg">

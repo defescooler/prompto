@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useCallback, memo, useEffect } from 'react'
+import React, { useState, useCallback, useMemo, useEffect, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Sparkles, 
@@ -10,9 +10,16 @@ import {
   Check, 
   AlertCircle,
   ChevronDown,
-  LogOut
+  LogOut,
+  BookOpen,
+  Settings,
+  CheckCircle,
+  Zap,
+  Send,
+  RotateCcw
 } from 'lucide-react'
-import { AuthContext } from '../App.jsx'
+import { useAuth } from '../hooks/useAuth'
+import Footer from '@/components/ui/footer'
 // import './dashboard-optimizations.css' // Temporarily commented out for troubleshooting
 
 // Performance optimization constants at the top
@@ -195,7 +202,7 @@ const PromptoLogo = ({ className = "" }) => (
 )
 
 function WorkingDashboard() {
-  const { user, logout } = useContext(AuthContext)
+  const { user, logout } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [copySuccess, setCopySuccess] = useState(null)
@@ -582,6 +589,9 @@ function WorkingDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

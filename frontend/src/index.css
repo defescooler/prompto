@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,15 +10,19 @@
   }
 
   html {
-    font-family: 'Roboto Mono', 'SF Mono', Monaco, 'Cascadia Code', Consolas, 'Courier New', monospace;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-display: swap;
+    scroll-behavior: smooth;
   }
 
   body {
-    font-family: 'Roboto Mono', 'SF Mono', Monaco, 'Cascadia Code', Consolas, 'Courier New', monospace;
-    background: #0a0a0a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #020617;
     color: #ffffff;
     line-height: 1.5;
     min-height: 100vh;
+    font-display: swap;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 
   button, input, textarea, select {
@@ -29,59 +32,160 @@
 
 @layer components {
   .prompto-card {
-    @apply bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-2xl shadow-2xl;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(51, 65, 85, 0.5);
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   }
 
   .prompto-button {
-    @apply bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl transition-all duration-200 font-semibold shadow-lg hover:shadow-emerald-500/25 font-mono;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.25);
+    font-family: 'Roboto Mono', monospace;
+  }
+
+  .prompto-button:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4);
   }
 
   .prompto-button-ghost {
-    @apply bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 text-white px-6 py-3 rounded-xl transition-all duration-200 font-medium font-mono;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgb(51, 65, 85);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
+    font-family: 'Roboto Mono', monospace;
+  }
+
+  .prompto-button-ghost:hover {
+    background: rgba(51, 65, 85, 0.5);
   }
 
   .prompto-input {
-    @apply bg-slate-950/50 border border-slate-600/50 rounded-xl p-4 text-white font-mono text-sm backdrop-blur-sm focus:border-emerald-500/50 transition-all;
+    background: rgba(2, 6, 23, 0.5);
+    border: 1px solid rgba(71, 85, 105, 0.5);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    color: white;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.875rem;
+    backdrop-filter: blur(12px);
+    transition: border-color 0.2s ease;
+  }
+
+  .prompto-input:focus {
+    border-color: rgba(16, 185, 129, 0.5);
+    outline: none;
   }
 
   .prompto-section-title {
-    @apply text-xl font-semibold text-white text-transform uppercase letter-spacing-wide border-b-2 border-emerald-500 pb-2 mb-6 font-mono;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid #10b981;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Roboto Mono', monospace;
   }
 
   .technique-card {
-    @apply bg-slate-800/50 border border-slate-700 rounded-2xl p-6 transition-all hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgb(51, 65, 85);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .technique-card:hover {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
   }
 
   .preset-chip {
-    @apply bg-slate-800/50 border border-slate-700 rounded-xl px-6 py-3 cursor-pointer transition-all font-medium text-slate-300 hover:bg-slate-700/50 hover:border-emerald-500/50 hover:text-white font-mono text-sm uppercase tracking-wide;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgb(51, 65, 85);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
+    color: rgb(148, 163, 184);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .preset-chip:hover {
+    background: rgba(51, 65, 85, 0.5);
+    border-color: rgba(16, 185, 129, 0.5);
+    color: white;
   }
 
   .preset-chip.active {
-    @apply bg-gradient-to-r from-emerald-500 to-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-500/25;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: #10b981;
+    color: white;
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.25);
   }
 
   .toggle-switch {
-    @apply relative w-14 h-8 flex-shrink-0;
+    position: relative;
+    width: 3.5rem;
+    height: 2rem;
+    flex-shrink: 0;
   }
 
   .toggle-input {
-    @apply opacity-0 w-0 h-0;
+    opacity: 0;
+    width: 0;
+    height: 0;
   }
 
   .toggle-slider {
-    @apply absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-slate-600 transition-all duration-300 rounded-full border-2 border-slate-500;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(71, 85, 105);
+    transition: all 0.3s ease;
+    border-radius: 9999px;
+    border: 2px solid rgb(71, 85, 105);
   }
 
   .toggle-slider:before {
-    @apply absolute content-[''] h-6 w-6 left-0.5 bottom-0.5 bg-slate-300 transition-all duration-300 rounded-full;
+    position: absolute;
+    content: '';
+    height: 1.5rem;
+    width: 1.5rem;
+    left: 0.125rem;
+    bottom: 0.125rem;
+    background: rgb(203, 213, 225);
+    transition: all 0.3s ease;
+    border-radius: 9999px;
   }
 
   .toggle-input:checked + .toggle-slider {
-    @apply bg-gradient-to-r from-emerald-500 to-emerald-600 border-emerald-500;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: #10b981;
   }
 
   .toggle-input:checked + .toggle-slider:before {
-    @apply transform translate-x-6 bg-white;
+    transform: translateX(1.5rem);
+    background: white;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -103,27 +207,17 @@
   }
 }
 
-/* Terminal-style scrolling constraints */
+/* Performance optimizations */
 .scroll-smooth {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
 
-/* Custom scrollbar styling for terminal feel */
 .scrollbar-thin {
   scrollbar-width: thin;
 }
 
-.scrollbar-thumb-\[#334155\] {
-  scrollbar-color: #334155 transparent;
-}
-
-.scrollbar-track-\[#0f172a\] {
-  scrollbar-color: #334155 #0f172a;
-}
-
-/* Webkit scrollbar styling */
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
 }
@@ -143,13 +237,11 @@
   background: #22c55e;
 }
 
-/* Prevent elastic scrolling and overscroll */
 body, html {
   overscroll-behavior: none;
   scroll-behavior: smooth;
 }
 
-/* Terminal-style focus constraints */
 .terminal-scroll {
   scroll-snap-type: y proximity;
   scroll-padding-top: 2rem;
@@ -159,14 +251,12 @@ body, html {
   scroll-snap-align: start;
 }
 
-/* Precise scroll control */
 .controlled-scroll {
   overscroll-behavior: contain;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
 
-/* Animation constraints for better performance */
 * {
   scroll-behavior: smooth;
 }
@@ -174,5 +264,8 @@ body, html {
 @media (prefers-reduced-motion: reduce) {
   * {
     scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

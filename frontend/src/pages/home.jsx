@@ -1,263 +1,193 @@
-import { useEffect } from "react"
-import {
-  ArrowRight,
-  Sparkles,
-  TrendingUp,
-  TrendingDown,
-  CheckCircle,
-  Users,
-  Clock,
-  Github,
-  Twitter,
-  Zap,
-  Cpu,
-} from "lucide-react"
+import { motion } from 'framer-motion'
+import { Sparkles, ArrowRightIcon, ChevronDown, ExternalLink, Download } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Component as PricingSection } from '@/components/ui/squishy-pricing'
+import StarsCanvas from '@/components/StarsCanvas'
+import Footer from '@/components/ui/footer'
+import VideoDemo from '@/components/VideoDemo'
 
-import { Button } from "@/components/ui/button"
-import Section from "@/components/ui/section"
-import Footer from "@/components/ui/footer"
-import PromptDemoMono from "@/components/PromptDemoMono"
-import FeatureCard from "@/components/FeatureCard"
-import Stat from "@/components/ui/stat"
-import CTA from "@/components/CTA"
-import { Component as PricingSection } from "@/components/ui/squishy-pricing"
-import AnimatedBackground from "@/components/AnimatedBackground"
-import HomeNavbar from "@/components/HomeNavbar"
-import { Logo } from "@/components/icons.jsx"
-import { tokens } from "@/lib/tokens"
-import { cn } from "@/lib/utils"
-
-export default function Home({ onGetStarted }) {
-  /* ---------- helpers ---------- */
-  const scrollTo = id => {
-    const node = document.getElementById(id)
-    if (node) node.scrollIntoView({ behavior: "smooth" })
+export default function Home() {
+  // Animation variants for Framer Motion choreography
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
   }
 
-  useEffect(() => {
-    document.documentElement.style.scrollBehavior = "smooth"
-    return () => (document.documentElement.style.scrollBehavior = "auto")
-  }, [])
-
-  const stats = [
-    { label: 'Prompts zapped', value: 10000, suffix: '+', icon: Sparkles },
-    { label: 'Fat trimmed', value: 60, suffix: '%', icon: TrendingDown },
-    { label: 'Humans smiling', value: 500, suffix: '+', icon: Users },
-    { label: 'Time alive', value: 99.9, suffix: '%', icon: Clock }
-  ]
-
-  const features = [
-    {
-      title: '60% Token Diet',
-      blurb: 'Lose weight—keep brains.',
-      icon: TrendingDown,
-      accent: 'from-emerald-500/30 to-emerald-500/5'
-    },
-    {
-      title: 'AI-Turbo',
-      blurb: 'Context? Nuance? Sorted.',
-      icon: Cpu,
-      accent: 'from-blue-500/30 to-blue-500/5'
-    },
-    {
-      title: 'Plugs Anywhere',
-      blurb: 'GPT-4, Claude, Gemini—same button.',
-      icon: Zap,
-      accent: 'from-purple-500/30 to-purple-500/5'
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.7,
+        ease: "easeOut"
+      }
     }
-  ]
+  }
 
-  /* ---------- UI ---------- */
+  const buttonVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+        delay: 0.1
+      }
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-[#0e1629] text-slate-100 antialiased">
-      <HomeNavbar />
-      {/* Hero Section */}
-      <AnimatedBackground shapes="circles" speed={0.8} variant="blend">
-        <Section 
-          id="hero" 
-          className="relative min-h-[90vh] flex flex-col items-center justify-center text-center bg-gradient-radial from-slate-900 via-slate-900 to-slate-800"
-          maxWidth={false}
-          spacing={false}
+    <div className="min-h-screen bg-nebula-gradient text-white antialiased overflow-x-hidden">
+
+
+      {/* Go to App Button - Top Right */}
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="fixed top-6 right-6 z-50"
+      >
+        <Button
+          onClick={() => window.location.href = '/dashboard'}
+          className="group flex items-center gap-2 px-4 py-2 rounded-button bg-black/40 backdrop-blur-md border border-white/20 hover:border-brand-green/40 text-white hover:text-brand-green transition-all duration-300 hover:scale-105 shadow-lg"
         >
-          <div className="max-w-4xl mx-auto">
-            <p className={cn(
-              "mb-2 font-medium flex items-center justify-center",
-              tokens.typography.body,
-              tokens.colors.text.muted
-            )}>
-              <Sparkles className={cn(tokens.icon.className, "mr-2")} />
-              LLM-turbo for text
-            </p>
-            
-            <h1 className={cn(
-              tokens.typography.display,
-              tokens.colors.text.primary,
-              "mb-6 font-bold tracking-tight"
-            )}>
-              <span className="inline-block animate-in fade-in-50 slide-in-from-bottom-8 duration-1000">
-                Turn messy thoughts
+          <span className="font-semibold text-sm">Go to App</span>
+          <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+        </Button>
+      </motion.div>
+      
+      {/* Particle Field Background */}
+      <StarsCanvas particleCount={120} speed={0.3} />
+      
+      {/* Hero Section */}
+      <section className="relative isolate min-h-screen grid place-content-center text-center px-6 py-20 scroll-mt-24">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-6xl mx-auto"
+        >
+          {/* Chrome Extension Badge */}
+          <motion.div variants={itemVariants} className="mb-8">
+            <button
+              onClick={() => {
+                // Open Chrome Web Store for the extension
+                window.open('https://chrome.google.com/webstore/category/extensions', '_blank')
+              }}
+              className="group transition-all duration-300 hover:scale-105 hover:drop-shadow-2xl"
+            >
+                             <img 
+                 src="/chrome.svg" 
+                 alt="Available in the Chrome Web Store" 
+                 className="w-auto h-12 group-hover:brightness-110 transition-all duration-300 mx-auto"
+               />
+            </button>
+          </motion.div>
+
+          {/* Prompto Logo */}
+          <motion.div variants={itemVariants} className="mb-8">
+            <img 
+              src="/prompto-logo-white.svg" 
+              alt="Prompto" 
+              className="w-auto h-16 mx-auto opacity-90"
+            />
+          </motion.div>
+
+
+
+          {/* Main Heading - Proper H1 with strong hierarchy */}
+          <motion.h1
+            variants={itemVariants}
+            className="text-[clamp(3rem,6vw,6rem)] font-extrabold leading-[0.9] tracking-tight mb-8"
+          >
+            Turn messy thoughts
+            <br />
+            <span className="relative inline-block">
+              {/* High contrast gradient optimized for readability */}
+              <span className="relative z-10 bg-gradient-to-r from-white via-emerald-200 to-brand-green bg-clip-text text-transparent">
+                into killer prompts
               </span>
-              <br />
-              <span className="relative inline-block animate-in fade-in-50 slide-in-from-bottom-8 duration-1000 delay-200">
-                <span className="bg-gradient-to-r from-emerald-400 via-emerald-300 to-lime-400 bg-clip-text text-transparent animate-pulse">
-                  into killer prompts
-                </span>
-                {/* Subtle glow effect */}
-                <span className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 via-emerald-300/20 to-lime-400/20 blur-2xl -z-10" />
-              </span>
-            </h1>
-            
-            <p className={cn(
-              tokens.typography['body-lg'],
-              tokens.colors.text.secondary,
-              "mb-12 max-w-2xl mx-auto animate-in fade-in-50 slide-in-from-bottom-8 duration-1000 delay-300 leading-relaxed"
-            )}>
-              Slash token spend, keep every ounce of meaning. Plays nice with GPT-4, 
-              Claude, Gemini — whatever you feed it.
-            </p>
-            
-            <div className="flex justify-center mb-16 animate-in fade-in-50 slide-in-from-bottom-8 duration-1000 delay-500">
-              <button
-                onClick={() => window.location.href = '/auth'}
-                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 text-base font-semibold text-white bg-white/5 backdrop-blur-sm border border-white/10 rounded-full transition-all duration-500 hover:bg-white/10 hover:border-emerald-500/30 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/20 active:scale-95"
+              {/* Strong backdrop for contrast */}
+              <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-emerald-200/40 to-brand-green/40 blur-2xl -z-10" />
+            </span>
+          </motion.h1>
+
+          {/* Subtitle with improved contrast */}
+          <motion.p
+            variants={itemVariants}
+            className="text-xl md:text-2xl text-white/90 mb-12 max-w-4xl mx-auto leading-relaxed font-medium"
+          >
+            Slash token spend by 60% while keeping every ounce of meaning.
+            <br className="hidden md:block" />
+            We integrate advanced AI into your prompt environment.
+          </motion.p>
+
+          {/* Single Primary CTA - Following conversion best practices */}
+          <motion.div
+            variants={buttonVariants}
+            className="mb-16"
+          >
+            <Button
+              onClick={() => window.location.href = '/auth'}
+              size="lg"
+              className="group relative min-w-[280px] h-[64px] px-10 py-5 rounded-button bg-gradient-to-r from-brand-green to-emerald-400 hover:from-emerald-400 hover:to-brand-green text-white font-bold transition-all duration-300 hover:scale-105 border-0 text-lg shadow-2xl shadow-brand-green/30 hover:shadow-brand-green/50"
+            >
+              <Sparkles className="w-6 h-6 mr-3 group-hover:animate-spin transition-transform duration-300" />
+              Boost my prompt
+              <ArrowRightIcon className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
+              {/* Enhanced hover glow */}
+              <div className="absolute inset-0 rounded-button bg-gradient-to-r from-brand-green/30 to-emerald-400/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-md -z-10" />
+            </Button>
+          </motion.div>
+
+          {/* Subtle Scroll Hint - Single conversion cue */}
+          <motion.div
+            variants={itemVariants}
+            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          >
+            <button
+              onClick={() => {
+                document.querySelector('#pricing')?.scrollIntoView({ 
+                  behavior: 'smooth' 
+                })
+              }}
+              className="flex flex-col items-center gap-2 opacity-70 hover:opacity-100 transition-opacity group"
+            >
+              <span className="text-sm text-white/80 font-medium">See pricing</span>
+              <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="group-hover:text-brand-green transition-colors"
               >
-                {/* Animated background gradient */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/0 via-emerald-400/0 to-lime-400/0 group-hover:from-emerald-500/10 group-hover:via-emerald-400/10 group-hover:to-lime-400/10 transition-all duration-500" />
-                
-                {/* Button content */}
-                <span className="relative z-10 flex items-center gap-3">
-                  <Sparkles className="w-5 h-5 text-emerald-400 group-hover:animate-spin transition-transform duration-500" />
-                  Boost my prompt
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                </span>
-                
-                {/* Subtle inner glow */}
-                <div className="absolute inset-0.5 rounded-full bg-gradient-to-r from-transparent via-emerald-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </button>
-            </div>
-          </div>
-        </Section>
-      </AnimatedBackground>
+                <ChevronDown className="w-5 h-5" />
+              </motion.div>
+            </button>
+          </motion.div>
+        </motion.div>
+      </section>
 
-      {/* Two Optimization Methods */}
-      <AnimatedBackground shapes="rects" speed={1.2} variant="dark">
-        <div id="demo">
-          <PromptDemoMono />
-        </div>
-      </AnimatedBackground>
-
-      {/* Unified Features → Stats → CTA Band */}
-      <AnimatedBackground shapes="triangles" speed={0.6} variant="blend">
-        <Section id="features" className="bg-slate-900">
-          {/* Grain texture overlay */}
-          <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.04] pointer-events-none" />
-          
-          <div className="relative">
-            {/* Section intro */}
-            <div className="text-center mb-16">
-              <h2 className={cn(tokens.typography.headline, tokens.colors.text.primary, "mb-4")}>
-                Why choose Prompt Copilot?
-              </h2>
-              <p className={cn(tokens.typography['body-lg'], tokens.colors.text.secondary)}>
-                Advanced AI optimization for all your prompting needs
-              </p>
-            </div>
-
-            {/* 1️⃣ Feature cards with glassmorphism */}
-            <div className="grid md:grid-cols-3 gap-8 mb-20">
-              {features.map((feature, index) => (
-                <FeatureCard
-                  key={index}
-                  title={feature.title}
-                  blurb={feature.blurb}
-                  icon={feature.icon}
-                  accent={feature.accent}
-                />
-              ))}
-            </div>
-
-            {/* Hairline divider */}
-            <div className="mb-20 h-px bg-gradient-to-r from-transparent via-slate-700/30 to-transparent" />
-
-            {/* 2️⃣ KPI counters with count-up animations */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {stats.map((stat, index) => (
-                <Stat
-                  key={index}
-                  value={stat.value}
-                  suffix={stat.suffix}
-                  label={stat.label}
-                  icon={stat.icon}
-                />
-              ))}
-            </div>
-          </div>
-        </Section>
-      </AnimatedBackground>
+      {/* Video Demo Section */}
+      <VideoDemo />
 
       {/* Pricing Section */}
-      <AnimatedBackground shapes="circles" speed={1.0} variant="light">
-        <div id="pricing">
+      <section id="pricing" className="relative py-32 scroll-mt-24">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-surface-dark/60 to-surface-darker" />
+        <div className="relative z-10">
           <PricingSection />
         </div>
-      </AnimatedBackground>
-
-      {/* 3️⃣ CTA banner with sparkles */}
-      <AnimatedBackground shapes="rects" speed={0.5} variant="blend">
-        <CTA
-          headline="Ready to supercharge your prompts?"
-          sub="Join thousands of users saving time and money with AI optimization."
-          primary={{ 
-            text: "Start Free Trial", 
-            href: "/auth",
-            icon: Sparkles 
-          }}
-          secondary={{ 
-            text: "See how it works", 
-            href: "/demo" 
-          }}
-        />
-      </AnimatedBackground>
+      </section>
 
       {/* Footer */}
-      <AnimatedBackground shapes="triangles" speed={0.3} variant="dark">
-        <Footer
-          socialLinks={[
-            {
-              icon: <Twitter className="h-5 w-5" />,
-              href: "https://twitter.com/defescooler",
-              label: "Twitter",
-            },
-            {
-              icon: <Github className="h-5 w-5" />,
-              href: "https://github.com/defescooler",
-              label: "GitHub",
-            },
-          ]}
-          mainLinks={[
-            { href: "#features", label: "Features" },
-            { href: "/demo", label: "Demo" },
-            { href: "/dashboard", label: "Dashboard" },
-          ]}
-          legalLinks={[
-            { href: "/privacy", label: "Privacy" },
-            { href: "/terms", label: "Terms" },
-          ]}
-          copyright={{
-            text: "Made with ❤️ by",
-            license: (
-              <a
-                href="https://github.com/defescooler"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold hover:text-white"
-              >
-                defescooler
-              </a>
-            ),
-          }}
-        />
-      </AnimatedBackground>
+      <Footer />
     </div>
   )
 }

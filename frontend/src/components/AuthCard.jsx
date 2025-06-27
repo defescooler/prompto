@@ -36,26 +36,88 @@ const signUpSchema = z.object({
   password: z.string().min(6, { message: "Password ≥ 6 chars" }),
 });
 
-// ---------------- API stubs ----------------
-function signIn(values) {
-  return toast.promise(new Promise((res) => setTimeout(res, 800)), {
-    loading: "Signing in…",
-    success: () => `Welcome back, ${values.email}!`,
-    error: "Sign-in failed",
-  });
+// ---------------- API Configuration ----------------
+const API_BASE_URL = 'http://localhost:8002'
+
+// ---------------- API Functions ----------------
+async function signIn(values) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: values.email,
+        password: values.password
+      })
+    })
+    
+    const data = await response.json()
+    
+    if (!response.ok) {
+      throw new Error(data.error || 'Login failed')
+    }
+    
+    // Store token and user data
+    localStorage.setItem('token', data.token)
+    localStorage.setItem('user', JSON.stringify(data.user))
+    
+    return { success: true, data }
+  } catch (error) {
+    return { success: false, error: error.message }
+  }
 }
 
-function register(values) {
-  return toast.promise(new Promise((res) => setTimeout(res, 800)), {
-    loading: "Creating account…",
-    success: () => `Account created for ${values.email}!`,
-    error: "Registration failed",
-  });
+async function register(values) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: values.name,
+        email: values.email,
+        password: values.password
+      })
+    })
+    
+    const data = await response.json()
+    
+    if (!response.ok) {
+      throw new Error(data.error || 'Registration failed')
+    }
+    
+    // Store token and user data
+    localStorage.setItem('token', data.token)
+    localStorage.setItem('user', JSON.stringify(data.user))
+    
+    return { success: true, data }
+  } catch (error) {
+    return { success: false, error: error.message }
+  }
 }
 
-function signInWithGoogle() {
-  toast("Redirecting to Google OAuth…");
-  // window.location.href = "/api/auth/google";
+async function signInWithGoogle() {
+  try {
+    toast("Redirecting to Google OAuth…");
+    // Simulate potential error in OAuth flow
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // Simulate 10% chance of user cancellation
+        if (Math.random() < 0.1) {
+          reject(new Error("User cancelled Google sign-in"));
+        } else {
+          resolve();
+        }
+      }, 1000);
+    });
+    // window.location.href = "/api/auth/google";
+  } catch (error) {
+    toast.error(error.message || "Google sign-in failed");
+    throw error;
+  }
 }
 
 // ---------------- Helper components ----------------
@@ -69,13 +131,13 @@ function PasswordField({ id, register, error, autoComplete, placeholder }) {
         aria-invalid={!!error}
         autoComplete={autoComplete}
         placeholder={placeholder}
-        className="pr-10"
+        className="pr-10 focus:ring-2 focus:ring-emerald-500/60"
         {...register}
       />
       <button
         type="button"
         onClick={() => setShow((s) => !s)}
-        className="absolute w-8 h-8 right-2 md:right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 focus-visible:outline-none"
+        className="absolute w-8 h-8 right-2 md:right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/60 rounded"
         aria-label={show ? "Hide password" : "Show password"}
       >
         {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
@@ -99,38 +161,47 @@ function SignInForm() {
   const {
     register: rhfRegister,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting, isValid, touchedFields },
     setError,
-  } = useForm({ resolver: zodResolver(signInSchema), mode: "onChange" });
+  } = useForm({ 
+    resolver: zodResolver(signInSchema), 
+    mode: "onChange",
+    reValidateMode: "onChange",
+    shouldFocusError: true
+  });
 
   const navigate = useNavigate();
   const [search] = useSearchParams();
   const cardRef = useRef(null);
-  const [remember] = useState(false);
 
-  const onSubmit = useCallback(async (data) => {
-    const payload = {
-      ...data,
-      remember,
-      device: navigator.userAgent,
-      tzOffset: -new Date().getTimezoneOffset(),
-      redirectTo: search.get("next") ?? "/dashboard",
-    };
-
-    const result = await signIn(payload);
-    if (result?.error) {
-      const firstErrorField = Object.keys(errors)[0];
-      if (firstErrorField) {
-        cardRef.current?.querySelector(`#signin_${firstErrorField}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
-        setError(firstErrorField, { type: "server", message: result.error });
-      } else {
-        toast.error(result.error, { position: "top-center" });
-      }
-      return;
+  const onSubmit = useCallback(async (data, event) => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
+    
+    try {
+      const result = await signIn(data);
+      
+      if (!result.success) {
+        if (result.error.includes('email') || result.error.includes('Email')) {
+          setError('email', { type: 'server', message: result.error });
+        } else if (result.error.includes('password') || result.error.includes('Password')) {
+          setError('password', { type: 'server', message: result.error });
+        } else {
+          toast.error(result.error, { position: "top-center" });
+        }
+        return;
+      }
 
-    navigate(payload.redirectTo, { replace: true });
-  }, [navigate, remember, search]);
+      toast.success(`Welcome back, ${result.data.user.name}!`);
+      const redirectTo = search.get("next") ?? "/dashboard";
+      navigate(redirectTo, { replace: true });
+    } catch (error) {
+      console.error('Sign in error:', error);
+      toast.error('Sign in failed. Please try again.', { position: "top-center" });
+    }
+  }, [navigate, search, setError]);
 
   // ⌘/Ctrl + Enter shortcut
   useEffect(() => {
@@ -144,7 +215,7 @@ function SignInForm() {
   }, [handleSubmit, onSubmit]);
 
   return (
-    <form ref={cardRef} onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+    <form ref={cardRef} onSubmit={(e) => { e.preventDefault(); handleSubmit(onSubmit)(e); }} className="space-y-4" noValidate>
       <div>
         <Label htmlFor="signin_email">Email</Label>
         <Input
@@ -154,10 +225,11 @@ function SignInForm() {
           enterKeyHint="next"
           autoComplete="email"
           aria-invalid={!!errors.email}
+          className="focus:ring-2 focus:ring-emerald-500/60"
           {...rhfRegister("email")}
           placeholder="john@company.com"
         />
-        {errors.email && (
+        {errors.email && (touchedFields.email || errors.email.type === 'server') && (
           <p className="mt-1 text-xs text-red-400" aria-live="polite">
             {errors.email.message}
           </p>
@@ -172,7 +244,7 @@ function SignInForm() {
           error={errors.password}
           placeholder="••••••••"
         />
-        {errors.password && (
+        {errors.password && (touchedFields.password || errors.password.type === 'server') && (
           <p className="mt-1 text-xs text-red-400" aria-live="polite">
             {errors.password.message}
           </p>
@@ -195,36 +267,49 @@ function SignUpForm() {
   const {
     register: rhfRegister,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting, isValid, touchedFields },
     setError,
-  } = useForm({ resolver: zodResolver(signUpSchema), mode: "onChange" });
+  } = useForm({ 
+    resolver: zodResolver(signUpSchema), 
+    mode: "onChange",
+    reValidateMode: "onChange", 
+    shouldFocusError: true
+  });
 
   const navigate = useNavigate();
   const [search2] = useSearchParams();
   const cardRef2 = useRef(null);
 
-  const onSubmit = useCallback(async (data) => {
-    const payload = {
-      ...data,
-      remember: false,
-      device: navigator.userAgent,
-      tzOffset: -new Date().getTimezoneOffset(),
-      redirectTo: search2.get("next") ?? "/dashboard",
-    };
-
-    const result = await register(payload);
-    if (result?.error) {
-      const firstErrorField = Object.keys(errors)[0];
-      if (firstErrorField) {
-        cardRef2.current?.querySelector(`#signup_${firstErrorField}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
-        setError(firstErrorField, { type: "server", message: result.error });
-      } else {
-        toast.error(result.error, { position: "top-center" });
-      }
-      return;
+  const onSubmit = useCallback(async (data, event) => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
-    navigate(payload.redirectTo, { replace: true });
-  }, [navigate, search2]);
+    
+    try {
+      const result = await register(data);
+      
+      if (!result.success) {
+        if (result.error.includes('name') || result.error.includes('Name')) {
+          setError('name', { type: 'server', message: result.error });
+        } else if (result.error.includes('email') || result.error.includes('Email')) {
+          setError('email', { type: 'server', message: result.error });
+        } else if (result.error.includes('password') || result.error.includes('Password')) {
+          setError('password', { type: 'server', message: result.error });
+        } else {
+          toast.error(result.error, { position: "top-center" });
+        }
+        return;
+      }
+
+      toast.success(`Welcome to Prompto, ${result.data.user.name}!`);
+      const redirectTo = search2.get("next") ?? "/dashboard";
+      navigate(redirectTo, { replace: true });
+    } catch (error) {
+      console.error('Sign up error:', error);
+      toast.error('Sign up failed. Please try again.', { position: "top-center" });
+    }
+  }, [navigate, search2, setError]);
 
   useEffect(() => {
     function onKey(e) {
@@ -237,7 +322,7 @@ function SignUpForm() {
   }, [handleSubmit, onSubmit]);
 
   return (
-    <form ref={cardRef2} onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+    <form ref={cardRef2} onSubmit={(e) => { e.preventDefault(); handleSubmit(onSubmit)(e); }} className="space-y-4" noValidate>
       <div>
         <Label htmlFor="signup_name">Name</Label>
         <Input
@@ -245,10 +330,11 @@ function SignUpForm() {
           autoComplete="name"
           enterKeyHint="next"
           aria-invalid={!!errors.name}
+          className="focus:ring-2 focus:ring-emerald-500/60"
           {...rhfRegister("name")}
           placeholder="Jane Doe"
         />
-        {errors.name && (
+        {errors.name && (touchedFields.name || errors.name.type === 'server') && (
           <p className="mt-1 text-xs text-red-400" aria-live="polite">
             {errors.name.message}
           </p>
@@ -263,10 +349,11 @@ function SignUpForm() {
           enterKeyHint="next"
           autoComplete="email"
           aria-invalid={!!errors.email}
+          className="focus:ring-2 focus:ring-emerald-500/60"
           {...rhfRegister("email")}
           placeholder="jane@company.com"
         />
-        {errors.email && (
+        {errors.email && (touchedFields.email || errors.email.type === 'server') && (
           <p className="mt-1 text-xs text-red-400" aria-live="polite">
             {errors.email.message}
           </p>
@@ -281,7 +368,7 @@ function SignUpForm() {
           error={errors.password}
           placeholder="At least 6 characters"
         />
-        {errors.password && (
+        {errors.password && (touchedFields.password || errors.password.type === 'server') && (
           <p className="mt-1 text-xs text-red-400" aria-live="polite">
             {errors.password.message}
           </p>
@@ -306,22 +393,29 @@ export default function AuthCard({ mode = "sign-in" }) {
   const isSignIn = mode === "sign-in";
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  const handleGoogleSignIn = async () => {
+    setGoogleLoading(true);
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      // Error already handled in signInWithGoogle
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 140, damping: 18, mass: 0.5 }}
-      className="w-full sm:max-w-[420px] sm:rounded-lg bg-black p-4 sm:p-8 shadow-xl text-slate-100"
+      className="w-full sm:max-w-[420px] sm:rounded-lg bg-[#0D0D0D]/85 backdrop-blur-md border border-[#2B2B2B] p-4 sm:p-8 shadow-xl text-slate-100 ring-0 ring-emerald-500/30"
     >
       <div className="space-y-3">
         <Button
           variant="secondary"
           className="w-full"
-          onClick={async () => {
-            setGoogleLoading(true);
-            toast("Redirecting…", { position: "bottom-center" });
-            await signInWithGoogle();
-          }}
+          onClick={handleGoogleSignIn}
           aria-label="Sign in with Google"
           disabled={googleLoading}
         >
@@ -334,12 +428,12 @@ export default function AuthCard({ mode = "sign-in" }) {
 
       {isSignIn ? <SignInForm /> : <SignUpForm />}
 
-      <p className="mt-6 text-center text-xs text-slate-400">
-        By continuing you're agreeing to the
-        <Link to="#" className="underline">
+      <p className="mt-6 text-center text-sm text-slate-400">
+        By continuing you're agreeing to the{' '}
+        <Link to="#" className="underline mr-1">
           Terms
-        </Link>{" "}
-        and {" "}
+        </Link>
+        and{' '}
         <Link to="#" className="underline">
           Privacy
         </Link>

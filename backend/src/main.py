@@ -31,7 +31,7 @@ from src.utils.prompt_techniques import PromptTechniques
 from src.utils.performance_optimizer import performance_optimizer, FastPromptProcessor
 
 # JWT Configuration
-SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
+SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-prompto-2024-super-secure')
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440
 
@@ -43,11 +43,11 @@ def create_app(config_name=None):
     
     # Load configuration
     if config_name is None:
-        config_name = os.getenv('FLASK_ENV', 'default')
+        config_name = os.getenv('FLASK_ENV', 'development')
     app.config.from_object(config[config_name])
 
     # Enable CORS for all routes
-    CORS(app, origins="*")
+    CORS(app, origins=["http://localhost:5173", "http://localhost:5179", "http://localhost:3000", "http://localhost:8080"])
 
     # Initialize database and migrations
     init_app(app)
@@ -104,12 +104,8 @@ def get_current_user():
             return None
         
         user = User.query.get(user_id)
-        print(f"Debug: get_current_user found user: {user.id if user else None}")
         return user
     except Exception as e:
-        print(f"Debug: Error in get_current_user: {e}")
-        import traceback
-        traceback.print_exc()
         return None
 
 # Authentication endpoints
@@ -117,21 +113,36 @@ def get_current_user():
 def register():
     try:
         data = request.get_json()
-        name = data.get('name')
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+            
+        name = data.get('name', '').strip()
+        email = data.get('email', '').strip()
+        password = data.get('password', '')
         
-        if not all([name, username, email, password]):
-            return jsonify({'error': 'All fields are required'}), 400
+        if not all([name, email, password]):
+            return jsonify({'error': 'Name, email, and password are required'}), 400
+        
+        if len(password) < 6:
+            return jsonify({'error': 'Password must be at least 6 characters'}), 400
+        
+        # Validate email format
+        if '@' not in email or '.' not in email:
+            return jsonify({'error': 'Invalid email format'}), 400
         
         # Check if user already exists
-        existing_user = User.query.filter(
-            (User.username == username) | (User.email == email)
-        ).first()
-        
+        existing_user = User.query.filter(User.email == email).first()
         if existing_user:
-            return jsonify({'error': 'Username or email already registered'}), 400
+            return jsonify({'error': 'Email already registered'}), 400
+        
+        # Generate username from email
+        username = email.split('@')[0]
+        counter = 1
+        original_username = username
+        
+        while User.query.filter(User.username == username).first():
+            username = f"{original_username}{counter}"
+            counter += 1
         
         # Create user
         user = User(
@@ -153,28 +164,30 @@ def register():
         return jsonify({
             'token': access_token,
             'user': user.to_dict()
-        })
+        }), 201
         
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        db.session.rollback()
+        return jsonify({'error': f'Registration failed: {str(e)}'}), 500
 
 @app.route('/api/auth/login', methods=['POST'])
 def login():
     try:
         data = request.get_json()
-        username_or_email = data.get('username_or_email')
-        password = data.get('password')
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+            
+        email = data.get('email', '').strip()
+        password = data.get('password', '')
         
-        if not all([username_or_email, password]):
-            return jsonify({'error': 'Username/email and password are required'}), 400
+        if not all([email, password]):
+            return jsonify({'error': 'Email and password are required'}), 400
         
-        # Find user by username or email
-        user = User.query.filter(
-            (User.username == username_or_email) | (User.email == username_or_email)
-        ).first()
+        # Find user by email
+        user = User.query.filter(User.email == email).first()
         
         if not user or not user.check_password(password):
-            return jsonify({'error': 'Invalid credentials'}), 401
+            return jsonify({'error': 'Invalid email or password'}), 401
         
         # Create token
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -185,20 +198,23 @@ def login():
         return jsonify({
             'token': access_token,
             'user': user.to_dict()
-        })
+        }), 200
         
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': f'Login failed: {str(e)}'}), 500
 
 @app.route('/api/auth/me', methods=['GET'])
 def get_current_user_info():
-    user = get_current_user()
-    if not user:
-        return jsonify({'error': 'Invalid token'}), 401
-    
-    return jsonify({
-        'user': user.to_dict()
-    })
+    try:
+        user = get_current_user()
+        if not user:
+            return jsonify({'error': 'Invalid or expired token'}), 401
+        
+        return jsonify({
+            'user': user.to_dict()
+        }), 200
+    except Exception as e:
+        return jsonify({'error': f'Authentication failed: {str(e)}'}), 401
 
 def enhance_with_openai(original_prompt, method='llm', enabled_techniques=None):
     """Advanced prompt engineering with OpenAI GPT - PERFORMANCE OPTIMIZED"""

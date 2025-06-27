@@ -1,48 +1,67 @@
 import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
 
 export const Component = () => {
   return (
-    <section className="px-4 py-24 transition-colors">
-      <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Simple pricing, powerful results
-          </h2>
-          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            Start free, scale with usage. Pay only when you enhance prompts.
-          </p>
+    <section className="px-8 py-16">
+      <div className="container mx-auto max-w-7xl">
+        <div className="text-center mb-24">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl md:text-5xl font-bold text-white mb-8"
+          >
+            Simple pricing, powerful prompts
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed"
+          >
+            Start free, unlock advanced features. Perfect prompts for every user.
+          </motion.p>
         </div>
         
-        <div className="mx-auto flex justify-center items-center gap-8 max-w-4xl">
+        <div className="flex flex-row justify-center items-start gap-4 max-w-3xl mx-auto">
           <PricingCard
-            label="Starter"
-            monthlyPrice="Free"
+            title="Free"
+            subtitle="Hacker"
+            price="0"
+            period="/month"
             description="Perfect for getting started with AI prompt optimization"
             features={[
-              "20 enhanced prompts/month",
-              "Basic compression techniques",
-              "Browser extension",
+              "50 enhanced prompts/month",
+              "Basic optimization techniques", 
+              "Chrome extension access",
+              "Public prompt library",
+              "Access to Claude & Gemini",
               "Community support"
             ]}
-            cta="Get Started"
-            background="bg-slate-800 border-slate-700"
+            buttonText="Start for free"
             popular={false}
-            BGComponent={BGComponent1}
+            delay={0}
           />
           <PricingCard
-            label="Pro"
-            monthlyPrice="12"
-            description="For power users who want unlimited prompt enhancement"
+            title="Pro"
+            subtitle="For professional developers"
+            price="5.99"
+            period="/month"
+            description="Everything in Free, plus advanced features for power users"
             features={[
-              "400 enhanced prompts/month",
-              "All 25+ AI techniques",
-              "Advanced compression",
-              "Email support <24h"
+              "Everything in Free, plus...",
+              "Unlimited prompt enhancements",
+              "Advanced AI techniques (25+)",
+              "Private prompt collections",
+              "Analytics & insights dashboard",
+              "Team collaboration tools",
+              "API access integration",
+              "Priority support"
             ]}
-            cta="Get Pro"
-            background="bg-gradient-to-br from-green-600 to-green-700"
-            popular={false}
-            BGComponent={BGComponent2}
+            buttonText="Subscribe"
+            popular={true}
+            delay={0.1}
           />
         </div>
       </div>
@@ -50,129 +69,99 @@ export const Component = () => {
   );
 };
 
-const PricingCard = ({ label, monthlyPrice, description, features, cta, background, popular, BGComponent }) => {
+const PricingCard = ({ title, subtitle, price, period, description, features, buttonText, popular, delay }) => {
   const handleClick = () => {
-    if (cta === "Get Started" || cta === "Get Pro") {
-      window.location.href = "/auth";
-    } else if (cta === "Book Demo") {
-      window.location.href = "/demo";
-    }
+    window.location.href = "/auth";
   };
+
   return (
     <motion.div
-      whileHover="hover"
-      transition={{ duration: 0.6, ease: "backInOut" }}
-      variants={{ hover: { scale: 1.02, y: -8 } }}
-      className={`relative h-[520px] w-80 shrink-0 overflow-hidden rounded-2xl p-6 ${background} shadow-xl hover:shadow-2xl transition-shadow border border-slate-600/50`}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: 0.7, delay }}
+      className="flex-shrink-0 w-[300px] relative"
     >
-      <div className="relative z-10 text-white h-full flex flex-col">
-        <div className="flex-1">
-          <span className="mb-6 block w-fit rounded-full bg-white/10 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-white border border-white/20">
-            {label}
-          </span>
-          
-          <div className="mb-6">
-            <motion.div
-              initial={{ scale: 0.9 }}
-              variants={{ hover: { scale: 1 } }}
-              transition={{ duration: 0.6, ease: "backInOut" }}
-              className="origin-top-left"
-            >
-              {monthlyPrice === "Free" ? (
-                <span className="font-['Montserrat'] text-6xl font-black leading-[1.1] text-white">
-                  Free
-                </span>
-              ) : (
-                <span className="font-['Montserrat'] text-6xl font-black leading-[1.1] text-white">
-                  ${monthlyPrice}<span className="text-3xl font-normal">/mo</span>
-                </span>
-              )}
-            </motion.div>
+      {popular && (
+        <div className="absolute -top-3 right-6 z-20">
+          <div className="bg-gradient-to-r from-brand-green to-emerald-400 text-white text-sm font-bold px-4 py-1.5 rounded-full shadow-lg">
+            Popular
           </div>
-          
-          <p className="text-white/90 mb-8 leading-relaxed text-base">{description}</p>
-          
-          <ul className="space-y-4 text-sm h-40 flex flex-col justify-start">
-            {features.map((feature, index) => (
-              <li key={index} className="flex items-start gap-3 text-white/90">
-                <svg className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span>{feature}</span>
-              </li>
-            ))}
-          </ul>
         </div>
-        
-        <div className="mt-6">
+      )}
+
+      <div 
+        className={`relative h-full rounded-2xl p-4 backdrop-blur-md transition-all duration-300 hover:transform hover:scale-[1.02] ${
+          popular 
+            ? 'bg-slate-800/90 border-2 border-brand-green/50 shadow-2xl shadow-brand-green/20' 
+            : 'bg-slate-900/80 border border-slate-700/50 shadow-xl'
+        }`}
+      >
+        {/* Background Glow Effects for Popular Card */}
+        {popular && (
+          <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+            <div className="absolute top-1/4 right-1/4 w-32 h-32 bg-gradient-to-r from-brand-green/8 to-emerald-400/8 rounded-full blur-2xl animate-pulse" />
+            <div className="absolute bottom-1/4 left-1/4 w-24 h-24 bg-gradient-to-r from-emerald-400/6 to-brand-green/6 rounded-full blur-xl animate-pulse delay-1000" />
+          </div>
+        )}
+
+        <div className="relative z-10 h-full flex flex-col">
+          {/* Header */}
+          <div className="mb-4">
+            <h3 className="text-xl font-bold text-white mb-1">{title}</h3>
+            <p className="text-slate-400 text-xs font-medium">{subtitle}</p>
+          </div>
+
+          {/* Price - Fixed height and alignment for perfect row alignment */}
+          <div className="mb-6">
+            <div className="flex items-baseline justify-start h-16 min-h-[64px] w-full">
+              <span className="text-3xl font-bold text-white leading-none tracking-tight">${price}</span>
+              <span className="text-slate-400 ml-2 text-base leading-none whitespace-nowrap">{period}</span>
+            </div>
+          </div>
+
+          {/* Features */}
+          <div className="flex-1 mb-8">
+            <ul className="space-y-4">
+              {features.map((feature, index) => (
+                <motion.li 
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.4, delay: delay + (index * 0.05) }}
+                  className="flex items-start gap-3"
+                >
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-brand-green/20 flex items-center justify-center mt-0.5">
+                    <Check className="w-3 h-3 text-brand-green" />
+                  </div>
+                  <span className="text-slate-300 text-sm leading-relaxed">{feature}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          {/* CTA Button */}
           <motion.button 
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ 
+              scale: 1.02, 
+              y: -2,
+              boxShadow: popular 
+                ? "0 20px 40px rgba(34, 197, 94, 0.3)" 
+                : "0 10px 30px rgba(255, 255, 255, 0.1)"
+            }}
             whileTap={{ scale: 0.98 }}
             onClick={handleClick}
-            className="w-full rounded-xl border-2 border-white bg-white py-4 text-center font-semibold text-slate-900 backdrop-blur-sm transition-all duration-200 hover:bg-white/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent"
+            className={`relative z-20 w-full rounded-full py-4 text-center font-bold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent min-h-[56px] text-base ${
+              popular 
+                ? 'bg-gradient-to-r from-brand-green to-emerald-400 hover:from-emerald-400 hover:to-brand-green text-white shadow-xl focus:ring-brand-green/50'
+                : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 shadow-lg focus:ring-slate-500/50 rounded-full'
+            }`}
           >
-            {cta}
+            {buttonText}
           </motion.button>
         </div>
       </div>
-      
-      <BGComponent />
     </motion.div>
   );
-};
-
-const BGComponent1 = () => (
-  <motion.svg
-    width="320"
-    height="520"
-    viewBox="0 0 320 520"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    variants={{ hover: { scale: 1.1, rotate: 5 } }}
-    transition={{ duration: 0.6, ease: "backInOut" }}
-    className="absolute inset-0 z-0"
-  >
-    <motion.circle
-      variants={{ hover: { scale: 1.2, x: 20 } }}
-      transition={{ duration: 0.8, ease: "backInOut", delay: 0.1 }}
-      cx="160"
-      cy="140"
-      r="80"
-      fill="rgba(148, 163, 184, 0.1)"
-    />
-    <motion.circle
-      variants={{ hover: { scale: 0.8, x: -20 } }}
-      transition={{ duration: 0.8, ease: "backInOut", delay: 0.2 }}
-      cx="160"
-      cy="340"
-      r="60"
-      fill="rgba(148, 163, 184, 0.05)"
-    />
-  </motion.svg>
-);
-
-const BGComponent2 = () => (
-  <motion.svg
-    width="320"
-    height="520"
-    viewBox="0 0 320 520"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    variants={{ hover: { scale: 1.05 } }}
-    transition={{ duration: 0.6, ease: "backInOut" }}
-    className="absolute inset-0 z-0"
-  >
-    <motion.path
-      variants={{ hover: { rotate: 15, scale: 1.1 } }}
-      transition={{ duration: 0.8, ease: "backInOut", delay: 0.1 }}
-      d="M80 120L240 120L200 220L120 220Z"
-      fill="rgba(255, 255, 255, 0.1)"
-    />
-    <motion.path
-      variants={{ hover: { rotate: -10, scale: 0.9 } }}
-      transition={{ duration: 0.8, ease: "backInOut", delay: 0.2 }}
-      d="M60 300L280 300L260 400L80 400Z"
-      fill="rgba(255, 255, 255, 0.05)"
-    />
-  </motion.svg>
-); 
+}; 

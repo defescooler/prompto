@@ -32,30 +32,24 @@ def register():
         data = request.get_json()
         
         # Validate required fields
-        required_fields = ['name', 'username', 'email', 'password']
+        required_fields = ['name', 'email', 'password']
         for field in required_fields:
             if not data.get(field):
                 return jsonify({'error': f'{field} is required'}), 400
         
         # Check if user already exists
-        if User.query.filter_by(username=data['username']).first():
-            return jsonify({'error': 'Username already exists'}), 400
-        
         if User.query.filter_by(email=data['email']).first():
             return jsonify({'error': 'Email already exists'}), 400
         
         # Validate password strength
         password = data['password']
-        if len(password) < 8:
-            return jsonify({'error': 'Password must be at least 8 characters long'}), 400
+        if len(password) < 6:
+            return jsonify({'error': 'Password must be at least 6 characters long'}), 400
         
-        if not any(c.isalpha() for c in password) or not any(c.isdigit() for c in password):
-            return jsonify({'error': 'Password must contain both letters and numbers'}), 400
-        
-        # Create new user
+        # Create new user - use email as username if username field doesn't exist
         user = User(
             name=data['name'],
-            username=data['username'],
+            username=data['email'],  # Use email as username for compatibility
             email=data['email']
         )
         user.set_password(password)
@@ -65,7 +59,7 @@ def register():
         
         # Create analytics record for new user
         analytics = Analytics(user_id=user.id)
-        db.session.add(analytics)
+        db.session.add(analytics)  
         db.session.commit()
         
         # Generate JWT token
@@ -86,19 +80,17 @@ def login():
     try:
         data = request.get_json()
         
-        username_or_email = data.get('username_or_email')
+        email = data.get('email')
         password = data.get('password')
         
-        if not username_or_email or not password:
-            return jsonify({'error': 'Username/email and password are required'}), 400
+        if not email or not password:
+            return jsonify({'error': 'Email and password are required'}), 400
         
-        # Find user by username or email
-        user = User.query.filter(
-            (User.username == username_or_email) | (User.email == username_or_email)
-        ).first()
+        # Find user by email
+        user = User.query.filter_by(email=email).first()
         
         if not user or not user.check_password(password):
-            return jsonify({'error': 'Invalid credentials'}), 401
+            return jsonify({'error': 'Invalid email or password'}), 401
         
         # Generate JWT token
         token = generate_jwt_token(user.id)
