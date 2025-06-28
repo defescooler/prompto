@@ -15,7 +15,7 @@ let activeTechniques = {
   compression: false,
   triple_prime: true
 };
-
+a
 // Load user's technique preferences from storage
 chrome.storage.sync.get(['promptoTechniques'], (result) => {
   if (result.promptoTechniques && typeof result.promptoTechniques === 'object') {
@@ -101,6 +101,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ success: false, error: error.message });
       }
       return false;
+    }
+    
+    if (request.type === 'PROMPTO_ENHANCE') {
+      fetch('http://localhost:8000/api/prompts/enhance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ body: request.prompt })
+      })
+        .then(res => res.json())
+        .then(data => sendResponse({ success: true, data }))
+        .catch(() => sendResponse({ success: false }));
+      return true; // Keep the message channel open for async response
     }
     
     // Unknown action

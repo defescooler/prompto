@@ -34,6 +34,13 @@
       ],
       "js": ["content.js"],
       "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://claude.ai/*"
+      ],
+      "js": ["content-claude.js"],
+      "run_at": "document_end"
     }
   ],
   "background": {
@@ -60,7 +67,8 @@
       "resources": [
         "icon16.png",
         "icon48.png",
-        "icon128.png"
+        "icon128.png",
+        "popup.js"
       ],
       "matches": ["<all_urls>"]
     }
