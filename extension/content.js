@@ -39,17 +39,80 @@ console.log('🚀 Prompto: Content script loaded');
     child: 'prompto-child',
     toast: 'prompto-toast',
     banner: 'prompto-banner',
-    btn: 'prompto-btn'
+    btn: 'prompto-btn',
+    particle: 'prompto-particle',
+    overlay: 'prompto-overlay',
+    typewriter: 'prompto-typewriter'
   };
 
+  // Enhanced Lucide-style icons with proper styling
   const ICONS = {
-    plus: '<svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="12" fill="url(#prompto-grad)"/><svg x="4" y="4" width="16" height="16" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet"><path d="M275 0H325V150H275V0ZM275 450H325V600H275V450ZM0 325V275H150V325H0ZM450 325V275H600V325H450ZM70.2 105.5L105.55 70.2L211.6 176.25L176.25 211.6L70.2 105.55V105.5ZM388.4 423.75L423.75 388.4L529.8 494.45L494.45 529.8L388.4 423.75ZM105.85 529.5L70.5 494.15L176.25 388.4L211.6 423.75L105.85 529.5ZM423.75 211.6L388.4 176.25L494.45 70.2L529.8 105.55L423.75 211.6Z" fill="white"/></svg></svg>',
-    minus: '<svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="12" fill="url(#prompto-grad)"/><svg x="4" y="4" width="16" height="16" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet"><rect x="150" y="275" width="300" height="50" fill="white"/></svg></svg>',
-    sparkles: '<svg viewBox="0 0 24 24" width="20" height="20"><path d="M4.85,10.87 C4.91,10.73 5.09,10.73 5.15,10.87 L5.29,11.16 C5.89,12.4 6.85,13.45 8.05,14.15 L8.26,14.27 C8.36,14.32 8.36,14.48 8.26,14.53 L8.05,14.65 C6.85,15.35 5.89,16.4 5.29,17.64 L5.15,17.93 C5.09,18.07 4.91,18.07 4.85,17.93 L4.71,17.64 C4.11,16.4 3.15,15.35 1.95,14.65 L1.74,14.53 C1.64,14.48 1.64,14.32 1.74,14.27 L1.95,14.15 C3.15,13.45 4.11,12.4 4.71,11.16 L4.85,10.87 Z M12.11,2.29 C12.21,2.04 12.54,2.04 12.64,2.29 L12.77,2.58 L12.89,2.85 L13.05,3.21 L13.16,3.44 C13.97,5.05 15.16,6.46 16.64,7.54 L16.99,7.78 C17.24,7.95 17.49,8.11 17.75,8.26 C17.87,8.33 18,8.4 18.13,8.46 C18.31,8.56 18.31,8.81 18.13,8.91 C18,8.97 17.87,9.04 17.75,9.11 C17.56,9.22 17.37,9.34 17.19,9.47 L16.84,9.71 C15.36,10.79 14.17,12.2 13.36,13.81 L13.25,14.04 C13.14,14.27 13.04,14.5 12.95,14.74 L12.83,15.01 L12.7,15.28 C12.6,15.53 12.27,15.53 12.17,15.28 L12.04,15.01 L11.92,14.74 L11.76,14.38 L11.65,14.15 C10.84,12.54 9.65,11.13 8.17,10.05 L7.82,9.81 C7.57,9.64 7.32,9.48 7.06,9.33 C6.94,9.26 6.81,9.19 6.68,9.13 C6.5,9.03 6.5,8.78 6.68,8.68 C6.81,8.62 6.94,8.55 7.06,8.48 C7.25,8.37 7.44,8.25 7.62,8.12 L7.97,7.88 C9.45,6.8 10.64,5.39 11.45,3.78 L11.56,3.55 C11.67,3.32 11.77,3.09 11.86,2.85 L11.98,2.58 L12.11,2.29 Z M12.35,5.29 C11.52,6.54 10.46,7.65 9.22,8.55 C10.46,9.45 11.52,10.56 12.35,11.81 C13.18,10.56 14.24,9.45 15.48,8.55 C14.24,7.65 13.18,6.54 12.35,5.29 Z" fill="#fff"/></svg>',
-    zap: '<svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 2 4 12h5v6l6-10h-5V2z" fill="#fff"/></svg>',
-    spinner: '<svg viewBox="0 0 20 20" width="20" height="20"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="2" fill="none" stroke-dasharray="32" stroke-dashoffset="16"><animate attributeName="stroke-dashoffset" values="16;0;-16" dur="1s" repeatCount="indefinite"/></circle></svg>',
-    construction: '<svg viewBox="0 0 36 36" width="20" height="20"><path fill="#FFCC4D" d="M36 15a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v8z"></path><path d="M6 3H4a4 4 0 0 0-4 4v2l6-6zm6 0L0 15c0 1.36.682 2.558 1.72 3.28L17 3h-5zM7 19h5L28 3h-5zm16 0L35.892 6.108A3.995 3.995 0 0 0 33.64 3.36L18 19h5zm13-4v-3l-7 7h3a4 4 0 0 0 4-4z" fill="#292F33"></path><path fill="#99AAB5" d="M4 19h5v14H4zm23 0h5v14h-5z"></path></svg>',
-    settings: '<svg viewBox="0 0 20 20" width="20" height="20"><path d="M15.0007 10C15.0007 11.6569 13.6576 13 12.0007 13C10.3439 13 9.00073 11.6569 9.00073 10C9.00073 8.3431 10.3439 7 12.0007 7C13.6576 7 15.0007 8.3431 15.0007 10Z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M12.0012 3C7.52354 3 3.73326 5.94288 2.45898 10C3.73324 14.0571 7.52354 17 12.0012 17C16.4788 17 20.2691 14.0571 21.5434 10C20.2691 5.94291 16.4788 3 12.0012 3Z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'
+    plus: `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`,
+    
+    sparkles: `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path><path d="M5 3v4"></path><path d="M19 17v4"></path><path d="M3 5h4"></path><path d="M17 19h4"></path></svg>`,
+    
+    settings: `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>`,
+    
+    construction: `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20"></path><path d="M7 16v4"></path><path d="M17 16v4"></path><path d="M2 8l20 0"></path><path d="M7 8V4"></path><path d="M17 8V4"></path><path d="M7 4C7 2.5 8.5 1 12 1s5 1.5 5 3"></path></svg>`,
+    
+    check: `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"></polyline></svg>`,
+    
+    x: `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
+    
+    spinner: `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="prompto-spinner"><path d="M21 12a9 9 0 11-6.219-8.56"></path></svg>`,
+    
+    zap: `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"></polygon></svg>`
+  };
+
+  // Animation utilities
+  const animations = {
+    springIn: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    springOut: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    easeOut: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+    bounceIn: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+    bounceOut: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+  };
+
+  // Particle system
+  let particleId = 0;
+  const createParticles = (element, count = 8, type = 'enhance') => {
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < count; i++) {
+      const particle = document.createElement('div');
+      particle.className = `${CLASSES.particle} ${type}`;
+      particle.style.cssText = `
+        position: fixed !important;
+        left: ${centerX}px !important;
+        top: ${centerY}px !important;
+        width: 6px !important;
+        height: 6px !important;
+        border-radius: 50% !important;
+        background: ${type === 'party' ? '#fbbf24' : '#10b981'} !important;
+        pointer-events: none !important;
+        z-index: 999999999 !important;
+        transform: scale(0) !important;
+        opacity: 1 !important;
+      `;
+      
+      document.body.appendChild(particle);
+      
+      // Animate particle
+      const angle = (i / count) * 360;
+      const distance = type === 'party' ? 120 : 80;
+      const x = Math.cos(angle * Math.PI / 180) * distance;
+      const y = Math.sin(angle * Math.PI / 180) * distance;
+      
+      requestAnimationFrame(() => {
+        particle.style.transition = `all ${type === 'party' ? '1.2s' : '0.8s'} ${animations.easeOut}`;
+        particle.style.transform = `translate(${x}px, ${y}px) scale(${type === 'party' ? '1.5' : '1'})`;
+        particle.style.opacity = '0';
+      });
+      
+      setTimeout(() => particle.remove(), type === 'party' ? 1200 : 800);
+    }
   };
 
   const $ = (selector, root = document) => safeQuerySelector(selector, root);
@@ -84,14 +147,24 @@ console.log('🚀 Prompto: Content script loaded');
     const style = document.createElement('style');
     style.id = 'prompto-styles';
     style.textContent = `
-      .${CLASSES.btn} { all: unset; box-sizing: border-box; }
+      .${CLASSES.btn} { 
+        all: unset; 
+        box-sizing: border-box; 
+        cursor: pointer;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
       
       .${CLASSES.wrapper} { 
         position: relative; 
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        margin: 0 4px; 
+        margin: 0 6px; 
+        padding: 0;
+        background: none;
+        border: none;
+        vertical-align: middle;
+        flex-shrink: 0;
         z-index: 999999999 !important;
         isolation: isolate;
         transform: translateZ(0);
@@ -99,246 +172,463 @@ console.log('🚀 Prompto: Content script loaded');
 
       .${CLASSES.fab} {
         position: relative;
-        width: 36px; height: 36px; border-radius: 18px; cursor: pointer;
-        background: linear-gradient(135deg, #0DA30D 0%, #51D071 100%);
-        color: #fff; display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 2px 12px rgba(13,163,13,0.14);
-        transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        width: 32px; 
+        height: 32px; 
+        border-radius: 8px; 
+        cursor: pointer;
+        background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+        color: #fff; 
+        display: inline-flex; 
+        align-items: center; 
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25), 0 1px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ${animations.springOut};
         z-index: 999999999 !important;
         isolation: isolate;
         transform: translateZ(0);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        font-size: 14px;
+        user-select: none;
+        outline: none;
+        vertical-align: middle;
+        flex-shrink: 0;
       }
+      
       .${CLASSES.fab}:hover { 
-        box-shadow: 0 4px 16px rgba(13,163,13,0.2); 
+        box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35), 0 2px 8px rgba(0, 0, 0, 0.15); 
         transform: translateZ(0) scale(1.05);
+        background: linear-gradient(135deg, #0d9488 0%, #10b981 100%);
       }
+      
+      .${CLASSES.fab}:active {
+        transform: translateZ(0) scale(0.95);
+        transition: all 0.15s ${animations.bounceOut};
+      }
+      
       .${CLASSES.child} {
         position: fixed; 
-        width: 40px; height: 40px; border-radius: 20px;
-        background: #333; color: #fff; display: flex;
-        align-items: center; justify-content: center; cursor: pointer;
-        transform: scale(0.3) translateZ(0);
-        transform-origin: center; opacity: 0;
-        transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease-out;
+        width: 44px; 
+        height: 44px; 
+        border-radius: 22px;
+        color: #fff; 
+        display: flex;
+        align-items: center; 
+        justify-content: center; 
+        cursor: pointer;
+        transform: scale(0) translateZ(0);
+        transform-origin: center; 
+        opacity: 0;
+        transition: all 0.4s ${animations.springIn};
         pointer-events: none;
         z-index: 999999999 !important;
         isolation: isolate;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        position: relative;
-      }
-      .${CLASSES.child}:hover { 
-        background: #444; 
-        transform: scale(1.1) translateZ(0) !important; 
-      }
-      .${CLASSES.child}.enhance {
-        background: linear-gradient(135deg, #0DA30D 0%, #51D071 100%);
-      }
-      .${CLASSES.child}.enhance:hover {
-        background: linear-gradient(135deg, #51D071 0%, #0DA30D 100%);
-        transform: scale(1.15) translateZ(0) !important;
-      }
-      .${CLASSES.child}.construction {
-        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
-        cursor: not-allowed;
-      }
-      .${CLASSES.child}.construction:hover {
-        background: linear-gradient(135deg, #FFB347 0%, #FF8C00 100%);
-        transform: scale(1.05) translateZ(0) !important;
-      }
-      .${CLASSES.child}.settings {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      }
-      .${CLASSES.child}.settings:hover {
-        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-        transform: scale(1.15) translateZ(0) !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        font-weight: 500;
       }
       
-      /* Tooltip labels for buttons */
+      .${CLASSES.child}.visible {
+        transform: scale(1) translateZ(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+      
+      .${CLASSES.child}:hover { 
+        transform: scale(1.15) translateZ(0) !important; 
+        transition: all 0.25s ${animations.bounceIn};
+      }
+      
+      .${CLASSES.child}:active {
+        transform: scale(0.95) translateZ(0) !important;
+        transition: all 0.15s ${animations.bounceOut};
+      }
+      
+      .${CLASSES.child}.enhance {
+        background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+      }
+      
+      .${CLASSES.child}.enhance:hover {
+        background: linear-gradient(135deg, #0d9488 0%, #059669 100%);
+        box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4);
+      }
+      
+      .${CLASSES.child}.construction {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        cursor: not-allowed;
+        opacity: 0.8;
+      }
+      
+      .${CLASSES.child}.construction:hover {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        transform: scale(1.05) translateZ(0) !important;
+        box-shadow: 0 8px 32px rgba(245, 158, 11, 0.4);
+      }
+      
+      .${CLASSES.child}.settings {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      }
+      
+      .${CLASSES.child}.settings:hover {
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4);
+      }
+      
+      /* Enhanced tooltip system */
       .${CLASSES.child}::after {
         content: attr(data-label);
         position: absolute;
-        right: 50px;
+        right: 54px;
         top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0,0,0,0.8);
+        transform: translateY(-50%) scale(0.8);
+        background: rgba(0, 0, 0, 0.9);
         color: white;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 12px;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 13px;
         font-weight: 500;
         white-space: nowrap;
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.2s ease;
+        transition: all 0.3s ${animations.springOut};
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       }
+      
       .${CLASSES.child}:hover::after {
         opacity: 1;
+        transform: translateY(-50%) scale(1);
       }
       
       .${CLASSES.banner} {
         position: fixed; 
-        top: 20px; 
+        top: 24px; 
         left: 50%; 
-        transform: translateX(-50%) translateY(-100px); 
-        background: linear-gradient(135deg, #0DA30D 0%, #51D071 100%);
+        transform: translateX(-50%) translateY(-120px); 
+        background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
         color: white; 
-        padding: 16px 24px; 
-        border-radius: 12px;
+        padding: 16px 28px; 
+        border-radius: 16px;
         font-size: 15px; 
         font-weight: 600; 
         z-index: 999999999 !important;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.1);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.5s ${animations.springOut};
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         isolation: isolate;
         display: flex;
         align-items: center;
         gap: 12px;
-      }
-      .${CLASSES.banner}.visible { transform: translateX(-50%) translateY(0); }
-      .${CLASSES.banner}.success { 
-        background: linear-gradient(135deg, #0DA30D 0%, #51D071 100%);
-        border-color: rgba(81, 208, 113, 0.3);
-      }
-      .${CLASSES.banner}.error { 
-        background: linear-gradient(135deg, #dc3545 0%, #ff4757 100%);
-        border-color: rgba(255, 71, 87, 0.3);
-      }
-      .${CLASSES.banner}.warn { 
-        background: linear-gradient(135deg, #ffc107 0%, #ffb700 100%);
-        color: #333;
-        border-color: rgba(255, 183, 0, 0.3);
-      }
-      .${CLASSES.banner}.info { 
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-        border-color: rgba(0, 123, 255, 0.3);
-      }
-      .${CLASSES.banner}.construction { 
-        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
-        border-color: rgba(255, 165, 0, 0.3);
-      }
-      .${CLASSES.banner}.review {
-        background: rgba(24,24,27,0.90);
-        border: 1px solid #3f3f46;
-        backdrop-filter: blur(8px);
+        max-width: 90vw;
       }
       
-      .${CLASSES.toast} {
-        position: fixed; top: 24px; right: 24px; padding: 12px 16px; border-radius: 8px;
-        font-size: 14px; font-weight: 500; color: white; 
-        z-index: 999999998 !important;
-        transform: translateX(120%) translateZ(0); opacity: 0;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        isolation: isolate;
-      }
-      .${CLASSES.toast}.visible { transform: translateX(0) translateZ(0); opacity: 1; }
-      .${CLASSES.toast}.success { background: #0DA30D; }
-      .${CLASSES.toast}.error { background: #dc3545; }
-      .${CLASSES.toast}.warn { background: #ffc107; color: #333; }
-      .${CLASSES.toast}.info { background: #007bff; }
-      
-      /* Ensure our elements are always on top of ChatGPT elements */
-      .${CLASSES.wrapper}, .${CLASSES.fab}, .${CLASSES.child} {
-        position: relative !important;
-        z-index: 999999999 !important;
-        isolation: isolate !important;
-        transform-style: preserve-3d !important;
+      .${CLASSES.banner}.visible {
+        transform: translateX(-50%) translateY(0);
       }
       
-      /* Override any conflicting ChatGPT styles */
-      [data-testid*="composer"] .${CLASSES.wrapper},
-      [class*="composer"] .${CLASSES.wrapper},
-      [class*="textarea"] .${CLASSES.wrapper} {
-        z-index: 999999999 !important;
-        isolation: isolate !important;
+      .${CLASSES.banner}.success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       }
-
-      /* Ensure textarea can scroll when maxed out */
-      textarea.prompto-preview {
-        resize: none !important;
-        overflow-y: hidden; /* toggled to auto when needed */
-        line-height: 1.4;
+      
+      .${CLASSES.banner}.error {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
       }
-
-      [contenteditable="true"].prompto-preview {
-        resize: none !important;
-        overflow-y: hidden;
-        line-height: 1.4;
+      
+      .${CLASSES.banner}.construction {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      }
+      
+      .${CLASSES.banner}.info {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      }
+      
+      /* Spinner animation */
+      .prompto-spinner {
+        animation: prompto-spin 1s linear infinite;
+      }
+      
+      @keyframes prompto-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      /* Particle effects */
+      .${CLASSES.particle} {
+        will-change: transform, opacity;
+        border-radius: 50% !important;
+      }
+      
+      /* Enhancement overlay */
+      .${CLASSES.overlay} {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(12px);
+        z-index: 999999998;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        padding: 24px;
+      }
+      
+      .${CLASSES.overlay}.visible {
+        opacity: 1;
+      }
+      
+      .${CLASSES.overlay} .content {
+        background: rgba(15, 23, 42, 0.95);
+        border-radius: 24px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(20px);
+        max-width: 90vw;
+        max-height: 85vh;
+        overflow: hidden;
+        transform: scale(0.9) translateY(40px);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      }
+      
+      .${CLASSES.overlay}.visible .content {
+        transform: scale(1) translateY(0);
+      }
+      
+      /* Typewriter effect */
+      .${CLASSES.typewriter}::after {
+        content: '|';
+        color: #10b981;
+        animation: prompto-blink 1s infinite;
+      }
+      
+      @keyframes prompto-blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+      }
+      
+      /* Smooth transitions for all elements */
+      .${CLASSES.fab} svg,
+      .${CLASSES.child} svg {
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        will-change: transform;
+      }
+      
+      /* Hover effects for icons */
+      .${CLASSES.fab}:hover svg {
+        transform: scale(1.1);
+      }
+      
+      .${CLASSES.child}:hover svg {
+        transform: scale(1.2);
+      }
+      
+      /* Success checkmark animation */
+      .${CLASSES.fab}.success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+      }
+      
+      .${CLASSES.fab}.success svg {
+        animation: prompto-checkmark 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      
+      @keyframes prompto-checkmark {
+        0% { transform: scale(0) rotate(-90deg); }
+        50% { transform: scale(1.3) rotate(0deg); }
+        100% { transform: scale(1) rotate(0deg); }
+      }
+      
+      /* FAB rotation animation */
+      .${CLASSES.fab}.open {
+        transform: translateZ(0) rotate(45deg) !important;
+      }
+      
+      .${CLASSES.fab}.open svg {
+        transform: rotate(0deg);
+      }
+      
+      /* Particle effects */
+      .${CLASSES.particle} {
+        will-change: transform, opacity;
+      }
+      
+      /* Enhancement overlay */
+      .${CLASSES.overlay} {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(12px);
+        z-index: 999999998;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.4s ${animations.springOut};
+        padding: 24px;
+      }
+      
+      .${CLASSES.overlay}.visible {
+        opacity: 1;
+      }
+      
+      .${CLASSES.overlay} .content {
+        background: rgba(15, 23, 42, 0.95);
+        border-radius: 24px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(20px);
+        max-width: 90vw;
+        max-height: 85vh;
+        overflow: hidden;
+        transform: scale(0.9) translateY(40px);
+        transition: all 0.4s ${animations.springOut};
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      }
+      
+      .${CLASSES.overlay}.visible .content {
+        transform: scale(1) translateY(0);
+      }
+      
+      /* Typewriter effect */
+      .${CLASSES.typewriter}::after {
+        content: '|';
+        color: #10b981;
+        animation: prompto-blink 1s infinite;
+      }
+      
+      @keyframes prompto-blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+      }
+      
+      /* Smooth transitions for all elements */
+      .${CLASSES.fab} svg,
+      .${CLASSES.child} svg {
+        transition: all 0.3s ${animations.springOut};
+        will-change: transform;
+      }
+      
+      /* Hover effects for icons */
+      .${CLASSES.fab}:hover svg {
+        transform: scale(1.1);
+      }
+      
+      .${CLASSES.child}:hover svg {
+        transform: scale(1.2);
       }
     `;
+    
     document.head.appendChild(style);
-
-    const svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svgDefs.style.position = 'absolute';
-    svgDefs.style.width = '0';
-    svgDefs.style.height = '0';
-    svgDefs.innerHTML = `<defs><linearGradient id="prompto-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0DA3D0"/><stop offset="100%" stop-color="#51D071"/></linearGradient></defs>`;
-    document.body.appendChild(svgDefs);
   }
 
   function findAnchor() {
     return safeExecute(() => {
-      // Priority 1: Microphone/voice input button (preferred)
-      const micButton = safeQuerySelector('button[aria-label*="voice"], button[aria-label*="микрофон"], button[data-testid*="voice"], button[data-testid*="microphone"]');
+      console.log('🚀 Prompto: Finding anchor for FAB positioning...');
+      
+      // Priority 1: Find the main chat input area (not follow-up or hover buttons)
+      const mainTextarea = safeQuerySelector('main textarea[placeholder*="Спросите"], main textarea[placeholder*="Ask"], main form textarea, main [contenteditable="true"]');
+      if (!mainTextarea?.isConnected) {
+        console.log('🚀 Prompto: Main textarea not found');
+        return null;
+      }
+
+      // Find the input container that holds the textarea and buttons
+      const inputForm = mainTextarea.closest('form') || mainTextarea.closest('div[class*="composer"]') || mainTextarea.closest('div');
+      if (!inputForm?.isConnected) {
+        console.log('🚀 Prompto: Input form container not found');
+        return null;
+      }
+
+      console.log('🚀 Prompto: Found main input container');
+
+      // Priority 2: Look for the button container structure 
+      // Find the container with trailing actions that holds all the buttons
+      const trailingActions = safeQuerySelector('[data-testid="composer-trailing-actions"]', inputForm);
+      if (trailingActions?.isConnected) {
+        // Find the flex container that holds the buttons (.ms-auto.flex.items-center.gap-1.5)
+        const buttonGroup = safeQuerySelector('.ms-auto.flex.items-center', trailingActions);
+        if (buttonGroup?.isConnected) {
+          // Look for the speech button container (it should be the last item)
+          const speechContainer = safeQuerySelector('[data-testid="composer-speech-button-container"]', buttonGroup);
+          if (speechContainer?.isConnected) {
+            console.log('🚀 Prompto: Found speech container, positioning before it in button group');
+            return { element: speechContainer, position: 'before' };
+          }
+          
+          // Fallback: Look for any child elements and position before the last one
+          const children = Array.from(buttonGroup.children).filter(child => 
+            child?.isConnected && getComputedStyle(child).display !== 'none'
+          );
+          if (children.length > 0) {
+            console.log('🚀 Prompto: Found button group children, positioning before last one');
+            return { element: children[children.length - 1], position: 'before' };
+          }
+          
+          console.log('🚀 Prompto: Found empty button group, appending to it');
+          return { element: buttonGroup, position: 'append' };
+        }
+      }
+
+      // Priority 3: Original speech button fallback
+      const speechButton = safeQuerySelector('button[data-testid="composer-speech-button"]', inputForm);
+      if (speechButton?.isConnected) {
+        const rect = speechButton.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0 && getComputedStyle(speechButton).display !== 'none') {
+          console.log('🚀 Prompto: Found speech button, positioning before it');
+          return { element: speechButton, position: 'before' };
+        }
+      }
+
+      // Priority 4: Look for the microphone/dictation button (классная кнопка диктовки)
+      const micButton = safeQuerySelector('button[aria-label*="диктовки"], button[aria-label*="Кнопка диктовки"], button.composer-btn', inputForm);
       if (micButton?.isConnected) {
         const rect = micButton.getBoundingClientRect();
-        if (rect.width > 0 && rect.height > 0) {
-          const style = getComputedStyle(micButton);
-          if (style.visibility !== 'hidden' && style.display !== 'none') {
-            return { element: micButton, position: 'after' };
+        if (rect.width > 0 && rect.height > 0 && getComputedStyle(micButton).display !== 'none') {
+          console.log('🚀 Prompto: Found dictation button, positioning after it');
+          return { element: micButton, position: 'after' };
+        }
+      }
+
+      // Priority 5: Look for any voice-related buttons
+      const voiceButtons = safeQuerySelectorAll('button[aria-label*="voice"], button[aria-label*="Voice"], button[aria-label*="голос"], button[aria-label*="микрофон"]', inputForm);
+      for (const btn of voiceButtons) {
+        if (btn?.isConnected) {
+          const rect = btn.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0 && getComputedStyle(btn).display !== 'none') {
+            console.log('🚀 Prompto: Found voice button, positioning after it');
+            return { element: btn, position: 'after' };
           }
         }
       }
 
-      // Priority 2: Send button when mic not found
-      const textarea = safeQuerySelector('textarea');
-      if (textarea?.isConnected) {
-        const composer = textarea.closest('form') || textarea.parentElement;
-        if (composer?.isConnected) {
-          const sendBtn = safeQuerySelector('button[type="submit"], button[data-testid="send-button"]', composer);
-          if (sendBtn?.isConnected) {
-            const rect = sendBtn.getBoundingClientRect();
-            if (rect.width > 0 && rect.height > 0) {
-              return { element: sendBtn, position: 'before' };
-            }
-          }
-          return { element: composer, position: 'before' };
-        }
-      }
-
-      // Priority 3: Send-button container fallback
-      const sendButtonContainer = safeQuerySelector('[data-testid="send-button"]')?.parentElement;
-      if (sendButtonContainer?.isConnected) {
-        const el = sendButtonContainer.children[0] || sendButtonContainer;
-        if (el?.isConnected) {
-          const rect = el.getBoundingClientRect();
-          if (rect.width > 0 && rect.height > 0) {
-            return { element: el, position: 'before' };
-          }
-        }
-      }
-
-      // Priority 4: Plain send-button fallback
-      const sendButton = safeQuerySelector('[data-testid="send-button"]');
+      // Priority 6: Look for send button as fallback
+      const sendButton = safeQuerySelector('button[data-testid="send-button"], button[type="submit"]', inputForm);
       if (sendButton?.isConnected) {
         const rect = sendButton.getBoundingClientRect();
-        if (rect.width > 0 && rect.height > 0) {
+        if (rect.width > 0 && rect.height > 0 && getComputedStyle(sendButton).display !== 'none') {
+          console.log('🚀 Prompto: Found send button, positioning before it');
           return { element: sendButton, position: 'before' };
         }
       }
 
-      // Priority 5: Any composer-area button (last one -> rightmost)
-      const composerButtons = safeQuerySelectorAll('[data-testid*="composer"] button, [class*="composer"] button')
-        .filter(btn => btn?.isConnected);
-      if (composerButtons.length) {
-        return { element: composerButtons[composerButtons.length - 1], position: 'after' };
+      // Priority 7: Look for all buttons in the input form and position before the last one
+      const allButtons = safeQuerySelectorAll('button', inputForm)
+        .filter(btn => {
+          if (!btn?.isConnected) return false;
+          const rect = btn.getBoundingClientRect();
+          const style = getComputedStyle(btn);
+          return rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
+        });
+
+      if (allButtons.length > 0) {
+        console.log('🚀 Prompto: Using last button in form as anchor, found', allButtons.length, 'buttons');
+        return { element: allButtons[allButtons.length - 1], position: 'before' };
       }
 
+      console.log('🚀 Prompto: No suitable anchor found in main input area');
       return null;
     }, 'findAnchor');
   }
@@ -738,6 +1028,13 @@ console.log('🚀 Prompto: Content script loaded');
 
       // Start enhancement process
       console.log('🚀 Prompto: Starting enhancement, showing banner...');
+      
+      // Create particle burst effect from FAB
+      const fab = safeQuerySelector(`.${CLASSES.fab}`);
+      if (fab) {
+        createParticles(fab, 12, 'enhance');
+      }
+      
       const startTime = Date.now();
       let progress = 0;
       const bannerId = showBanner('⚡ AI enhancement in progress...', 'info', ICONS.spinner, progress);
@@ -825,6 +1122,20 @@ console.log('🚀 Prompto: Content script loaded');
             return showBanner('❌ Invalid response format', 'error', '⚠️');
           }
           
+          // Show success animation on FAB
+          const fab = safeQuerySelector(`.${CLASSES.fab}`);
+          if (fab) {
+            fab.classList.add('success');
+            fab.innerHTML = ICONS.check;
+            createParticles(fab, 20, 'party');
+            
+            // Reset FAB after animation
+            setTimeout(() => {
+              fab.classList.remove('success');
+              fab.innerHTML = ICONS.plus;
+            }, 1500);
+          }
+          
           // Success feedback with performance metrics
           const speedEmoji = duration < 1000 ? '⚡' : duration < 3000 ? '🚀' : '🐌';
           const providerEmoji = response.provider === 'cache' ? '⚡' : response.provider === 'openai' ? '🤖' : response.provider === 'gemini' ? '🧠' : '🔧';
@@ -893,25 +1204,23 @@ console.log('🚀 Prompto: Content script loaded');
         }, 'childClick');
       };
       
+      // Apply initial styles without conflicting specificity
       child.style.cssText = `
         position: fixed !important; 
         z-index: 999999999 !important; 
         isolation: isolate !important;
         transform-style: preserve-3d !important;
-        transform: scale(0.3) translateZ(0) !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
       `;
       
       if (document.body?.isConnected) {
         document.body.appendChild(child);
         positionChild(child, fab, index);
         
+        // Immediate visibility with staggered animation
         requestAnimationFrame(() => {
           if (child?.isConnected) {
-            child.style.transform = `scale(1) translateZ(0)`;
-            child.style.opacity = '1';
-            child.style.pointerEvents = 'auto';
+            child.classList.add('visible');
+            console.log(`🚀 Prompto: Child ${index} made visible`);
           }
         });
         
@@ -976,9 +1285,15 @@ console.log('🚀 Prompto: Content script loaded');
       const wrapper = document.createElement('div');
       wrapper.className = CLASSES.wrapper;
       wrapper.style.cssText = `
-        display: flex !important;
+        display: inline-flex !important;
         align-items: center !important;
-        margin: 0 4px !important;
+        justify-content: center !important;
+        margin: 0 6px !important;
+        padding: 0 !important;
+        background: none !important;
+        border: none !important;
+        vertical-align: middle !important;
+        flex-shrink: 0 !important;
       `;
 
       const fab = document.createElement('button');
@@ -1003,6 +1318,16 @@ console.log('🚀 Prompto: Content script loaded');
         isolation: isolate !important;
         transform: translateZ(0) !important;
         transform-style: preserve-3d !important;
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        border-radius: 8px !important;
+        border: none !important;
+        outline: none !important;
+        cursor: pointer !important;
+        user-select: none !important;
+        flex-shrink: 0 !important;
       `;
 
       wrapper.appendChild(fab);
@@ -1010,11 +1335,13 @@ console.log('🚀 Prompto: Content script loaded');
       try {
         if (position === 'after') {
           parent.insertBefore(wrapper, anchor.nextSibling);
+        } else if (position === 'append') {
+          anchor.appendChild(wrapper);
         } else {
           parent.insertBefore(wrapper, anchor);
         }
         
-        console.log('🚀 Prompto: FAB mounted successfully');
+        console.log('🚀 Prompto: FAB mounted successfully with position:', position);
         currentAnchor = anchor;
       } catch (e) {
         console.error('🚀 Prompto: Error mounting FAB:', e);
@@ -1079,8 +1406,14 @@ console.log('🚀 Prompto: Content script loaded');
   function openSpeedDial(fab) {
     console.log('🚀 Prompto: Opening speed dial', fab.getBoundingClientRect());
 
+    // Clear any existing child buttons first
+    const existingChildren = document.querySelectorAll(`.${CLASSES.child}`);
+    existingChildren.forEach(child => child.remove());
+
+    console.log('🚀 Prompto: Creating child buttons...');
+
     // Enhance Prompt Button – green with sparkles
-    createChild(
+    const enhanceChild = createChild(
       fab,
       1,
       ICONS.sparkles,
@@ -1089,9 +1422,10 @@ console.log('🚀 Prompto: Content script loaded');
       'enhance',
       'Enhance Prompt'
     );
+    console.log('🚀 Prompto: Created enhance button:', enhanceChild);
 
     // Token Optimizer Button – orange construction placeholder
-    createChild(
+    const tokenChild = createChild(
       fab,
       2,
       ICONS.construction,
@@ -1100,9 +1434,10 @@ console.log('🚀 Prompto: Content script loaded');
       'construction',
       'Token Optimizer'
     );
+    console.log('🚀 Prompto: Created token optimizer button:', tokenChild);
 
     // Advanced Settings Button – blue settings icon
-    createChild(
+    const settingsChild = createChild(
       fab,
       3,
       ICONS.settings,
@@ -1116,9 +1451,20 @@ console.log('🚀 Prompto: Content script loaded');
       'settings',
       'Advanced Settings'
     );
+    console.log('🚀 Prompto: Created settings button:', settingsChild);
     
-    // Ensure children are positioned correctly after creation
-    setTimeout(() => updateChildPositions(), 50);
+    // Force immediate positioning and visibility
+    setTimeout(() => {
+      updateChildPositions();
+      console.log('🚀 Prompto: Updated child positions');
+      
+      // Double-check visibility
+      const children = document.querySelectorAll(`.${CLASSES.child}`);
+      console.log(`🚀 Prompto: Found ${children.length} child buttons after creation`);
+      children.forEach((child, index) => {
+        console.log(`🚀 Prompto: Child ${index + 1} - Classes:`, child.className, 'Visible:', getComputedStyle(child).opacity);
+      });
+    }, 100);
     
     document.addEventListener('click', function closeOnClickAway(e) {
       // Check if click is on fab or any child button
@@ -1126,28 +1472,45 @@ console.log('🚀 Prompto: Content script loaded');
       const isClickOnChild = e.target.closest(`.${CLASSES.child}`);
       
       if (!isClickOnFab && !isClickOnChild) {
+        console.log('🚀 Prompto: Clicking away from speed dial');
         toggleSpeedDial(fab);
       }
     }, { capture: true, once: true });
   }
 
   function closeSpeedDial(fab) {
-    // Find all child buttons (now attached to body)
-    document.querySelectorAll(`.${CLASSES.child}`).forEach(child => {
-      child.style.transform = 'scale(0.3) translateZ(0)';
-      child.style.opacity = '0';
-      child.style.pointerEvents = 'none';
-      setTimeout(() => child.remove(), 300);
+    // Find all child buttons and animate them out with stagger
+    const children = document.querySelectorAll(`.${CLASSES.child}`);
+    children.forEach((child, index) => {
+      setTimeout(() => {
+        child.classList.remove('visible');
+        setTimeout(() => {
+          if (child?.isConnected) child.remove();
+        }, 400);
+      }, index * 50); // Stagger exit animation
     });
   }
 
   function toggleSpeedDial(fab) {
     const isOpen = fab.dataset.open === '1';
     fab.dataset.open = isOpen ? '0' : '1';
-    fab.innerHTML = isOpen ? ICONS.plus : ICONS.minus;
-    fab.style.transform = isOpen ? 'translateZ(0) rotate(0deg)' : 'translateZ(0) rotate(45deg)';
-    if (isOpen) closeSpeedDial(fab);
-    else openSpeedDial(fab);
+    
+    console.log(`🚀 Prompto: Toggling speed dial - ${isOpen ? 'closing' : 'opening'}`);
+    
+    // Enhanced animation with rotation
+    if (isOpen) {
+      fab.classList.remove('open');
+      fab.innerHTML = ICONS.plus;
+      fab.style.transform = 'rotate(0deg) translateZ(0)';
+      fab.style.background = 'linear-gradient(135deg, #10b981 0%, #0d9488 100%)';
+      closeSpeedDial(fab);
+    } else {
+      fab.classList.add('open');
+      fab.innerHTML = ICONS.x;
+      fab.style.transform = 'rotate(45deg) translateZ(0)';
+      fab.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+      openSpeedDial(fab);
+    }
   }
 
   let currentAnchor = null; // stores anchor element for repositioning

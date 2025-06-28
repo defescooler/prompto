@@ -203,6 +203,18 @@ class PromptRead(PromptBase):
 # Always insert custom toolbar buttons as siblings to native ChatGPT buttons, never absolutely positioned overlays.
 # Prevent duplicate DOM insertions by checking for existing .prompto-opt-btn before adding.
 
+[Chrome Extension - Button Positioning - CRITICAL]
+# DO NOT MODIFY the findAnchor() function in extension/content.js without extreme care.
+# The current positioning logic correctly places the Prompto FAB button between the dictation and speech buttons in ChatGPT.
+# Key positioning rules that MUST be preserved:
+#   - Target [data-testid="composer-trailing-actions"] container
+#   - Look for .ms-auto.flex.items-center button group
+#   - Position before [data-testid="composer-speech-button-container"] 
+#   - Use 'before' position to create sibling buttons, never nest inside other button containers
+#   - Maintain 32px x 32px button size with 8px border-radius for ChatGPT integration
+#   - Preserve margin: 0 6px for proper spacing between buttons
+# The current implementation creates a perfect inline button row. Any changes risk breaking layout.
+
 [Frontend]
 # Use shadcn/ui for UI components.
 # Use Tailwind CSS for styling.

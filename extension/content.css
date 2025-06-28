@@ -1,32 +1,52 @@
-/* Prompto Extension - SIMPLE WORKING STYLES */
-/* Based on Alejandro AO tutorial - clean and minimal */
+/* Prompto Extension - Enhanced VideoDemo-style Animations */
+/* Sophisticated animations and modern styling matching VideoDemo.jsx */
 
+/* Enhanced button with modern gradients and animations */
 .prompto-enhance-btn {
-  width: 32px !important;
-  height: 32px !important;
+  width: 40px !important;
+  height: 40px !important;
   border: none !important;
-  border-radius: 6px !important;
-  background: #f0f0f0 !important;
+  border-radius: 20px !important;
+  background: linear-gradient(135deg, #10b981 0%, #0d9488 100%) !important;
   cursor: pointer !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   margin: 0 4px !important;
   padding: 0 !important;
-  transition: all 0.2s ease !important;
-  font-family: inherit !important;
-  border: 1px solid #d0d0d0 !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   box-sizing: border-box !important;
+  color: white !important;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.prompto-enhance-btn::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(135deg, #0d9488 0%, #10b981 100%) !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s ease !important;
+  border-radius: inherit !important;
+}
+
+.prompto-enhance-btn:hover::before {
+  opacity: 1 !important;
 }
 
 .prompto-enhance-btn:hover {
-  background: #e8e8e8 !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  transform: scale(1.1) translateY(-2px) !important;
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4) !important;
 }
 
 .prompto-enhance-btn:active {
-  transform: translateY(0) !important;
+  transform: scale(0.95) !important;
+  transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
 .prompto-enhance-btn:disabled {
@@ -39,25 +59,34 @@
   width: 20px !important;
   height: 20px !important;
   flex-shrink: 0 !important;
+  position: relative !important;
+  z-index: 1 !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
 }
 
-/* Notifications */
+.prompto-enhance-btn:hover svg {
+  transform: scale(1.1) !important;
+}
+
+/* Enhanced notifications with modern styling */
 .prompto-notification {
   position: fixed !important;
-  top: 20px !important;
-  right: 20px !important;
-  padding: 12px 16px !important;
-  border-radius: 8px !important;
+  top: 24px !important;
+  right: 24px !important;
+  padding: 16px 24px !important;
+  border-radius: 16px !important;
   font-size: 14px !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   color: white !important;
   z-index: 10000 !important;
-  transform: translateX(100%) !important;
-  transition: transform 0.3s ease !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  transform: translateX(120%) !important;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  max-width: 300px !important;
+  max-width: 350px !important;
   word-wrap: break-word !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .prompto-notification.visible {
@@ -65,23 +94,116 @@
 }
 
 .prompto-notification.success {
-  background: #0DA30D !important;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3) !important;
 }
 
 .prompto-notification.error {
-  background: #dc3545 !important;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3) !important;
 }
 
 .prompto-notification.warning {
-  background: #ffc107 !important;
-  color: #333 !important;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: white !important;
+  box-shadow: 0 10px 40px rgba(245, 158, 11, 0.3) !important;
 }
 
 .prompto-notification.info {
-  background: #007bff !important;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+  box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3) !important;
 }
 
-/* Loading animation */
+/* Child button styles for speed dial */
+.prompto-child {
+  all: unset !important;
+  box-sizing: border-box !important;
+  width: 40px !important;
+  height: 40px !important;
+  border: none !important;
+  border-radius: 20px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  color: white !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  z-index: 999999999 !important;
+  isolation: isolate !important;
+  transform-style: preserve-3d !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: scale(1) translateZ(0) !important;
+}
+
+.prompto-child.visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: scale(1) translateZ(0) !important;
+}
+
+.prompto-child.enhance {
+  background: linear-gradient(135deg, #10b981 0%, #0d9488 100%) !important;
+}
+
+.prompto-child.construction {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+}
+
+.prompto-child.settings {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+}
+
+.prompto-child:hover {
+  transform: scale(1.1) translateZ(0) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+.prompto-child:active {
+  transform: scale(0.95) translateZ(0) !important;
+  transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.prompto-child svg {
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.prompto-child:hover svg {
+  transform: scale(1.1) !important;
+}
+
+/* FAB open state animation */
+.prompto-fab.open {
+  transform: rotate(45deg) translateZ(0) !important;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+}
+
+/* Enhanced particle effects */
+.prompto-particle {
+  pointer-events: none !important;
+  position: fixed !important;
+  border-radius: 50% !important;
+  z-index: 999999999 !important;
+}
+
+.prompto-particle.enhance {
+  background: #10b981 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6) !important;
+}
+
+.prompto-particle.party {
+  background: #fbbf24 !important;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.8) !important;
+}
+
+/* Enhanced loading animation with modern styling */
 @keyframes prompto-spin {
   0% {
     transform: rotate(0deg);
@@ -91,8 +213,50 @@
   }
 }
 
+@keyframes prompto-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes prompto-glow {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    box-shadow: 0 8px 40px rgba(16, 185, 129, 0.6);
+  }
+}
+
 .prompto-enhance-btn svg circle {
   animation: prompto-spin 1s linear infinite;
+}
+
+.prompto-enhance-btn.loading {
+  animation: prompto-pulse 2s ease-in-out infinite, prompto-glow 3s ease-in-out infinite;
+}
+
+/* Success state animation */
+.prompto-enhance-btn.success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  animation: prompto-success 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes prompto-success {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Ensure no conflicts with page styles */
@@ -101,42 +265,77 @@
   all: unset !important;
 }
 
-/* Re-apply button styles */
+/* Re-apply enhanced button styles */
 .prompto-enhance-btn {
-  width: 32px !important;
-  height: 32px !important;
-  border: 1px solid #d0d0d0 !important;
-  border-radius: 6px !important;
-  background: #f0f0f0 !important;
+  width: 40px !important;
+  height: 40px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(135deg, #10b981 0%, #0d9488 100%) !important;
   cursor: pointer !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   margin: 0 4px !important;
   padding: 0 !important;
-  transition: all 0.2s ease !important;
-  font-family: inherit !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   box-sizing: border-box !important;
   position: relative !important;
+  color: white !important;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  z-index: 999999999 !important;
+  isolation: isolate !important;
+  transform: translateZ(0) !important;
 }
 
-/* Re-apply notification styles */
+/* Re-apply enhanced notification styles */
 .prompto-notification {
   position: fixed !important;
-  top: 20px !important;
-  right: 20px !important;
-  padding: 12px 16px !important;
-  border-radius: 8px !important;
+  top: 24px !important;
+  right: 24px !important;
+  padding: 16px 24px !important;
+  border-radius: 16px !important;
   font-size: 14px !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   color: white !important;
   z-index: 10000 !important;
-  transform: translateX(100%) !important;
-  transition: transform 0.3s ease !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  transform: translateX(120%) !important;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  max-width: 300px !important;
+  max-width: 350px !important;
   word-wrap: break-word !important;
   display: block !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Modern glassmorphism effects */
+.prompto-enhance-btn,
+.prompto-notification {
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+/* Enhanced hover states */
+.prompto-enhance-btn:hover {
+  transform: scale(1.1) translateY(-2px) translateZ(0) !important;
+  box-shadow: 0 12px 48px rgba(16, 185, 129, 0.4) !important;
+}
+
+/* Smooth icon transitions */
+.prompto-enhance-btn svg {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  will-change: transform !important;
+}
+
+/* Performance optimizations */
+.prompto-enhance-btn,
+.prompto-notification,
+.prompto-particle {
+  will-change: transform, opacity !important;
+  transform-style: preserve-3d !important;
 }
 

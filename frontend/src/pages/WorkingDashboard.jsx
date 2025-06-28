@@ -24,7 +24,9 @@ import {
   Shield,
   Gauge,
   X,
-  Save
+  Save,
+  FileText,
+  Target
 } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import Footer from '@/components/ui/footer'
@@ -364,7 +366,7 @@ class DashboardErrorBoundary extends React.Component {
 
 // Modern Stat Card Component
 const StatCard = memo(({ icon: Icon, title, value, subtitle, gradient, onClick, isPremium = false }) => {
-  const safeIcon = (typeof Icon === 'function') ? Icon : Sparkles
+  const IconComponent = Icon || Sparkles
   const safeTitle = (typeof title === 'string' && title.length > 0) ? title : 'Unknown'
   const safeValue = (value !== null && value !== undefined) ? value : 0
   const safeSubtitle = (typeof subtitle === 'string') ? subtitle : ''
@@ -374,26 +376,22 @@ const StatCard = memo(({ icon: Icon, title, value, subtitle, gradient, onClick, 
       whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.98 }}
       transition={ANIMATION_CONFIG}
-      className={`relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 cursor-pointer group overflow-hidden ${isPremium ? 'border-amber-500/30' : ''}`}
+      className={`relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl min-h-[120px] flex flex-col items-center justify-center gap-2 cursor-pointer group overflow-hidden ${isPremium ? 'border-amber-500/30' : ''}`}
       onClick={onClick}
     >
       {isPremium && (
         <div className="absolute top-3 right-3">
-          <Crown className="w-4 h-4 text-amber-400" />
+          <Crown className="w-3 h-3 text-amber-400" />
         </div>
       )}
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      <div className="relative z-10">
-        <div className="flex items-center justify-between mb-4">
-          <div className={`p-3 rounded-xl ${gradient} bg-opacity-20`}>
-            <safeIcon className="w-6 h-6 text-white" />
-          </div>
+      <div className="relative z-10 text-center px-4">
+        <div className="inline-flex mb-3">
+          <IconComponent className="h-9 w-9 text-emerald-400/60" strokeWidth={1.5} />
         </div>
-        <div className="space-y-1">
-          <p className="text-white/60 text-sm font-medium">{safeTitle}</p>
-          <p className="text-white text-2xl font-bold">{safeValue}</p>
-          {safeSubtitle && <p className="text-white/40 text-xs">{safeSubtitle}</p>}
-        </div>
+        <p className="text-2xl lg:text-3xl font-semibold text-white mb-2">{safeValue}</p>
+        <p className="text-xs text-white/60 font-medium mb-1">{safeTitle}</p>
+        {safeSubtitle && <p className="text-xs text-slate-400 tracking-wide pb-2">{safeSubtitle}</p>}
       </div>
     </motion.div>
   )
@@ -695,13 +693,13 @@ function WorkingDashboard() {
             <PromptoLogo className="text-emerald-400" />
           </motion.button>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 overflow-visible">
             {/* Pro Settings Button */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleAdvancedSettings}
-              className="px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30"
+              className="hidden sm:flex px-4 py-2 rounded-xl font-medium transition-all duration-200 items-center gap-2 bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30"
             >
               <Settings className="w-4 h-4" />
               Pro Settings
@@ -709,32 +707,31 @@ function WorkingDashboard() {
             </motion.button>
 
             {/* User Menu */}
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center gap-3 px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-200"
+                className="flex items-center gap-3 px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-200 max-w-[200px]"
               >
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center">
                     <User className="w-4 h-4 text-white" />
                   </div>
-                  <span className="text-white font-medium">{safeUser.username}</span>
+                  <span className="text-white font-medium truncate">{safeUser.username}</span>
                   {safeUser.isPremium && <Crown className="w-4 h-4 text-amber-400" />}
                 </div>
                 <ChevronDown className={`w-4 h-4 text-white/60 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
               </motion.button>
               
-              <AnimatePresence key="user-menu">
+              <AnimatePresence>
                 {isUserMenuOpen && (
                   <motion.div
-                    key="user-menu-dropdown"
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute right-0 mt-2 w-56 bg-slate-900/90 backdrop-blur-sm border border-white/10 rounded-xl shadow-2xl z-50"
+                    className="absolute right-0 top-full mt-2 w-56 bg-slate-900/95 backdrop-blur-sm border border-white/10 rounded-xl shadow-2xl z-[100]"
                   >
                     <div className="p-2">
                       <motion.button
@@ -773,143 +770,137 @@ function WorkingDashboard() {
         {/* Premium Banner */}
         {!safeUser.isPremium && <PremiumBanner />}
 
-        {/* Top Section - Stats and Terminal */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Left Half - Stats Grid */}
-          <div className="flex items-center justify-center">
-            <div className="grid grid-cols-2 gap-3 max-w-md w-full">
-              <motion.div
-                key="stat-prompts"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.1 }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 aspect-square flex flex-col justify-center items-center text-center hover:border-emerald-500/30 transition-all"
-              >
-                <div className="w-2 h-2 bg-emerald-500 rounded-full mb-2"></div>
-                <p className="text-xl font-bold text-white">{stats.totalPrompts}</p>
-                <p className="text-xs text-white/60">Prompts</p>
-              </motion.div>
-
-              <motion.div
-                key="stat-score"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 aspect-square flex flex-col justify-center items-center text-center hover:border-blue-500/30 transition-all"
-              >
-                <div className="w-2 h-2 bg-blue-500 rounded-full mb-2"></div>
-                <p className="text-xl font-bold text-white">{stats.avgScore}/10</p>
-                <p className="text-xs text-white/60">Score</p>
-              </motion.div>
-
-              <motion.div
-                key="stat-saved"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 aspect-square flex flex-col justify-center items-center text-center hover:border-purple-500/30 transition-all"
-              >
-                <div className="w-2 h-2 bg-purple-500 rounded-full mb-2"></div>
-                <p className="text-xl font-bold text-white">{(stats.tokensSaved / 1000).toFixed(1)}K</p>
-                <p className="text-xs text-white/60">Saved</p>
-              </motion.div>
-
-              <motion.div
-                key="stat-level"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.4 }}
-                className={`bg-white/5 backdrop-blur-sm border rounded-xl p-4 aspect-square flex flex-col justify-center items-center text-center hover:border-orange-500/30 transition-all ${safeUser.isPremium ? 'border-amber-500/30' : 'border-white/10'}`}
-              >
-                {safeUser.isPremium && <Crown className="w-3 h-3 text-amber-400 mb-1" />}
-                <div className="w-2 h-2 bg-orange-500 rounded-full mb-2"></div>
-                <p className="text-xl font-bold text-white">{stats.masteryLevel}</p>
-                <p className="text-xs text-white/60">Level</p>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Right Half - Prompt Terminal */}
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
-            <h2 className="text-xl font-semibold mb-4 text-white flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-emerald-400" />
-              Prompt Terminal
-            </h2>
-            
-            <div className="space-y-4">
-              <textarea 
-                value={promptText}
-                onChange={(e) => setPromptText(e.target.value)}
-                className="w-full h-32 bg-white/5 border border-white/10 rounded-xl p-4 text-white resize-none text-sm backdrop-blur-sm focus:border-emerald-500/50 transition-all focus:outline-none placeholder-white/40"
-                placeholder="Enter your prompt here..."
-                disabled={isEnhancing}
+        {/* Stats Ribbon */}
+        <div className="max-w-screen-xl mx-auto">
+          <div className="grid grid-cols-12 gap-6 mb-8">
+            <div className="col-span-12 sm:col-span-6 lg:col-span-3">
+              <StatCard
+                icon={FileText}
+                title="Total Prompts"
+                value={47}
+                subtitle="+12 this week"
+                gradient="bg-emerald-500"
               />
-              
-              <div className="flex gap-3">
-                <button 
-                  onClick={handleEnhancePrompt}
-                  disabled={isEnhancing || !promptText.trim()}
-                  className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 py-3 rounded-xl transition-all duration-200 font-medium shadow-lg hover:shadow-emerald-500/25 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {isEnhancing ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Enhancing...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4" />
-                      Enhance
-                    </>
-                  )}
-                </button>
-                
-                <button 
-                  onClick={clearPrompt}
-                  disabled={isEnhancing}
-                  className="px-4 py-3 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Clear
-                </button>
-              </div>
-              
-              <AnimatePresence key="enhanced-prompt">
-                {enhancedPrompt && (
-                  <motion.div
-                    key="enhanced-prompt-content"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-4"
-                  >
-                  <h3 className="text-emerald-400 font-medium mb-2 flex items-center gap-2">
-                    <Check className="w-4 h-4" />
-                    Enhanced Prompt
-                  </h3>
-                  <div className="bg-white/5 border border-emerald-500/30 rounded-xl p-4 relative">
-                    <pre className="text-emerald-300 text-sm whitespace-pre-wrap leading-relaxed">
-                      {enhancedPrompt}
-                    </pre>
-                    <button
-                      onClick={() => copyToClipboard(enhancedPrompt, 'enhanced')}
-                      className="absolute top-3 right-3 p-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 hover:text-emerald-300 rounded-lg transition-all duration-200"
-                    >
-                      {copySuccess === 'enhanced' ? (
-                        <Check className="w-4 h-4" />
-                      ) : (
-                        <Copy className="w-4 h-4" />
-                      )}
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-              </AnimatePresence>
+            </div>
+            <div className="col-span-12 sm:col-span-6 lg:col-span-3">
+              <StatCard
+                icon={Target}
+                title="Average Score"
+                value="8.7/10"
+                subtitle="Excellent"
+                gradient="bg-blue-500"
+              />
+            </div>
+            <div className="col-span-12 sm:col-span-6 lg:col-span-3">
+              <StatCard
+                icon={Zap}
+                title="Efficiency Gain"
+                value="12.8K"
+                subtitle="Tokens saved"
+                gradient="bg-purple-500"
+              />
+            </div>
+            <div className="col-span-12 sm:col-span-6 lg:col-span-3">
+              <StatCard
+                icon={Crown}
+                title="Level 2"
+                value="Prompt Master"
+                subtitle="240 XP to Level 3"
+                gradient="bg-amber-500"
+                isPremium={safeUser.isPremium}
+              />
             </div>
           </div>
         </div>
 
-        {/* Bottom Section - Recent Prompts */}
+        {/* Prompt Terminal Section */}
+        <div className="max-w-screen-xl mx-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl min-h-[180px] p-6 mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-white flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-emerald-400" />
+            Prompt Terminal
+          </h2>
+          
+          <div className="space-y-4">
+            <textarea 
+              value={promptText}
+              onChange={(e) => setPromptText(e.target.value)}
+              className="w-full h-32 bg-white/5 border border-white/10 rounded-xl p-4 text-white resize-none text-sm backdrop-blur-sm focus:border-emerald-500/50 transition-all focus:outline-none placeholder-white/40"
+              placeholder="Enter your prompt here..."
+              disabled={isEnhancing}
+            />
+            
+            <div className="flex gap-3">
+              <button 
+                onClick={handleEnhancePrompt}
+                disabled={isEnhancing || !promptText.trim()}
+                className={`flex-1 px-4 py-3 rounded-xl transition-all duration-200 font-medium shadow-lg flex items-center justify-center gap-2 ${
+                  isEnhancing || !promptText.trim() 
+                    ? 'bg-slate-800 text-slate-500 cursor-not-allowed' 
+                    : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white hover:shadow-emerald-500/25'
+                }`}
+              >
+                {isEnhancing ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-slate-500 border-t-transparent rounded-full animate-spin" />
+                    Enhancing...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    Enhance
+                  </>
+                )}
+              </button>
+              
+              <button 
+                onClick={clearPrompt}
+                disabled={isEnhancing}
+                className={`px-4 py-3 rounded-xl transition-all duration-200 ${
+                  isEnhancing 
+                    ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                    : 'bg-white/5 hover:bg-white/10 text-white/60 hover:text-white'
+                }`}
+              >
+                Clear
+              </button>
+            </div>
+            
+            <AnimatePresence key="enhanced-prompt">
+              {enhancedPrompt && (
+                <motion.div
+                  key="enhanced-prompt-content"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-4"
+                >
+                <h3 className="text-emerald-400 font-medium mb-2 flex items-center gap-2">
+                  <Check className="w-4 h-4" />
+                  Enhanced Prompt
+                </h3>
+                <div className="bg-white/5 border border-emerald-500/30 rounded-xl p-4 relative">
+                  <pre className="text-emerald-300 text-sm whitespace-pre-wrap leading-relaxed">
+                    {enhancedPrompt}
+                  </pre>
+                  <button
+                    onClick={() => copyToClipboard(enhancedPrompt, 'enhanced')}
+                    className="absolute top-3 right-3 p-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 hover:text-emerald-300 rounded-lg transition-all duration-200"
+                  >
+                    {copySuccess === 'enhanced' ? (
+                      <Check className="w-4 h-4" />
+                    ) : (
+                      <Copy className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
+              </motion.div>
+            )}
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Recent Prompts Section */}
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
           <h2 className="text-xl font-semibold mb-4 text-white flex items-center gap-2">
             <Star className="w-5 h-5 text-amber-400" />

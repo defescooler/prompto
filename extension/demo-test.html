@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompto Extension Demo - VideoDemo.jsx Style Animations</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: white;
+      min-height: 100vh;
+    }
+    
+    .demo-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #10b981, #0d9488);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .description {
+      font-size: 1.2rem;
+      margin-bottom: 3rem;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+    
+    .chat-mockup {
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      backdrop-filter: blur(20px);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+    
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: between;
+      padding: 1rem;
+      background: rgba(30, 41, 59, 0.6);
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(148, 163, 184, 0.1);
+    }
+    
+    .chat-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    
+    .chat-input-area {
+      position: relative;
+      margin-top: 1.5rem;
+    }
+    
+    .chat-textarea {
+      width: 100%;
+      padding: 1rem 4rem 1rem 1rem;
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 16px;
+      color: white;
+      font-size: 1rem;
+      resize: none;
+      min-height: 120px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+    
+    .chat-textarea::placeholder {
+      color: rgba(148, 163, 184, 0.6);
+    }
+    
+    .chat-textarea:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+    
+    .send-button {
+      position: absolute;
+      bottom: 12px;
+      right: 60px;
+      width: 36px;
+      height: 36px;
+      background: rgba(148, 163, 184, 0.2);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .send-button:hover {
+      background: rgba(148, 163, 184, 0.3);
+      transform: scale(1.05);
+    }
+    
+    .features-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    
+    .feature-card {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #10b981, #0d9488);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .feature-description {
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+    
+    .loading-demo {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(15, 23, 42, 0.4);
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.1);
+    }
+    
+    .loading-demo h3 {
+      margin-bottom: 1rem;
+      color: #10b981;
+    }
+    
+    .demo-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .demo-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      min-width: 140px;
+    }
+    
+    .demo-btn.primary {
+      background: linear-gradient(135deg, #10b981, #0d9488);
+      color: white;
+    }
+    
+    .demo-btn.secondary {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+    }
+    
+    .demo-btn.warning {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+    }
+    
+    .demo-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .demo-btn:active {
+      transform: scale(0.95);
+    }
+    
+    @keyframes particle-burst {
+      0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.5) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    .particle {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      animation: particle-burst 1s ease-out forwards;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <h1>🚀 Prompto Extension Demo</h1>
+    <p class="description">
+      Experience the enhanced VideoDemo.jsx-style animations and interactions.<br>
+      Load this page with the Prompto Chrome extension active to see the magic!
+    </p>
+    
+    <div class="chat-mockup">
+      <div class="chat-header">
+        <div>
+          <div class="chat-title">ChatGPT Demo Interface</div>
+          <div style="font-size: 0.85rem; opacity: 0.7;">AI Assistant</div>
+        </div>
+        <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite;"></div>
+      </div>
+      
+      <div class="chat-input-area">
+        <textarea 
+          class="chat-textarea" 
+          placeholder="Type your prompt here to test Prompto's enhanced animations..."
+          id="demo-textarea"
+        >How do I start a successful tech startup?</textarea>
+        
+        <button class="send-button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+        </button>
+        
+        <!-- Prompto FAB will be injected here by the extension -->
+      </div>
+    </div>
+    
+    <div class="loading-demo">
+      <h3>🎬 Animation Test Controls</h3>
+      <div class="demo-buttons">
+        <button class="demo-btn primary" onclick="testParticles()">
+          ✨ Test Particles
+        </button>
+        <button class="demo-btn secondary" onclick="testNotification('success')">
+          ✅ Success Toast
+        </button>
+        <button class="demo-btn warning" onclick="testNotification('warning')">
+          ⚠️ Warning Toast
+        </button>
+        <button class="demo-btn primary" onclick="simulateEnhancement()">
+          🚀 Simulate Enhancement
+        </button>
+      </div>
+    </div>
+    
+    <div class="features-list">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+          </svg>
+        </div>
+        <div class="feature-title">Enhanced Animations</div>
+        <div class="feature-description">
+          Smooth cubic-bezier transitions, particle effects, and spring animations just like VideoDemo.jsx
+        </div>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+          </svg>
+        </div>
+        <div class="feature-title">Speed Dial Controls</div>
+        <div class="feature-description">
+          Rotating FAB with staggered child animations and modern glassmorphism effects
+        </div>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2">
+            <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+          </svg>
+        </div>
+        <div class="feature-title">Particle System</div>
+        <div class="feature-description">
+          Dynamic particle bursts for enhancement feedback and celebration effects
+        </div>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2">
+            <polyline points="20,6 9,17 4,12"/>
+          </svg>
+        </div>
+        <div class="feature-title">Success Animations</div>
+        <div class="feature-description">
+          Checkmark transitions, success states, and party particle celebrations
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Test functions for demo purposes
+    function testParticles() {
+      createTestParticles(event.target);
+    }
+    
+    function testNotification(type) {
+      // This would trigger the extension's notification system
+      console.log(`Testing ${type} notification`);
+      
+      // Create a mock notification for demo
+      const notification = document.createElement('div');
+      notification.className = `prompto-notification ${type} visible`;
+      notification.textContent = `${type === 'success' ? '✅' : '⚠️'} Test ${type} notification!`;
+      notification.style.position = 'fixed';
+      notification.style.top = '24px';
+      notification.style.right = '24px';
+      notification.style.zIndex = '10000';
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+    
+    function simulateEnhancement() {
+      const textarea = document.getElementById('demo-textarea');
+      if (textarea) {
+        // Simulate the enhancement process
+        textarea.style.borderColor = '#10b981';
+        textarea.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.1)';
+        
+        createTestParticles(textarea);
+        
+        setTimeout(() => {
+          textarea.style.borderColor = '';
+          textarea.style.boxShadow = '';
+          testNotification('success');
+        }, 1500);
+      }
+    }
+    
+    function createTestParticles(element) {
+      const rect = element.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      for (let i = 0; i < 12; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = centerX + 'px';
+        particle.style.top = centerY + 'px';
+        
+        const angle = (i / 12) * 360;
+        const distance = 80;
+        const x = Math.cos(angle * Math.PI / 180) * distance;
+        const y = Math.sin(angle * Math.PI / 180) * distance;
+        
+        particle.style.setProperty('--end-x', x + 'px');
+        particle.style.setProperty('--end-y', y + 'px');
+        
+        document.body.appendChild(particle);
+        
+        setTimeout(() => {
+          particle.remove();
+        }, 1000);
+      }
+    }
+    
+    // Add pulse animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Log when page is ready for extension
+    console.log('🚀 Prompto Demo Page Ready - Extension should inject FAB into textarea area');
+    
+    // Simulate typing effect on page load
+    window.addEventListener('load', () => {
+      const textarea = document.getElementById('demo-textarea');
+      if (textarea) {
+        // Clear and type new content
+        const newText = "I want to build an innovative AI startup that revolutionizes how people interact with technology. What are the key steps I should focus on?";
+        textarea.value = '';
+        
+        let i = 0;
+        const typeInterval = setInterval(() => {
+          if (i < newText.length) {
+            textarea.value += newText[i];
+            i++;
+          } else {
+            clearInterval(typeInterval);
+          }
+        }, 50);
+      }
+    });
+  </script>
+</body>
+</html> 
