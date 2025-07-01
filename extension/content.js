@@ -4,36 +4,6 @@ console.log('🚀 Prompto: Content script loaded');
   if (window.__PROMPTO_LOADED) return;
   window.__PROMPTO_LOADED = true;
 
-  // Global error handler for invalid selectors
-  const originalQuerySelector = document.querySelector;
-  const originalQuerySelectorAll = document.querySelectorAll;
-  
-  document.querySelector = function(selector) {
-    try {
-      if (typeof selector === 'string' && selector.includes('parent::')) {
-        console.warn('🚀 Prompto: Blocked invalid selector:', selector);
-        return null;
-      }
-      return originalQuerySelector.call(this, selector);
-    } catch (error) {
-      console.error('🚀 Prompto: QuerySelector error:', error);
-      return null;
-    }
-  };
-  
-  document.querySelectorAll = function(selector) {
-    try {
-      if (typeof selector === 'string' && selector.includes('parent::')) {
-        console.warn('🚀 Prompto: Blocked invalid selector:', selector);
-        return [];
-      }
-      return originalQuerySelectorAll.call(this, selector);
-    } catch (error) {
-      console.error('🚀 Prompto: QuerySelectorAll error:', error);
-      return [];
-    }
-  };
-
   // Defensive error handling wrapper
   const safeExecute = (fn, context = 'Unknown') => {
     try {
@@ -47,11 +17,6 @@ console.log('🚀 Prompto: Content script loaded');
   // Safe DOM manipulation helpers
   const safeQuerySelector = (selector, root = document) => {
     try {
-      // Validate selector to prevent invalid CSS
-      if (typeof selector !== 'string' || selector.includes('parent::')) {
-        console.warn('🚀 Prompto: Invalid selector detected:', selector);
-        return null;
-      }
       return root?.querySelector?.(selector) || null;
     } catch (error) {
       console.error(`🚀 Prompto: Invalid selector "${selector}":`, error);
@@ -61,11 +26,6 @@ console.log('🚀 Prompto: Content script loaded');
 
   const safeQuerySelectorAll = (selector, root = document) => {
     try {
-      // Validate selector to prevent invalid CSS
-      if (typeof selector !== 'string' || selector.includes('parent::')) {
-        console.warn('🚀 Prompto: Invalid selector detected:', selector);
-        return [];
-      }
       return [...(root?.querySelectorAll?.(selector) || [])];
     } catch (error) {
       console.error(`🚀 Prompto: Invalid selector "${selector}":`, error);
