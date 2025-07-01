@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Load user statistics
 async function loadUserStats() {
     try {
-        const response = await fetch('http://localhost:8000/api/analytics/summary', {
+        const response = await fetch('http://localhost:8002/api/analytics/summary', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

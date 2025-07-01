@@ -11,8 +11,6 @@ from dotenv import load_dotenv
 import hashlib
 import time
 from collections import defaultdict
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
@@ -49,13 +47,7 @@ def create_app(config_name=None):
     app.config.from_object(config[config_name])
 
     # Enable CORS for all routes
-    CORS(app, origins=[
-        "http://localhost:5173", 
-        "http://localhost:5179", 
-        "http://localhost:3000", 
-        "http://localhost:8080",
-        "chrome-extension://ffhmbclfppffgkkdcbipaklfikacdnkh"
-    ])
+    CORS(app, origins=["http://localhost:5173", "http://localhost:5179", "http://localhost:3000", "http://localhost:8080"])
 
     # Initialize database and migrations
     init_app(app)
